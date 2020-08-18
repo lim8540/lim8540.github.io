@@ -1,6 +1,15 @@
 [
   
     {
+      "title"    : "Helloworld",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "/HelloWorld",
+      "date"     : "2020-08-18 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "Intro",
       "category" : "doc",
       "tags"     : "tutorial, textalic",

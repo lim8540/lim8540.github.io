@@ -5,9 +5,35 @@
     <description>Baesan's blog about developing</description>
     <link>http://localhost:4000http://localhost:4000/</link>
     <atom:link href="http://localhost:4000http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 18 Aug 2020 21:29:05 +0900</pubDate>
-    <lastBuildDate>Tue, 18 Aug 2020 21:29:05 +0900</lastBuildDate>
+    <pubDate>Tue, 18 Aug 2020 21:40:06 +0900</pubDate>
+    <lastBuildDate>Tue, 18 Aug 2020 21:40:06 +0900</lastBuildDate>
     <generator>Jekyll v4.1.1</generator>
+    
+      <item>
+        <title>Helloworld</title>
+        <description>&lt;p&gt;–
+category: HelloWorld
+tags : [HelloWorld]
+–&lt;/p&gt;
+
+&lt;p&gt;##Hello World
+첫번째 포스팅 테스트 앞으로 계속 잘 만들어가봐야겠다.
+‘강조하기’ 그리고 &lt;strong&gt;진하기하기&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;’'’yaml
+코딩체
+printf(“Hello World!”)
+‘’’&lt;/p&gt;
+
+&lt;p&gt;끝!&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 18 Aug 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/HelloWorld</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/HelloWorld</guid>
+        
+        
+      </item>
     
       <item>
         <title>Intro</title>
