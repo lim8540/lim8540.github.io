@@ -5,33 +5,34 @@
     <description>Baesan's blog about developing</description>
     <link>http://localhost:4000http://localhost:4000/</link>
     <atom:link href="http://localhost:4000http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 18 Aug 2020 21:40:06 +0900</pubDate>
-    <lastBuildDate>Tue, 18 Aug 2020 21:40:06 +0900</lastBuildDate>
+    <pubDate>Tue, 18 Aug 2020 21:53:41 +0900</pubDate>
+    <lastBuildDate>Tue, 18 Aug 2020 21:53:41 +0900</lastBuildDate>
     <generator>Jekyll v4.1.1</generator>
     
       <item>
         <title>Helloworld</title>
-        <description>&lt;p&gt;–
-category: HelloWorld
-tags : [HelloWorld]
-–&lt;/p&gt;
+        <description>&lt;h2 id=&quot;hello-world&quot;&gt;Hello World&lt;/h2&gt;
 
-&lt;p&gt;##Hello World
-첫번째 포스팅 테스트 앞으로 계속 잘 만들어가봐야겠다.
-‘강조하기’ 그리고 &lt;strong&gt;진하기하기&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;첫번째 포스팅 테스트 앞으로 계속 잘 만들어가봐야겠다.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;강조하기&lt;/code&gt; 그리고 &lt;strong&gt;진하기하기&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;’'’yaml
-코딩체
-printf(“Hello World!”)
-‘’’&lt;/p&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;코딩체&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;printf(&quot;Hello World!&quot;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;그레이브키(`)찾는데도 한참걸렸네&lt;/p&gt;
 
 &lt;p&gt;끝!&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 18 Aug 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/HelloWorld</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/HelloWorld</guid>
+        <link>http://localhost:4000http://localhost:4000/helloworld/HelloWorld</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/helloworld/HelloWorld</guid>
         
+        <category>HelloWorld</category>
+        
+        
+        <category>HelloWorld</category>
         
       </item>
     
