@@ -20,18 +20,18 @@
   
     {
       "title"    : "Intro",
-      "category" : "doc",
+      "category" : "demo",
       "tags"     : "tutorial, textalic",
-      "url"      : "/doc/Intro",
+      "url"      : "/demo/Intro",
       "date"     : "2019-12-25 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
       "title"    : "Install",
-      "category" : "doc",
+      "category" : "demo",
       "tags"     : "tutorial, textalic",
-      "url"      : "/doc/Install",
+      "url"      : "/demo/Install",
       "date"     : "2019-12-25 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
