@@ -1,0 +1,467 @@
+I"�<h2 id="boardcover-문제-개요">BOARDCOVER 문제 개요</h2>
+
+<h4 id="문제">문제</h4>
+<p><img src="http://algospot.com/media/judge-attachments/2b7bfee35cbec2f4e799bb011ac18f69/03.png" alt="example" title="exmaple" /><br />
+H*W 크기의 게임판이 있습니다. 게임판은 검은 칸과 흰 칸으로 구성된 격자 모양을 하고 있는데 이 중 모든 흰 칸을 3칸짜리 L자 모양의 블록으로 덮고 싶습니다. 이 때 블록들은 자유롭게 회전해서 놓을 수 있지만, 서로 겹치거나, 검은 칸을 덮거나, 게임판 밖으로 나가서는 안 됩니다. 위 그림은 한 게임판과 이를 덮는 방법을 보여줍니다.</p>
+
+<p>게임판이 주어질 때 이를 덮는 방법의 수를 계산하는 프로그램을 작성하세요.<br />
+<br /></p>
+
+<h4 id="입력">입력</h4>
+<p>입력의 첫 줄에는 테스트 케이스의 수 C (C &lt;= 30) 가 주어집니다. 각 테스트 케이스의 첫 줄에는 2개의 정수 H, W (1 &lt;= H,W &lt;= 20) 가 주어집니다. 다음 H 줄에 각 W 글자로 게임판의 모양이 주어집니다. # 은 검은 칸, . 는 흰 칸을 나타냅니다. 입력에 주어지는 게임판에 있는 흰 칸의 수는 50 을 넘지 않습니다.<br />
+<br /></p>
+
+<h4 id="출력">출력</h4>
+<p>한 줄에 하나씩 흰 칸을 모두 덮는 방법의 수를 출력합니다.<br />
+<br /></p>
+
+<h4 id="예제-입력">예제 입력</h4>
+<p>3<br />
+3 7<br />
+#…..#<br />
+#…..#<br />
+##…##<br />
+3 7<br />
+#…..#<br />
+#…..#<br />
+##..###<br />
+8 10<br />
+##########<br />
+#……..#<br />
+#……..#<br />
+#……..#<br />
+#……..#<br />
+#……..#<br />
+#……..#<br />
+##########</p>
+
+<h4 id="예제-출력">예제 출력</h4>
+<p>0<br />
+2<br />
+1514</p>
+
+<p>출처: <a href="https://algospot.com/judge/problem/read/BOARDCOVER">Algospot</a></p>
+
+<h2 id="구현">구현</h2>
+
+<h4 id="설계">설계</h4>
+<p>전에 구현한 PICNIC과 같이 교재에서 배운 것 처럼 재귀함수를 통해 구현을 하였다.</p>
+
+<ol>
+  <li>PICNIC과 마찬가지로 일정한 순서에 따라 하나의 포인트를 정하고 그 포인트에서 가능한 모든 경우에 대하여 블록을 끼울 수 있는지 찾아보고, 끼울 수 있는경우 그 블록을 끼운 상태로 하여 다시 나머지 빈자리들로 재귀함수를 돌린다. 이를 반복한다.</li>
+  <li>PICNIC과 다른점은 입력되는 데이터 수의 상한선이 없기 때문에, 동적으로 데이터 저장공간을 할당해 주어야한다는점.</li>
+</ol>
+
+<h4 id="전체-코드">전체 코드</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">TC</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">NumOfTotal</span><span class="p">,</span> <span class="n">Answer</span><span class="p">,</span> <span class="n">NumOfBlack</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">BoardCover</span><span class="p">(</span><span class="kt">bool</span><span class="o">*</span> <span class="n">covered</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ToCover</span><span class="p">,</span> <span class="kt">int</span> <span class="n">H</span><span class="p">,</span> <span class="kt">int</span> <span class="n">W</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">NumOfTotal</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">W</span><span class="p">;</span>
+
+    <span class="c1">//기저 사례 : 채워야할 블록이 없을 때, 모두 채워진 것이므로 1을 return한다.</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ToCover</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>    
+    <span class="c1">//중심이 되는 블록 위치.</span>
+    <span class="kt">int</span> <span class="n">point1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">point2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">//자료구조를 1차원 배열로 선언하고 값을 받았기 때문에, 블록의 가장 왼쪽위에서 오른쪽방향과 아래쪽 방향으로 빈 블록을 찾는다.</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">NumOfTotal</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">covered</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">point1</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//아래 한칸을 확인함</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">point1</span> <span class="o">+</span> <span class="n">W</span> <span class="o">&lt;</span> <span class="n">NumOfTotal</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//point2는 아래칸의 좌표값</span>
+        <span class="n">point2</span> <span class="o">=</span> <span class="n">point1</span> <span class="o">+</span> <span class="n">W</span><span class="p">;</span>
+        <span class="c1">//확인한 아래칸의 왼쪽블럭을 확인함(1번 케이스)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">point2</span> <span class="o">%</span> <span class="n">W</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//확인한 아래칸의 오른쪽 블럭을 확인함.(2번 케이스)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">point2</span> <span class="o">%</span> <span class="n">W</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//확인한 아래칸과 원래 중심 포인트의 오른쪽 블럭을 확인함.(3번 케이스)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">point1</span> <span class="o">%</span> <span class="n">W</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//중심 블럭의 오른쪽 블럭과 그 블럭의 아래쪽 블럭을 확인함.(4번 케이스)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">point1</span> <span class="o">%</span> <span class="n">W</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">((</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">W</span> <span class="o">&lt;</span> <span class="n">NumOfTotal</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">TC</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">TC</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">H</span> <span class="o">&gt;&gt;</span> <span class="n">W</span><span class="p">;</span>
+        <span class="n">NumOfTotal</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">W</span><span class="p">;</span>
+        <span class="n">NumOfBlack</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">Answer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">bool</span><span class="o">*</span> <span class="n">covered</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">NumOfTotal</span><span class="p">];</span>
+        
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">NumOfTotal</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">NumOfTotal</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">covered</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">NumOfBlack</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">NumOfBlack</span> <span class="o">==</span> <span class="n">NumOfTotal</span><span class="p">)</span>
+            <span class="n">Answer</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="n">NumOfTotal</span> <span class="o">-</span> <span class="n">NumOfBlack</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">Answer</span> <span class="o">=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">NumOfTotal</span> <span class="o">-</span> <span class="n">NumOfBlack</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">Answer</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<h4 id="main함수">main함수</h4>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">TC</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">TC</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">H</span> <span class="o">&gt;&gt;</span> <span class="n">W</span><span class="p">;</span>
+        <span class="n">NumOfTotal</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">W</span><span class="p">;</span>
+        <span class="n">NumOfBlack</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">Answer</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">bool</span><span class="o">*</span> <span class="n">covered</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">NumOfTotal</span><span class="p">];</span>
+        
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">NumOfTotal</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">NumOfTotal</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="sc">'#'</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">covered</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">NumOfBlack</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">NumOfBlack</span> <span class="o">==</span> <span class="n">NumOfTotal</span><span class="p">)</span>
+            <span class="n">Answer</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="n">NumOfTotal</span> <span class="o">-</span> <span class="n">NumOfBlack</span><span class="p">)</span><span class="o">%</span><span class="mi">3</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">Answer</span> <span class="o">=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">NumOfTotal</span> <span class="o">-</span> <span class="n">NumOfBlack</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+
+        <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">Answer</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<p>PICNIC의 main함수와 유사하게 구현하였다. Testcase룰 받고 그 수 만큼 함수를 실행시킨다. PICNIC과 다른점은 PICNIC의 경우 주어지는 데이터양의 상한선이 정해져 있어서 그 만큼만 할당해주면 되었지만, 이경우는 그렇지 않아서 입려받은 H와 W를 통해 배열의 크기를 바꾸어 주었다. 또한 전에 2차원배열을 사용했던 것과 달리 1차원 배열로 값들을 처리하였다.</p>
+
+<h4 id="recursive-함수boardcover">Recursive 함수(BoardCover)</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">BoardCover</span><span class="p">(</span><span class="kt">bool</span><span class="o">*</span> <span class="n">covered</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ToCover</span><span class="p">,</span> <span class="kt">int</span> <span class="n">H</span><span class="p">,</span> <span class="kt">int</span> <span class="n">W</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">NumOfTotal</span> <span class="o">=</span> <span class="n">H</span><span class="o">*</span><span class="n">W</span><span class="p">;</span>
+
+    <span class="c1">//기저 사례 : 채워야할 블록이 없을 때, 모두 채워진 것이므로 1을 return한다.</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ToCover</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>    
+    <span class="c1">//중심이 되는 블록 위치.</span>
+    <span class="kt">int</span> <span class="n">point1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">point2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">//자료구조를 1차원 배열로 선언하고 값을 받았기 때문에, 블록의 가장 왼쪽위에서 오른쪽방향과 아래쪽 방향으로 빈 블록을 찾는다.</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">NumOfTotal</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">covered</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">point1</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//아래 한칸을 확인함</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">point1</span> <span class="o">+</span> <span class="n">W</span> <span class="o">&lt;</span> <span class="n">NumOfTotal</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//point2는 아래칸의 좌표값</span>
+        <span class="n">point2</span> <span class="o">=</span> <span class="n">point1</span> <span class="o">+</span> <span class="n">W</span><span class="p">;</span>
+        <span class="c1">//확인한 아래칸의 왼쪽블럭을 확인함(1번 케이스)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">point2</span> <span class="o">%</span> <span class="n">W</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//확인한 아래칸의 오른쪽 블럭을 확인함.(2번 케이스)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">point2</span> <span class="o">%</span> <span class="n">W</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//확인한 아래칸과 원래 중심 포인트의 오른쪽 블럭을 확인함.(3번 케이스)</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">point1</span> <span class="o">%</span> <span class="n">W</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//중심 블럭의 오른쪽 블럭과 그 블럭의 아래쪽 블럭을 확인함.(4번 케이스)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">point1</span> <span class="o">%</span> <span class="n">W</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">W</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">((</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">W</span> <span class="o">&lt;</span> <span class="n">NumOfTotal</span> <span class="o">&amp;&amp;</span> <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">BoardCover</span><span class="p">(</span><span class="n">covered</span><span class="p">,</span> <span class="n">ToCover</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">);</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">covered</span><span class="p">[</span><span class="n">point1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">W</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>원래 위의 코드길이는 지금보다 2배정도 길었는데, 교재에 풀이를 보고 다음과 같이 바꾸게 되었다. 그 이유는 다음과 같은 실수를 했기 때문이다.</p>
+
+<p>처음에 구현할 때는 기준으로 잡은 포인트를 기준으로 다음의 9가지 경우를 생각했다.</p>
+
+<p>★-포인트 블럭<br />
+O-확인하는 블럭</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>O</td>
+      <td>O</td>
+      <td>X</td>
+      <td>:</td>
+      <td>X</td>
+      <td>O</td>
+      <td>O</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>★</td>
+      <td>X</td>
+      <td>:</td>
+      <td>X</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|O</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>★</td>
+      <td>O</td>
+      <td>|</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>:</td>
+      <td>X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|O</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>★</td>
+      <td>O</td>
+      <td>|</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>O</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>O</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>O</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>O</td>
+      <td>X</td>
+      <td>|</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|O</td>
+      <td>★</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>★</td>
+      <td>O</td>
+      <td>|</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|X</td>
+      <td>X</td>
+      <td>X</td>
+      <td>|</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h2 id="정리">정리</h2>
+<p>c++코딩을 너무 오랜만에 해서 데이터 입출력부터 시작해서 익숙해지는데 오래걸렸다. C++책도 찾고 인터넷 검색도 하면서 다시 감을 찾기까지가 엄청난 시간이 걸렸다. 구현 내용과 관련해서는 처음 재귀함수가 가져가는 변수에 matched, matchable배열을 넣지 않았는데 이때 글로벌 변수들이 초기화 되는 현상이 나타났다. 이는 다음에 공부해봐야 겠다. 이거 말고도 처음에 자료구조를 vector로 사용하려고 시도했다가 잘 안됐고, 뭐 여러 시행착오가 있었다. 엄청 시행착오가 많았던 것 같은데 구현 끝나니까 기억이 잘 안난다 ㅎ 아무튼 시작이 반이라고 시작했으니까 반한거겠지.</p>
+
+<p>끝!</p>
+:ET
