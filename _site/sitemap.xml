@@ -2,15 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_1</loc>
-<lastmod>2020-09-03T21:38:15+09:00</lastmod>
+<lastmod>2020-09-07T15:33:04+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_2</loc>
-<lastmod>2020-09-03T21:38:15+09:00</lastmod>
+<lastmod>2020-09-07T15:33:04+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series_2/demo_series_2_post_1</loc>
-<lastmod>2020-09-03T21:38:15+09:00</lastmod>
+<lastmod>2020-09-07T15:33:04+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo/Blogging</loc>
@@ -43,6 +43,10 @@
 <url>
 <loc>http://localhost:4000/algorithm/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EB%AC%B8%EC%A0%9C%ED%95%B4%EA%B2%B0%EC%A0%84%EB%9E%B5_QUADTREE</loc>
 <lastmod>2020-09-03T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/algorithm/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EB%AC%B8%EC%A0%9C%ED%95%B4%EA%B2%B0%EC%A0%84%EB%9E%B5_FENCE</loc>
+<lastmod>2020-09-04T00:00:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/series/</loc>

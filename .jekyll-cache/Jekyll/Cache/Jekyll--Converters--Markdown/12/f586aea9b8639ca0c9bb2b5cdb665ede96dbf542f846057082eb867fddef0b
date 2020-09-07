@@ -1,0 +1,261 @@
+I"�p<h2 id="clocksync-문제-개요">CLOCKSYNC 문제 개요</h2>
+
+<h4 id="문제">문제</h4>
+<p><img src="http://algospot.com/media/judge-attachments/506874700c7251881727ee4e70a1d502/fence.png" alt="example" title="exmaple" /><br />
+너비가 같은 N개의 나무 판자를 붙여 세운 울타리가 있습니다. 시간이 지남에 따라 판자들이 부러지거나 망가져 높이가 다 달라진 관계로 울타리를 통째로 교체하기로 했습니다. 이 때 버리는 울타리의 일부를 직사각형으로 잘라내 재활용하고 싶습니다. 그림 (b)는 (a)의 울타리에서 잘라낼 수 있는 많은 직사각형 중 가장 넓은 직사각형을 보여줍니다. 울타리를 구성하는 각 판자의 높이가 주어질 때, 잘라낼 수 있는 직사각형의 최대 크기를 계산하는 프로그램을 작성하세요. 단 (c)처럼 직사각형을 비스듬히 잘라낼 수는 없습니다.</p>
+
+<p>판자의 너비는 모두 1이라고 가정합니다.</p>
+
+<p><br /></p>
+
+<h4 id="입력">입력</h4>
+<p>첫 줄에 테스트 케이스의 개수 C (C≤50)가 주어집니다. 각 테스트 케이스의 첫 줄에는 판자의 수 N (1≤N≤20000)이 주어집니다. 그 다음 줄에는 N개의 정수로 왼쪽부터 각 판자의 높이가 순서대로 주어집니다. 높이는 모두 10,000 이하의 음이 아닌 정수입니다.<br />
+<br /></p>
+
+<h4 id="출력">출력</h4>
+<p>각 테스트 케이스당 정수 하나를 한 줄에 출력합니다. 이 정수는 주어진 울타리에서 잘라낼 수 있는 최대 직사각형의 크기를 나타내야 합니다.<br />
+<br /></p>
+
+<h4 id="예제-입력">예제 입력</h4>
+<p>3<br />
+7<br />
+7 1 5 9 6 7 3<br />
+7<br />
+1 4 4 4 4 1 1<br />
+4<br />
+1 8 2 2</p>
+
+<h4 id="예제-출력">예제 출력</h4>
+<p>20<br />
+16<br />
+8</p>
+
+<p>출처: <a href="https://algospot.com/judge/problem/read/FENCE">Algospot</a></p>
+
+<h2 id="구현">구현</h2>
+
+<h4 id="설계">설계</h4>
+<p>책에 나온대로 분할 정복을 통해 구현하기로 하였다.</p>
+
+<ol>
+  <li>분할을 절반으로 나누어서 하고 합칠 때, 두 부분 모두를 포함하는 부분중에서 가장 넓이가 넓은 부분을 찾고 이 값을 각 부분의 최대값과 비교하도록 하였다.</li>
+  <li>합칠 때, 두 부분을 모두 포함하는 부분을 완전 탐색으로 최대값을 찾으면 n^2 / 4의 시간이 걸리므로 이 시간을 절약하기 위해 가운데 두개 펜스를 선택하고 한칸씩 늘려가는 방법으로 n의 시간이 걸리도록 하였다.</li>
+</ol>
+
+<h4 id="전체-코드">전체 코드</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">TC</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">fence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">middle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left_curr</span> <span class="o">=</span> <span class="n">middle</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right_curr</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">min_fence</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">],</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">]);</span>
+    <span class="kt">int</span> <span class="n">max_ret</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">min_fence</span><span class="p">;</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">left_curr</span> <span class="o">||</span> <span class="n">right_curr</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//왼쪽으로 더 확장할 수 없을 때, 오른쪽으로 확장함</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">left_curr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">right_curr</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">//오른쪽으로 더 확장할 수 없을 때, 왼쪽으로 확장함</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">right</span> <span class="o">==</span> <span class="n">right_curr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">left_curr</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">//오른쪽과 왼쪽팬스중 긴쪽으로 확장한다.</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="n">right_curr</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">left_curr</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">max_ret</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max_ret</span><span class="p">,</span> <span class="n">min_fence</span> <span class="o">*</span> <span class="p">(</span><span class="n">right_curr</span> <span class="o">-</span> <span class="n">left_curr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">max_ret</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">Fence_merge</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">fence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fence</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+    
+    <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">left_max</span><span class="p">,</span> <span class="n">right_max</span><span class="p">,</span> <span class="n">merge_max</span><span class="p">;</span>
+    <span class="n">left_max</span> <span class="o">=</span> <span class="n">Fence_merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">);</span>
+    <span class="n">right_max</span> <span class="o">=</span> <span class="n">Fence_merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">left_max</span> <span class="o">&gt;</span> <span class="n">right_max</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">merge_max</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">left_max</span><span class="p">,</span> <span class="n">merge_max</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">merge_max</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">right_max</span><span class="p">,</span> <span class="n">merge_max</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">TC</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">TC</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
+        <span class="kt">int</span><span class="o">*</span> <span class="n">fence</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Fence_merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">fence</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<h4 id="main함수-및-fence_merge함수">main함수 및 Fence_merge함수</h4>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kt">int</span> <span class="nf">Fence_merge</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">fence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fence</span><span class="p">[</span><span class="n">left</span><span class="p">];</span>
+    
+    <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+
+    <span class="kt">int</span> <span class="n">left_max</span><span class="p">,</span> <span class="n">right_max</span><span class="p">,</span> <span class="n">merge_max</span><span class="p">;</span>
+    <span class="n">left_max</span> <span class="o">=</span> <span class="n">Fence_merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">);</span>
+    <span class="n">right_max</span> <span class="o">=</span> <span class="n">Fence_merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">left_max</span> <span class="o">&gt;</span> <span class="n">right_max</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">merge_max</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">left_max</span><span class="p">,</span> <span class="n">merge_max</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">merge_max</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">middle</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">max</span><span class="p">(</span><span class="n">right_max</span><span class="p">,</span> <span class="n">merge_max</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">TC</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">TC</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
+        <span class="kt">int</span><span class="o">*</span> <span class="n">fence</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">Fence_merge</span><span class="p">(</span><span class="n">fence</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">fence</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>main함수는 너무 단순해서 할말이 없다.<br />
+Fence_merge함수의 경우는 분할 정복을 구현해 놓은 함수이다. 기저 사례는 원소가 하나밖에 없는 경우이며 이때는 그 크기를 return해준다. 아닌 경우에는 입력받은 부분을 반으로 나누어서 각각을 다시 Fence_merge에 넣어주고 두 부분에서 return받은 값과 두 부분을 동시에 포함하는 부분의 최대값 중 가장 큰 값을 return 해준다. 전체적인 구성은 MergeSort와 비슷하게 하였다.</p>
+
+<h4 id="merge함수">merge함수</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span><span class="o">*</span> <span class="n">fence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">middle</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left_curr</span> <span class="o">=</span> <span class="n">middle</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">right_curr</span> <span class="o">=</span> <span class="n">middle</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">min_fence</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">],</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">]);</span>
+    <span class="kt">int</span> <span class="n">max_ret</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">min_fence</span><span class="p">;</span>
+
+    <span class="k">while</span><span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">left_curr</span> <span class="o">||</span> <span class="n">right_curr</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//왼쪽으로 더 확장할 수 없을 때, 오른쪽으로 확장함</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">left_curr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">right_curr</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">//오른쪽으로 더 확장할 수 없을 때, 왼쪽으로 확장함</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">right</span> <span class="o">==</span> <span class="n">right_curr</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">left_curr</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1">//오른쪽과 왼쪽팬스중 긴쪽으로 확장한다.</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="n">right_curr</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">right_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">left_curr</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">min_fence</span> <span class="o">&gt;</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">])</span>
+            <span class="p">{</span>
+                <span class="n">min_fence</span> <span class="o">=</span> <span class="n">fence</span><span class="p">[</span><span class="n">left_curr</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">max_ret</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max_ret</span><span class="p">,</span> <span class="n">min_fence</span> <span class="o">*</span> <span class="p">(</span><span class="n">right_curr</span> <span class="o">-</span> <span class="n">left_curr</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">max_ret</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>merge함수는 두 부분을 합칠 때, 두 부분을 모두 포함하는 부분중 최대값을 구하는 함수이다. 먼저 경계선을 기준으로 만나고 있는 양 부분의 두 펜스의 값을 초기값으로 하여 거기서 부터 왼쪽이나 오른쪽으로 한칸씩 확대해 나간다. 확장 할 때 전체 사각형의 크기는 펜스의 최소값에 의해 결정되므로 이를 활용하여 값을 구해나갔다.</p>
+
+<p><br /></p>
+
+<h2 id="정리">정리</h2>
+<ol>
+  <li>string을 제대로 다루지 못해서 시간이 걸렸던 것 같다. 기초적인 공부가 좀 더 필요해 보인다.</li>
+</ol>
+
+<p>끝!</p>
+:ET
