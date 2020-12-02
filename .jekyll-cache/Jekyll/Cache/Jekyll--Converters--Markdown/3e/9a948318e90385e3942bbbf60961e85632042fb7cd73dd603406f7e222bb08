@@ -1,0 +1,6 @@
+I"1<h2 id="isempty">!isEmpty()</h2>
+<p>파이썬에선 느낌표로 부정문을 나타나는게 아니라 not을 써서 not isEmpty()로 써야된다는거를 왜 지금까지 몰랐을까? 문제를 그렇게 많이 풀었었는데… 까먹은건가?</p>
+
+<h2 id="doublylinkedlist">DoublyLinkedList</h2>
+
+:ET

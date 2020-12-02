@@ -5,9 +5,123 @@
     <description>Baesan's blog about developing</description>
     <link>http://localhost:4000http://localhost:4000/</link>
     <atom:link href="http://localhost:4000http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 07 Sep 2020 15:33:04 +0900</pubDate>
-    <lastBuildDate>Mon, 07 Sep 2020 15:33:04 +0900</lastBuildDate>
+    <pubDate>Tue, 01 Dec 2020 10:26:58 +0900</pubDate>
+    <lastBuildDate>Tue, 01 Dec 2020 10:26:58 +0900</lastBuildDate>
     <generator>Jekyll v4.1.1</generator>
+    
+      <item>
+        <title>Week1_day2_til</title>
+        <description>&lt;h2 id=&quot;isempty&quot;&gt;!isEmpty()&lt;/h2&gt;
+&lt;p&gt;파이썬에선 느낌표로 부정문을 나타나는게 아니라 not을 써서 not isEmpty()로 써야된다는거를 왜 지금까지 몰랐을까? 문제를 그렇게 많이 풀었었는데… 까먹은건가?&lt;/p&gt;
+
+&lt;h2 id=&quot;doublylinkedlist&quot;&gt;DoublyLinkedList&lt;/h2&gt;
+
+</description>
+        <pubDate>Mon, 30 Nov 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/k-digital%20training(ai)/week1_day2_TIL</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/k-digital%20training(ai)/week1_day2_TIL</guid>
+        
+        <category>K-digital training</category>
+        
+        <category>week1_day2</category>
+        
+        
+        <category>K-digital training(AI)</category>
+        
+      </item>
+    
+      <item>
+        <title>Week1_day1_til copy</title>
+        <description>&lt;h2 id=&quot;linkedlist-popat-구현&quot;&gt;LinkedList PopAt() 구현&lt;/h2&gt;
+
+&lt;p&gt;처음으로 시간이 걸리는 과제가 나왔다. 계속 실패가 뜨길래 직접 코드를 복사해서 돌려보다가 답을 찾게 되었다 원래 코드는 다음과 같았다.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;popAt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nodeCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;IndexError&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nodeCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getAt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getAt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nodeCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;무작정 작성했을때는 문제가 없는 것 처럼 보였는데 직접 돌려보니까 에러가 발생했고 주로 맨 마지막 노드를 삭제할때 문제가 있었다. 그 원인은 마지막 노드를 삭제할 때, tail노드를 지정해주지 않아서 였다. 이를 수정하여 다음과 같이 바꾸어 주었다.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;popAt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nodeCount&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;IndexError&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nodeCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getAt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getAt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tail&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nodeCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;doublylinkedlist&quot;&gt;DoublyLinkedList&lt;/h2&gt;
+
+&lt;p&gt;DoublyLinkedList를 순회할 때의 코드는 아래와 같다.&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reverse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tail&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;while문을 curr.prev.prev가 아닌 curr.prev로 하면 마지막에 있는 더미 노드의 값(None)까지 읽어드리게 된다.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 30 Nov 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/k-digital%20training(ai)/week1_day1_TIL-copy</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/k-digital%20training(ai)/week1_day1_TIL-copy</guid>
+        
+        <category>K-digital training</category>
+        
+        <category>week1_day1</category>
+        
+        
+        <category>K-digital training(AI)</category>
+        
+      </item>
+    
+      <item>
+        <title>Intro</title>
+        <description>&lt;h3 id=&quot;ot&quot;&gt;OT&lt;/h3&gt;
+
+&lt;p&gt;프로그래머스에서 주관(?)하는 K-digital training 인공지능 커리큘럼에 참여하게 되었다. 오늘이 그 첫날로 오리엔테이션으로 시작하였다. 오랜만에 대학수업을 듣는 느낌을 받았다. 취업 준비하면서 남들도 한다길래 만들어놓은 블로그가 있었는데, 코딩 테스트 준비한다고 손놓고 있다가 이번 프로그램이 진행되는 동안 하루하루를 기록해 놓으면 좋다고 하여서, 다시 블로그를 써야겠다는 생각이 들었다. TIL이라고 해서 TIL이 뭔가 했는데 Today I learned의 줄임말이었다.ㅎ Markdown 쓰는것도 많이 까먹었는데 다시 시작하려니까 조금 귀찮기는 하다… &lt;br /&gt;
+그래도 이번에는 꾸준하게 기록해보고 싶다. 새로 많이 배워서 쓸 내용이 많았으면 한다.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 30 Nov 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/k-digital%20training(ai)/Intro</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/k-digital%20training(ai)/Intro</guid>
+        
+        <category>K-digital training</category>
+        
+        <category>Intro</category>
+        
+        
+        <category>K-digital training(AI)</category>
+        
+      </item>
     
       <item>
         <title>알고리즘문제해결전략_fence</title>
@@ -1707,126 +1821,6 @@ O-확인하는 블럭&lt;/p&gt;
         <category>tutorial</category>
         
         <category>textalic</category>
-        
-        
-        <category>demo</category>
-        
-      </item>
-    
-      <item>
-        <title>Install</title>
-        <description>&lt;h2 id=&quot;install--configuration&quot;&gt;Install &amp;amp; Configuration&lt;/h2&gt;
-
-&lt;h3 id=&quot;set-up-jekyll&quot;&gt;Set up jekyll&lt;/h3&gt;
-
-&lt;p&gt;Before anything, make sure you have set up jekyll correctly. See &lt;a href=&quot;https://jekyllrb.com/docs/&quot;&gt;the official jekyll doc&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;clone-this-repo&quot;&gt;Clone this repo&lt;/h3&gt;
-
-&lt;p&gt;Clone this repo into to your local machine, then &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cd&lt;/code&gt; to the root directory of your local copy. Here is an overview of the project’s file structure:&lt;/p&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;go&quot;&gt;jekyll-theme-textalic
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;├── 404.html                    #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;404 page
-&lt;span class=&quot;go&quot;&gt;├── Gemfile
-├── LICENCE
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;├── _config.yml                 #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;Main config
-&lt;span class=&quot;go&quot;&gt;├── _data
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;│   └── me.yml                  #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;Personal info config
-&lt;span class=&quot;gp&quot;&gt;├── _demo_series                #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;A demo series, add series into series folder
-&lt;span class=&quot;go&quot;&gt;│   └── demo_series_post_1.md
-├── _includes
-├── _layouts
-├── _posts
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;│   └── 2019-12-25-Intro.md     #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;Add new post here
-&lt;span class=&quot;go&quot;&gt;├── _sass
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;├── about                       #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;About page
-&lt;span class=&quot;gp&quot;&gt;├── assets                      #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;images, fonts, css, js...
-&lt;span class=&quot;go&quot;&gt;│   ├── img
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;│   │   ├── me.png              #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;Replace with your own, showed &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /about page
-&lt;span class=&quot;gp&quot;&gt;├── favicon.ico                 #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;Replace with your own
-&lt;span class=&quot;go&quot;&gt;├── feed.xml
-├── index.html
-├── resume
-&lt;/span&gt;&lt;span class=&quot;gp&quot;&gt;│   └── index.md                #&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;You may write your resume here. linked &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; /about page
-&lt;span class=&quot;go&quot;&gt;├── search.json
-├── series
-└── tag
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;install-gems&quot;&gt;Install gems&lt;/h3&gt;
-
-&lt;p&gt;Run the following to install required gems defined in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ bundle install
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;customization&quot;&gt;Customization&lt;/h3&gt;
-
-&lt;p&gt;Edit &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_data/me.yml&lt;/code&gt; to tweek the site configuration to your need. See corresponding file’s comments for details.&lt;/p&gt;
-
-&lt;p&gt;You also should replace the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/favicon.ico&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/assets/img/me.png&lt;/code&gt; file with your own.&lt;/p&gt;
-
-&lt;h3 id=&quot;run-locally&quot;&gt;Run locally&lt;/h3&gt;
-
-&lt;p&gt;Run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bundle exec serve --watch&lt;/code&gt; to run it locally.&lt;/p&gt;
-</description>
-        <pubDate>Wed, 25 Dec 2019 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/demo/Install</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/demo/Install</guid>
-        
-        <category>tutorial</category>
-        
-        <category>textalic</category>
-        
-        
-        <category>demo</category>
-        
-      </item>
-    
-      <item>
-        <title>Blogging</title>
-        <description>&lt;h2 id=&quot;blogging&quot;&gt;Blogging&lt;/h2&gt;
-
-&lt;p&gt;You can begin writting your posts under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/_posts&lt;/code&gt; folder. See &lt;a href=&quot;https://jekyllrb.com/docs/posts/&quot;&gt;Jekyll doc on posts&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Posts are automatically grouped under site’s post/category and post/tag menu. You can define post’s category and tags in the post’s &lt;a href=&quot;https://jekyllrb.com/docs/front-matter/&quot;&gt;front matter&lt;/a&gt;, using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tags&lt;/code&gt; front matter block.&lt;/p&gt;
-
-&lt;h3 id=&quot;series&quot;&gt;Series&lt;/h3&gt;
-
-&lt;p&gt;Sereis are implemented using &lt;a href=&quot;https://jekyllrb.com/docs/collections/&quot;&gt;Jekyll’s collections&lt;/a&gt;. So to add new series, following these steps:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Define a new collection in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;, under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;collections&lt;/code&gt; configuration block&lt;/p&gt;
-
-    &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;na&quot;&gt;collections&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-   &lt;span class=&quot;na&quot;&gt;demo_series&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-     &lt;span class=&quot;na&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;true&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-
-    &lt;p&gt;Note that to make the change to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; take effects, you &lt;strong&gt;need to restart jekyll&lt;/strong&gt;.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Create the series (aka collection) folder &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/_demo_series&lt;/code&gt;. Note that the &lt;strong&gt;folder name begin with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;By adding new post under series folder, you add post under the corresponding series&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;deployment&quot;&gt;Deployment&lt;/h2&gt;
-
-&lt;p&gt;See &lt;a href=&quot;https://jekyllrb.com/docs/deployment/&quot;&gt;Jekyll doc on deployment&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;thats-it&quot;&gt;That’s it&lt;/h2&gt;
-
-&lt;p&gt;Happy blogging!&lt;/p&gt;
-</description>
-        <pubDate>Wed, 25 Dec 2019 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/demo/Blogging</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/demo/Blogging</guid>
-        
-        <category>tutorial</category>
         
         
         <category>demo</category>

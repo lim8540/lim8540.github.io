@@ -1,6 +1,33 @@
 [
   
     {
+      "title"    : "Week1_day2_til",
+      "category" : "K-digital training(AI)",
+      "tags"     : "K-digital training, week1_day2",
+      "url"      : "/k-digital%20training(ai)/week1_day2_TIL",
+      "date"     : "2020-11-30 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Week1_day1_til copy",
+      "category" : "K-digital training(AI)",
+      "tags"     : "K-digital training, week1_day1",
+      "url"      : "/k-digital%20training(ai)/week1_day1_TIL-copy",
+      "date"     : "2020-11-30 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Intro",
+      "category" : "K-digital training(AI)",
+      "tags"     : "K-digital training, Intro",
+      "url"      : "/k-digital%20training(ai)/Intro",
+      "date"     : "2020-11-30 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "알고리즘문제해결전략_fence",
       "category" : "Algorithm",
       "tags"     : "알고리즘문제해결전략, FENCE",
