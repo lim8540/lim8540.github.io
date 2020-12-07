@@ -1,28 +1,55 @@
 [
   
     {
-      "title"    : "Week1_day2_til",
-      "category" : "K-digital training(AI)",
-      "tags"     : "K-digital training, week1_day2",
-      "url"      : "/k-digital%20training(ai)/week1_day2_TIL",
-      "date"     : "2020-11-30 00:00:00 +0900",
+      "title"    : "Jupyter notebook과 numpy",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day1",
+      "url"      : "/programmers/Jupyter-Notebook%EA%B3%BC-numpy",
+      "date"     : "2020-12-07 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
-      "title"    : "Week1_day1_til copy",
-      "category" : "K-digital training(AI)",
+      "title"    : "Python과 algorithm(3)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week1_day4",
+      "url"      : "/programmers/python%EA%B3%BC-algorithm(3)",
+      "date"     : "2020-12-03 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Python과 algorythm(2)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week1_day3",
+      "url"      : "/programmers/python%EA%B3%BC-Algorythm(2)",
+      "date"     : "2020-12-02 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Python과 algorithm(1)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week1_day2",
+      "url"      : "/programmers/python%EA%B3%BC-Algorithm(1)",
+      "date"     : "2020-12-01 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Linkedlist",
+      "category" : "programmers",
       "tags"     : "K-digital training, week1_day1",
-      "url"      : "/k-digital%20training(ai)/week1_day1_TIL-copy",
+      "url"      : "/programmers/LinkedList",
       "date"     : "2020-11-30 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
       "title"    : "Intro",
-      "category" : "K-digital training(AI)",
+      "category" : "programmers",
       "tags"     : "K-digital training, Intro",
-      "url"      : "/k-digital%20training(ai)/Intro",
+      "url"      : "/programmers/Intro",
       "date"     : "2020-11-30 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
