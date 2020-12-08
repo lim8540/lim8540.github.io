@@ -1,0 +1,69 @@
+I"�<h2 id="lu분해">LU분해</h2>
+<p>L : lower triangular matrix(하삼각행렬) / 아래쪽 삼각형에 의미있는 수가 들어있고 나머지는 0이 들어있는 행렬 <br />
+U : upper triangular matrix(상삼각행렬) / 위쪽 삼각형에 의미있는 수가 들어있고 나머지는 0이 들어있는 행렬</p>
+
+<h3 id="lu분해를-통해-선형시스템을-해결하는-방법">LU분해를 통해 선형시스템을 해결하는 방법</h3>
+<p>$Ax = b \to (LU)x = b \to L(Ux) = b \to Ly = b (단, Ux = y)$</p>
+<ol>
+  <li>전방 대치법을 통해서 $Ly = b$에서 $y$를 구해냄.</li>
+  <li>후방 대치법을 통해서 $Ux = y$에서 $x$를 구해냄.</li>
+</ol>
+
+<h3 id="lu-분해를-활용하는-이유">LU 분해를 활용하는 이유</h3>
+<ol>
+  <li>수치적 안정성 : 선형 시스템 $Ax = b$의 해를 $A$의 역행렬을 이용해 직접 구하는 것 보다 PLU분해를 이용하는 것이 좀 더 수치적으로 안정적입니다.</li>
+  <li>$b$가 자주 업데이트되는 경우 : 선형시스템 $Ax = b$에서 행렬 $A$는 고정되어 있고 $b$가 자주 변하는 문제가 종종 있습니다. 이런 경우, 행렬 $A$를 미리 PLU로 분해해 둔다면, $b$가 업데이트 될 때마다 선형시스템의 해 $x$를 실시간으로 구할 수 있습니다.</li>
+</ol>
+
+<h2 id="텐서tensor">텐서(tensor)</h2>
+<p>텐서(tensor)는 스칼라, 벡터, 행렬을 아우르는 개념이다, 숫자가 늘어설 수 있는 방향이 k개면 k-텐서로 부른다.</p>
+<ul>
+  <li>0-텐서 : 스칼라</li>
+  <li>1-텐서 : 벡터</li>
+  <li>2-텐서 : 행렬
+만약의 행렬 안의 각각의 요소가 벡터라고 한다면 그때의 구조는 3-텐서라고 볼 수 있다.     3-텐서의 대표적인 예는 컬러 영상이다. RGB영상은 3-벡터, RGBA영상은 4-벡터라고 볼 수 있다.</li>
+</ul>
+
+<h2 id="분할행렬partitioned-matrix">분할행렬(Partitioned Matrix)</h2>
+<p><img src="https://user-images.githubusercontent.com/51064261/101447565-cfc35880-3968-11eb-8542-c05f4d4acf2c.jpg" alt="Linear_Combination" /></p>
+
+<p>선형시스템 $Ax = b$를 선형조합 관점에서 바라보면 행렬 A의 열벡터를 가중치합으로 선형조합할 때 벡터 $b$를 만들 수 있는 가중치 조합이 존재한다면, 선형시스템 $Ax = b$의 해는 존재한다. 그 해는 가중치 $x_1$, $x_2$, …들로 구성된 벡터$x$ 이다.</p>
+
+<h2 id="좌표계-변환change-of-basis">좌표계 변환(Change of Basis)</h2>
+<p>2-벡터 v가  표준 좌표계에서 $(2,3)$으포 표현될 때, 벡터 $(3,1)$과 $(1,2)$를 기저벡터로 가지는 새로운 좌표계를 도입했을 때, 해당 벡터가 가지는 값($v’$)을 구하는 방법 :
+\(\begin{pmatrix}
+ 1 &amp; a_1 &amp; a_1^2 &amp; \cdots &amp; a_1^n \\
+ 1 &amp; a_2 &amp; a_2^2 &amp; \cdots &amp; a_2^n \\
+ \vdots  &amp; \vdots&amp; \vdots &amp; \ddots &amp; \vdots \\
+ 1 &amp; a_m &amp; a_m^2 &amp; \cdots &amp; a_m^n    
+ \end{pmatrix}\)</p>
+
+<p>행렬을 A라고 했을때, A x v’ = v가 되도록 하는 새로운 벡터 v’을 구한다.</p>
+
+<h2 id="선형-함수linear-function">선형 함수(linear function)</h2>
+<p>선형함수는 그래프로 그려봤을 때 선형의 형태를 가지는 함수를 말한다. 함수 f가 다음의 두가지 조건을 만족하면 함수 f는 선형함수라고 한다.</p>
+<ul>
+  <li>$f(x + y) = f(x) + f(y)$</li>
+  <li>$f(cx) = cf(x)$</li>
+</ul>
+
+<h2 id="행렬-변환matrix-transformation">행렬 변환(Matrix Transformation)</h2>
+<p>m x n 행렬 A에 대해 Ax는 n-벡터를 입력으로 받아 m-벡터를 출력으로 내는 변환 T(x) = Ax로 볼 수 있다. 이 변환은 행렬이 정의하기 때문에 행렬변환(matrix transformation)이라고 한다. 즉, m x n 행렬은 n-벡터를 입력으로 받아 m-벡터를 출력으로 내는 선형변환 이며, 임의의 선형변환은 행렬로 표현가능하다. 즉, 행렬은 선형변환의 구현체이다.</p>
+
+<p>(
+        \begin{matrix}
+        1 &amp; x &amp; x^2 <br />
+        1 &amp; y &amp; y^2 <br />
+        1 &amp; z &amp; z^2 <br />
+        \end{matrix}
+)</p>
+
+<p>(
+        \begin{matrix}
+        1 &amp; x &amp; x^2 <br />
+        1 &amp; y &amp; y^2 <br />
+        1 &amp; z &amp; z^2 <br />
+        \end{matrix}
+)</p>
+
+:ET

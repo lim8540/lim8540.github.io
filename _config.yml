@@ -17,7 +17,9 @@ paginate: 7
 paginate_path: "page:num"
 layout: post
 permalink: /:categories/:title
-excerpt_separator: "[-----]"
+excerpt_separator: "\n\n"
+incremental: false
+lsi: false
 
 url: "https://lim8540.github.io/"# Required: replace this with your domain
 name: BAESAN # Required: will be displayed on every page's header

@@ -5,6 +5,9 @@ layout: compress
 <html>
 <head>
   {% include head.html %}
+  {% if page.use_math %}
+  {% include mathjax_support.html %}
+{% endif %}
 </head>
 
 <!-- bare layout means not header and footer
