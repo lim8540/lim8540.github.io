@@ -1,6 +1,6 @@
 ---
 category: programmers
-tags: [K-digital training, week1_day1]
+tags: [K-digital training, week1_day1, algorithms]
 ---
 
 ## LinkedList PopAt() 구현

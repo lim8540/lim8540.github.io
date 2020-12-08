@@ -1,6 +1,6 @@
 ---
 category: programmers
-tags: [K-digital training, week1_day2]
+tags: [K-digital training, week1_day2, algorithms]
 ---
 
 ## !isEmpty()

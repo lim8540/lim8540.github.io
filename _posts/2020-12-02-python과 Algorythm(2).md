@@ -1,6 +1,6 @@
 ---
 category: programmers
-tags: [K-digital training, week1_day3]
+tags: [K-digital training, week1_day3, algorithms]
 ---
 
 ## 가장 큰 수 (조건에 따라 sort 하기)

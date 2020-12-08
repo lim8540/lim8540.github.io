@@ -1,0 +1,75 @@
+I"}<h2 id="게임-아이템python에서-heap-사용하기">게임 아이템(python에서 heap 사용하기)</h2>
+
+<h3 id="문제-개요">문제 개요</h3>
+<p>healths 에는 캐릭터들의 체력이 들어오고 items에는 item마다 늘어나는 공격력과 깎이는 체력이 들어있다. 아이템을 장착하였을때 남아있는 체력이 100이상이어야 하며 캐릭터 하나당 착용 가능한 아이템은 하나 뿐이다. 공격력이 최대가 되게하는 착용 아이템들의 index를 오름차순으로 return하라</p>
+
+<h3 id="입출력-예시">입출력 예시</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>healths</th>
+      <th style="text-align: center">items</th>
+      <th style="text-align: right">return</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>[200,120,150]</td>
+      <td style="text-align: center">[[30,100],[500,30],[100,400]]</td>
+      <td style="text-align: right">[1,2]</td>
+    </tr>
+    <tr>
+      <td>[300,200,500]</td>
+      <td style="text-align: center">[[1000, 600], [400, 500], [300, 100]]</td>
+      <td style="text-align: right">[3]</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>입출력 예 #2</p>
+
+<p>첫 번째, 두 번째 아이템을 사용하면 캐릭터의 체력이 100 미만이 됩니다. 따라서 세 번째 아이템만 사용할 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">import</span> <span class="nn">heapq</span>
+
+<span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">scoville</span><span class="p">,</span> <span class="n">K</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">heapq</span>
+
+<span class="k">def</span> <span class="nf">solution</span><span class="p">(</span><span class="n">healths</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">heap</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1">#체력을 낮은 순으로 정렬한다.
+</span>    <span class="n">healths</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="n">item</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">#items를 깎이는 채력이 낮은 순으로 정렬한다.
+</span>    <span class="n">items</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># 낮은순의 캐릭터 체력 루프
+</span>    <span class="k">for</span> <span class="n">health</span> <span class="ow">in</span> <span class="n">healths</span><span class="p">:</span>
+        <span class="c1"># 깎이는 체력이 낮은 순의 아이템 루프
+</span>        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+            <span class="c1"># 착용할 수 없는 아이템이 나온다면 아이템 루프를 중단하고 다음 캐릭터로 넘어간다.
+</span>            <span class="k">if</span> <span class="n">health</span> <span class="o">-</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># 착용할 수 있는 아이템이라면 heap에 넣는다. 한번 힙에 넣은 아이템은 다음 
+</span>            <span class="c1"># 캐릭터에서 착용 여부를 확인할 필요가 없다.(반드시 다음엔 지금 캐릭터 
+</span>            <span class="c1"># 보다  체력이 높은 캐릭터가 나오게 되므로 반드시 착용 가능하다.) min 
+</span>            <span class="c1"># heap이 아니라 max heap으로 만들어야 되기 때문에(공격력이 높은순)
+</span>            <span class="c1"># 공격력에 -를 붙여서 heap에 index와 함께 넣는다.
+</span>            <span class="n">heapq</span><span class="p">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># heap은 현재 캐릭터가 착용가능한 아이템들이 들어 있으며 여기서 pop을 하면, 
+</span>        <span class="c1"># 공격력이 가장 높은 아이템이 나오게 된다.
+</span>        <span class="k">if</span> <span class="n">heap</span><span class="p">:</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">heapq</span><span class="p">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">heap</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">answer</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">answer</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">answer</span>
+
+</code></pre></div></div>
+
+<p>heap을 활용해야 될 것 같다는 느낌이 있었지만, 위처럼 둘다 체력순이 아니라 items를 공격력 높은 순으로 정렬해 놓고 생각하다 보니, 힙을 쓸 부분을 찾지 못했고 결국 비효율을 유발해 채점할때 시간초가가 나왔다. 아쉬운 문제다.</p>
+:ET

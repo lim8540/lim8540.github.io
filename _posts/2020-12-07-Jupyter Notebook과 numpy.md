@@ -1,6 +1,6 @@
 ---
 category: programmers
-tags: [K-digital training, week2_day1]
+tags: [K-digital training, week2_day1, 인공지능 수학]
 ---
 
 ## Jupyter Notebook
@@ -264,6 +264,10 @@ a b c
 0 j k   
 0 0 n   
 의 형태와 같이 단순하게 바꾸어 주는 작업을 전방 소거법(forward elimination)이라고 한다. 그 후 아래부터 단순해진 방정식의 해를 하나씩 구하는 작업을 후방 대입법(back-substitution)이라고 한다.   
-|1 2  1| |x1|    |1 |   
-|1 2  3| |x2| =  |3 |   
-|2 3 -1| |x3|    |-3|
+Gauss elimination에서 forward elimination의 가치는 다음과 같다.
+- 주어진 선형 시스템을 가장 풀기 쉬운 꼴로 변형해 준다.
+- 주어진 선형시스템의 rank(랭크)를 알려준다.
+    - rank: 실제 의미있는 방정식이 몇개인가를 나타냄
+    - 전방 소거법을 쓰면 0x = 0과 같이 의미없는 방정식이 도출됨. 이는 랭크에 더해지지 않음
+- 선형시스템이 해가 있는지(consistent) 해가 없는지(inconsistent) 알려준다.
+    - 해가 없는 선형 시스템과 해가 있는 선형방정식(유일하지 않은)의 차이점은 0x + 0y = 0과 같은 식이 나오면 해가 있는(유일하지 않은) 방정식이고, 0x + 0y = 3과 같은 식은 해가 없는 방정식이 된다.

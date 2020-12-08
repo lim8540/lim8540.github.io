@@ -1,19 +1,37 @@
 [
   
     {
+      "title"    : "인공지능수학(미적분)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day2, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(%EB%AF%B8%EC%A0%81%EB%B6%84)",
+      "date"     : "2020-12-08 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Python과 algorithm(4)_heap응용",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day1, algorithms",
+      "url"      : "/programmers/python%EA%B3%BC-algorithm(4)_heap%EC%9D%91%EC%9A%A9",
+      "date"     : "2020-12-07 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "Jupyter notebook과 numpy",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day1",
+      "tags"     : "K-digital training, week2_day1, 인공지능 수학",
       "url"      : "/programmers/Jupyter-Notebook%EA%B3%BC-numpy",
       "date"     : "2020-12-07 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
-      "title"    : "Python과 algorithm(3)",
+      "title"    : "Python과 algorithm(3)_heap copy",
       "category" : "programmers",
-      "tags"     : "K-digital training, week1_day4",
-      "url"      : "/programmers/python%EA%B3%BC-algorithm(3)",
+      "tags"     : "K-digital training, week1_day4, algorithms",
+      "url"      : "/programmers/python%EA%B3%BC-algorithm(3)_heap-copy",
       "date"     : "2020-12-03 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
@@ -21,7 +39,7 @@
     {
       "title"    : "Python과 algorythm(2)",
       "category" : "programmers",
-      "tags"     : "K-digital training, week1_day3",
+      "tags"     : "K-digital training, week1_day3, algorithms",
       "url"      : "/programmers/python%EA%B3%BC-Algorythm(2)",
       "date"     : "2020-12-02 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -30,7 +48,7 @@
     {
       "title"    : "Python과 algorithm(1)",
       "category" : "programmers",
-      "tags"     : "K-digital training, week1_day2",
+      "tags"     : "K-digital training, week1_day2, algorithms",
       "url"      : "/programmers/python%EA%B3%BC-Algorithm(1)",
       "date"     : "2020-12-01 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -39,7 +57,7 @@
     {
       "title"    : "Linkedlist",
       "category" : "programmers",
-      "tags"     : "K-digital training, week1_day1",
+      "tags"     : "K-digital training, week1_day1, algorithms",
       "url"      : "/programmers/LinkedList",
       "date"     : "2020-11-30 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
