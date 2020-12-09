@@ -1,0 +1,76 @@
+I"<h2 id="통계학-개념-정의">통계학 개념 정의</h2>
+<ul>
+  <li>모집단(population):
+    <ul>
+      <li>어떤 질문이나 실험을 위해 관심의 대상이 되는 개체나 사건의 집합</li>
+    </ul>
+  </li>
+  <li>모수(parameter):
+    <ul>
+      <li>모집단의 수치적인 특성</li>
+    </ul>
+  </li>
+  <li>표본(sample):
+    <ul>
+      <li>모집단에서 선택된 개체나 사건의 집합</li>
+    </ul>
+  </li>
+  <li>도수(frequency):
+    <ul>
+      <li>어떤 사건이 실험이나 관찰로부터 발생한 횟수</li>
+      <li>표현 방법: 도수분포표(frequency distribution table), 막대 그래프 (bar graph), 히스토그램(Histogram)</li>
+    </ul>
+  </li>
+  <li>상대도수:
+    <ul>
+      <li>도수를 전체 원소의 수로 나눈 수치</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="python으로-구현하는-통계">python으로 구현하는 통계</h2>
+
+<h3 id="평균mean">평균(mean)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">statistics</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="p">...]</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">statistic</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="mf">40.132</span><span class="p">...</span>
+</code></pre></div></div>
+
+<h3 id="중앙값median">중앙값(Median)</h3>
+<ul>
+  <li>중앙값은 주어진 자료를 높은 쪽 절반과 낮은 쪽 절반으로 나누는 값을 의미한다.</li>
+  <li>자료의 수 : n
+    <ul>
+      <li>n이 홀수 : $(n+1) \over 2$번째 자료값</li>
+      <li>n이 짝수 : $n \over 2$번째와 ${n \over 2} + 1$번째 자료값의 평균</li>
+    </ul>
+  </li>
+  <li>평균의 경우는 극단적인 값들의 영향을 크게 받지만, 중앙값은 그렇지 않다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">statistics</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">statistics</span><span class="p">.</span><span class="n">median</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="mi">100</span>
+</code></pre></div></div>
+
+<h3 id="분산variance">분산(Variance)</h3>
+<ul>
+  <li>편차의 제곱의 합을 자료의 수로 나눈 값
+    <ul>
+      <li>편차 : 값과 평균의 차이</li>
+    </ul>
+  </li>
+  <li>자료가 모집단일 경우 : 모분산
+    <ul>
+      <li>$\sigma ^ 2= {1 \over N} \sum_1^N(x_i - \mu)^2$</li>
+    </ul>
+  </li>
+  <li>자료가 표본일 경우 : 표본분산
+    <ul>
+      <li>$s ^ 2= {1 \over n-1} \sum_1^n(x_i - \bar x)^2$</li>
+    </ul>
+  </li>
+</ul>
+:ET

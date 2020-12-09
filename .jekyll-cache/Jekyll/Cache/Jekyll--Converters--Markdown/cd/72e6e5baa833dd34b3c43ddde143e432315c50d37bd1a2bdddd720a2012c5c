@@ -1,0 +1,19 @@
+I"�<h2 id="lu분해">LU분해</h2>
+<p>$ \begin{bmatrix} 3 &amp; 1\cr 1 &amp; 2 \end{bmatrix} v’ = \begin{bmatrix} 2 \cr 3 \end{bmatrix}
+$</p>
+
+<h2 id="벡터의-투영projection">벡터의 투영(projection)</h2>
+<p>두 벡터 $u, a$가 있을 때, 벡터 $u$를 $a$ 위에 투영한 벡터를 $proj_au$라하고 다음과 같이 구한다.
+$proj_au = (u \cdot \frac{1}{\Vert a \Vert}\Vert a \Vert) (\frac{1}{\Vert a \Vert}\Vert a \Vert) = (\frac{u \cdot a}{\Vert a \Vert^2})a$ <br />
+위의 식에서 $(u \cdot \frac{1}{\Vert a \Vert}\Vert a \Vert)$는 투영한 벡터의 길이를 나타내고 $(\frac{1}{\Vert a \Vert}\Vert a \Vert)$는 방향을 나타내고 이를 곱한 결과값은 다시 (기저 a에 대한 좌표값)a 로 나타낼 수 있다. <br />
+$(u \cdot \frac{1}{\Vert a \Vert}\Vert a \Vert)$을 얻어낸 과정은 다음과 같다. <br />
+$ \Vert u \Vert \Vert a \Vert cos\theta = u \cdot a
+$
+이고(내적의 정의) 이중 투영한 벡터의 길이인 $\Vert u \Vert cos \theta = u \cdot \frac{1}{\Vert a \Vert}\Vert a \Vert$ 이 된다. <br />
+벡터 $u$를 $a$위에 투영하고 남은 보완벡터(complement vector) 는 $u - proj_au$이다.</p>
+
+<h2 id="직교행렬orthogonal-matrix">직교행렬(orthogonal matrix)</h2>
+<p>주어진 행렬의 모든 열벡터가 서로 직교한다면, 이 행렬을 직교행렬 이라고 한다. 직교행렬은 직교 좌표계를 의미한다. <br />
+$\begin{bmatrix} 1 &amp; 4 \cr -2 &amp; 2 \end{bmatrix}  \begin{bmatrix} 2 &amp; 2 &amp; -4 \cr 2 &amp; 1 &amp; 7 \cr 6 &amp; -1 &amp; -1 \end{bmatrix}$ <br />
+위의 두 행렬은 모두 직교 행렬이다. 첫번째 행렬의 두 열벡터 $(1, -2), (4, 2)$ 는 직교한다(내적이 0). 두번째 행렬에 세 열벡터 $(2, 2, 6), (2, 1, 1), (-4, 7, -1)$도 각각 직교한다. 직교행렬중에 모든 열벡터의 크기가 1인 행렬을 정규직교행렬(prthonormal matrix)이라고 한다. 정규직교행렬은 정규직교좌표계를 의미한다.</p>
+:ET

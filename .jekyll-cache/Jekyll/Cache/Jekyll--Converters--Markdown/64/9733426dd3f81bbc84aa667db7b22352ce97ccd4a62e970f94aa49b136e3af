@@ -1,0 +1,6 @@
+I"^<h2 id="특이값-분해svd-singular-value-decomposition">특이값 분해(SVD, Singular Value Decomposition)</h2>
+<p>$LU$ 분해와 $QR$분해는 $n \times n$ 정방행렬(square matrix)에 대한 행렬분해인 반면, 특이값 분해는 일반적인 $m \times n$ 행렬에 관한 행렬 분해이다. 특이값 분해는 직교분할, 확대축소, 차원변환 등과 관련이 있다.</p>
+
+<p>특이값 분해는 주어진 행렬을 아래의 형태를 가지는 세 행렬의 곱으로 나누는 행렬분해 입니다. <br />
+$A_{m \times n} = B_{m \times m} D{m \times n} {V_{n \times n}}^T$</p>
+:ET

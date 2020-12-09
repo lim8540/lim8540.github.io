@@ -1,0 +1,4 @@
+I"E<h2 id="lu분해">LU분해</h2>
+<p>L : lower triangular matrix(하삼각행렬) / 아래쪽 삼각형에 의미있는 수가 들어있고 나머지는 0이 들어있는 행렬 <br />
+U : upper triangular matrix(상삼각행렬) / 위쪽 삼각형에 의미있는 수가 들어있고 나머지는 0이 들어있는 행렬</p>
+:ET

@@ -1,0 +1,23 @@
+I"�<h2 id="특이값-분해svd-singular-value-decomposition">특이값 분해(SVD, Singular Value Decomposition)</h2>
+<p>$LU$ 분해와 $QR$분해는 $n \times n$ 정방행렬(square matrix)에 대한 행렬분해인 반면, 특이값 분해는 일반적인 $m \times n$ 행렬에 관한 행렬 분해이다. 특이값 분해는 직교분할, 확대축소, 차원변환 등과 관련이 있다.</p>
+
+<p>특이값 분해는 주어진 행렬을 아래의 형태를 가지는 세 행렬의 곱으로 나누는 행렬분해 이다. <br />
+$A_{m \times n} = B_{m \times m} D_{m \times n} V_{n \times n}^T$</p>
+<ul>
+  <li>$U$ : $m$차원 회전행렬(정규직교행렬), 입력 차원인 $R^m$공간에서의 회전</li>
+  <li>$D$ : $n$차원 확대축소(확대축소 크기에 따른 정렬 형태), 입력 차원인 $R^n$공간에 대해 축방향으로의 확대축소한 후, $R^n \to R^m$으로 차원 변환</li>
+  <li>$V$ : $n$차원 회전행렬(정규직교행렬), 입력차원인 $R^n$공간에서의 회전</li>
+</ul>
+
+<h2 id="주성분-분석pca-principal-component-analysis">주성분 분석(PCA, Principal Component Analysis)</h2>
+<p>주성분 분석(PCA)는 데이터의 공분산행렬(convariance matrix)에 대한 고유값 분해에 기반을 둔 직교분해이다. $K$개의 $n$차원 데이터 $[x_i]_{i=1}^K$가 있을 때, 데이터의 중심 $m$과 공분산행렬 $C$는 다음과 같이 구한다. <br />
+$m = {1 \over K}$ $\sum_1^n x_i$ <br />
+   $C = {1 \over K}$ $\sum_1^K (x_i - m)(x_i - m)^T$</p>
+
+<p>공분산행렬에 대해 주성분분석$(PCA)$는 아래와 같다.
+$C_{n \times n} = W_{n \times n} D_{n \times n} W_{n \times n}^T$</p>
+<ul>
+  <li>$W$ : $n$차원 회전행렬(정규직교행렬), 입력 차원인 $R^m$공간에서의 회전</li>
+  <li>$D$ : $n$차원 확대축소(확대축소 크기에 따른 정렬 형태), 입력 차원인 $R^n$공간에 대해 축방향으로의 확대축소한 후, $R^n \to R^m$으로 차원 변환</li>
+</ul>
+:ET
