@@ -1,10 +1,28 @@
 [
   
     {
-      "title"    : "인공지능수학(5)(통계학 기본개념)",
+      "title"    : "인공지능수학(7)(확률분포)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day4, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(7)(%ED%99%95%EB%A5%A0%EB%B6%84%ED%8F%AC)",
+      "date"     : "2020-12-10 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "인공지능수학(6)(확률) copy",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day4, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(6)(%ED%99%95%EB%A5%A0)-copy",
+      "date"     : "2020-12-10 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "인공지능수학(5)(통계학 기본개념) copy",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day3, 인공지능 수학",
-      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(5)(%ED%86%B5%EA%B3%84%ED%95%99-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90)",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(5)(%ED%86%B5%EA%B3%84%ED%95%99-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90)-copy",
       "date"     : "2020-12-09 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,

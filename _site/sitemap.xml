@@ -2,15 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_1</loc>
-<lastmod>2020-12-09T19:51:09+09:00</lastmod>
+<lastmod>2020-12-10T20:01:38+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_2</loc>
-<lastmod>2020-12-09T19:51:09+09:00</lastmod>
+<lastmod>2020-12-10T20:01:38+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series_2/demo_series_2_post_1</loc>
-<lastmod>2020-12-09T19:51:09+09:00</lastmod>
+<lastmod>2020-12-10T20:01:38+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo/Blogging</loc>
@@ -93,8 +93,16 @@
 <lastmod>2020-12-09T00:00:00+09:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(5)(%ED%86%B5%EA%B3%84%ED%95%99-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90)</loc>
+<loc>http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(5)(%ED%86%B5%EA%B3%84%ED%95%99-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90)-copy</loc>
 <lastmod>2020-12-09T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(6)(%ED%99%95%EB%A5%A0)-copy</loc>
+<lastmod>2020-12-10T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(7)(%ED%99%95%EB%A5%A0%EB%B6%84%ED%8F%AC)</loc>
+<lastmod>2020-12-10T00:00:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/series/</loc>
@@ -119,5 +127,8 @@
 </url>
 <url>
 <loc>http://localhost:4000/page3/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page4/</loc>
 </url>
 </urlset>

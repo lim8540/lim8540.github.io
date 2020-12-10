@@ -1,7 +1,0 @@
-I"X<h2 id="lu분해">LU분해</h2>
-<p>$ \begin{bmatrix} 3 &amp; 1\cr 1 &amp; 2 \end{bmatrix} v’ = \begin{bmatrix} 2 \cr 3 \end{bmatrix}
-$</p>
-
-<h2 id="벡터의-투영projection">벡터의 투영(projection)</h2>
-<p>두 벡터 $u, a$가 있을 때, 벡터 $u$를 $a$ 위에 투영한 벡터를 $proj_au$라하고 다음과 같이 구한다.</p>
-:ET
