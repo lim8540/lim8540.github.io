@@ -1,6 +1,42 @@
 [
   
     {
+      "title"    : "인공지능수학(9)(추정)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(9)(%EC%B6%94%EC%A0%95)",
+      "date"     : "2020-12-11 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "인공지능수학(8)(표본분포)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(8)(%ED%91%9C%EB%B3%B8%EB%B6%84%ED%8F%AC)",
+      "date"     : "2020-12-11 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "인공지능수학(11)(엔트로피)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(11)(%EC%97%94%ED%8A%B8%EB%A1%9C%ED%94%BC)",
+      "date"     : "2020-12-11 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "인공지능수학(10)(검정)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, 인공지능 수학",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(10)(%EA%B2%80%EC%A0%95)",
+      "date"     : "2020-12-11 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "인공지능수학(7)(확률분포)",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day4, 인공지능 수학",
@@ -10,46 +46,46 @@
     } ,
   
     {
-      "title"    : "인공지능수학(6)(확률) copy",
+      "title"    : "인공지능수학(6)(확률) ",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day4, 인공지능 수학",
-      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(6)(%ED%99%95%EB%A5%A0)-copy",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(6)(%ED%99%95%EB%A5%A0)",
       "date"     : "2020-12-10 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
-      "title"    : "인공지능수학(5)(통계학 기본개념) copy",
+      "title"    : "인공지능수학(5)(통계학 기본개념)",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day3, 인공지능 수학",
-      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(5)(%ED%86%B5%EA%B3%84%ED%95%99-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90)-copy",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(5)(%ED%86%B5%EA%B3%84%ED%95%99-%EA%B8%B0%EB%B3%B8%EA%B0%9C%EB%85%90)",
       "date"     : "2020-12-09 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
-      "title"    : "인공지능수학(4)(벡터공간과 최소제곱법) copy",
+      "title"    : "인공지능수학(4)(벡터공간과 최소제곱법)",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day3, 인공지능 수학",
-      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(4)(%EB%B2%A1%ED%84%B0%EA%B3%B5%EA%B0%84%EA%B3%BC-%EC%B5%9C%EC%86%8C%EC%A0%9C%EA%B3%B1%EB%B2%95)-copy",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(4)(%EB%B2%A1%ED%84%B0%EA%B3%B5%EA%B0%84%EA%B3%BC-%EC%B5%9C%EC%86%8C%EC%A0%9C%EA%B3%B1%EB%B2%95)",
       "date"     : "2020-12-09 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
-      "title"    : "인공지능수학(3)(svd, pca) copy",
+      "title"    : "인공지능수학(3)(svd, pca)",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day3, 인공지능 수학",
-      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(3)(SVD,-PCA)-copy",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(3)(SVD,-PCA)",
       "date"     : "2020-12-09 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,
   
     {
-      "title"    : "인공지능수학(2)(벡터와 직교분해) copy",
+      "title"    : "인공지능수학(2)(벡터와 직교분해)",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day3, 인공지능 수학",
-      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(2)(%EB%B2%A1%ED%84%B0%EC%99%80-%EC%A7%81%EA%B5%90%EB%B6%84%ED%95%B4)-copy",
+      "url"      : "/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(2)(%EB%B2%A1%ED%84%B0%EC%99%80-%EC%A7%81%EA%B5%90%EB%B6%84%ED%95%B4)",
       "date"     : "2020-12-09 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
     } ,

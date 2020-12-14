@@ -1,0 +1,11 @@
+I"�<h2 id="엔트로피">엔트로피</h2>
+
+<ul>
+  <li>자기정보(self-information) : $i(A)$
+    <ul>
+      <li>A : 사건</li>
+      <li>$ i(A) = {log_b(1\over {P(A)})} = -log_bP(A)$</li>
+    </ul>
+  </li>
+</ul>
+:ET
