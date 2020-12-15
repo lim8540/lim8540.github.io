@@ -1,6 +1,33 @@
 [
   
     {
+      "title"    : "깃(git)의 활용",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, git",
+      "url"      : "/programmers/%EA%B9%83(git)%EC%9D%98-%ED%99%9C%EC%9A%A9",
+      "date"     : "2020-12-14 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Python으로 데이터 다루기(numpy와 선형대수)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, numpy",
+      "url"      : "/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0(Numpy%EC%99%80-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98)",
+      "date"     : "2020-12-14 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Python으로 데이터 다루기(numpy)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, numpy",
+      "url"      : "/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0(Numpy)",
+      "date"     : "2020-12-14 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "인공지능수학(9)(추정)",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day5, 인공지능 수학",

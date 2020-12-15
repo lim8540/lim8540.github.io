@@ -1,0 +1,5 @@
+I"<h3 id="영벡터행렬">영벡터(행렬)</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 원소가 모두 0인 벡터(행렬)
+- np.zeros(dim)을 통해서 생성, dim은 값, 혹은 튜플(,)
+</code></pre></div></div>
+:ET
