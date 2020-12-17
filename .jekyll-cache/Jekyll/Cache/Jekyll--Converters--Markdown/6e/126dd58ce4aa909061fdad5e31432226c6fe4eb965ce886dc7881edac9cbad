@@ -1,0 +1,10 @@
+I"w<h2 id="1matplotlib-시작하기">1.Matplotlib 시작하기</h2>
+<ul>
+  <li>파이썬의 데이터 시각화 라이브러리
+    <ul>
+      <li>cf) 라이브러리(numpy, pandas, matplotlib, …) vs 프레임워크(django, flask, …)</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">%matplotlib inline</code>을 통해서 활성화</li>
+</ul>
+:ET

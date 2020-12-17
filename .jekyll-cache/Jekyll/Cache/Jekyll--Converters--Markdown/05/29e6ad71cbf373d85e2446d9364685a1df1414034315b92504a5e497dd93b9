@@ -1,0 +1,473 @@
+I"�I<h2 id="4-seaborn">4. SeaBorn</h2>
+
+<h3 id="matplotlib를-기반으로-더-다양한-시각화-방법을-제공하는-라이브러리">Matplotlib를 기반으로 더 다양한 시각화 방법을 제공하는 라이브러리</h3>
+<ul>
+  <li>커널밀도그림</li>
+  <li>카운트그림</li>
+  <li>캣그림</li>
+  <li>스트립그림</li>
+  <li>히트맵</li>
+</ul>
+
+<h3 id="seaborn-import-하기">Seaborn import 하기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+</code></pre></div></div>
+
+<h3 id="커널밀도그림kernel-density-plot">커널밀도그림(Kernel Density Plot)</h3>
+<ul>
+  <li>히스토그램과 같은 연속적인 분포를 곡선화해서 그린 그림</li>
+  <li><code class="language-plaintext highlighter-rouge">sns.kdeplot()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># in Histogram
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_5_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># kdeplot
+</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_6_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 음영넣기
+</span><span class="n">sns</span><span class="p">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">shade</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_7_0.png" alt="png" /></p>
+
+<h3 id="카운트그림count-plot">카운트그림(Count Plot)</h3>
+<ul>
+  <li>범주형 column의 빈도수를 시각화 -&gt; Groupby 후의 도수를 하는 것과 동일한 효과</li>
+  <li><code class="language-plaintext highlighter-rouge">sns.countplot()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">vote_df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s">"name"</span><span class="p">:[</span><span class="s">'Andy'</span><span class="p">,</span> <span class="s">'Bob'</span><span class="p">,</span> <span class="s">'Cat'</span><span class="p">],</span> <span class="s">"vote"</span> <span class="p">:</span> <span class="p">[</span><span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">]})</span>
+
+<span class="n">vote_df</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>vote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>Andy</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Bob</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Cat</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># in matplotlib barplot
+</span>
+<span class="n">vote_count</span> <span class="o">=</span> <span class="n">vote_df</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">'vote'</span><span class="p">).</span><span class="n">count</span><span class="p">()</span>
+
+<span class="n">vote_count</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+    </tr>
+    <tr>
+      <th>vote</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>False</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>True</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">],</span> <span class="n">height</span><span class="o">=</span><span class="n">vote_count</span><span class="p">[</span><span class="s">'name'</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_11_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># sns.countplot
+</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">vote_df</span><span class="p">[</span><span class="s">'vote'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_12_0.png" alt="png" /></p>
+
+<h3 id="캣-그림cat-plot">캣 그림(Cat Plot)</h3>
+<ul>
+  <li>숫자형 변수와 하나 이상의 범주형 변수의 관계를 보여주는 함수</li>
+  <li><code class="language-plaintext highlighter-rouge">sns.catplot()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">covid</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"./country_wise_latest.csv"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">sns</span><span class="p">.</span><span class="n">catplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">"WHO Region"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"Confirmed"</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">covid</span><span class="p">)</span>
+<span class="n">s</span><span class="p">.</span><span class="n">fig</span><span class="p">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="c1"># figure size 조정
+</span><span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_15_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">sns</span><span class="p">.</span><span class="n">catplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">"WHO Region"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"Confirmed"</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">covid</span><span class="p">,</span> <span class="n">kind</span> <span class="o">=</span> <span class="s">'violin'</span><span class="p">)</span>
+<span class="n">s</span><span class="p">.</span><span class="n">fig</span><span class="p">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="c1"># figure size 조정
+</span><span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_16_0.png" alt="png" /></p>
+
+<h3 id="스트립그림strip-plot">스트립그림(Strip Plot)</h3>
+<ul>
+  <li>scatter plot과 유사하게 데이터의 수치를 표현하는 그래프</li>
+  <li><code class="language-plaintext highlighter-rouge">sns.stripplot()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">"WHO Region"</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">"Recovered"</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">covid</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_18_0.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cf) swarmplot
+</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">swarmplot</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">"WHO Region"</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">"Recovered"</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">covid</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_19_0.png" alt="png" /></p>
+
+<h3 id="히트맵-heatmap">히트맵 (Heatmap)</h3>
+
+<ul>
+  <li>데이터의 행렬을 색상으로 표현해주는 그래프</li>
+  <li><code class="language-plaintext highlighter-rouge">sns.heatmap()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 히트맵 예제
+</span>
+<span class="n">covid</span><span class="p">.</span><span class="n">corr</span><span class="p">()</span> <span class="c1"># corr을 표현하기에 용이
+</span></code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Confirmed</th>
+      <th>Deaths</th>
+      <th>Recovered</th>
+      <th>Active</th>
+      <th>New cases</th>
+      <th>New deaths</th>
+      <th>New recovered</th>
+      <th>Deaths / 100 Cases</th>
+      <th>Recovered / 100 Cases</th>
+      <th>Deaths / 100 Recovered</th>
+      <th>Confirmed last week</th>
+      <th>1 week change</th>
+      <th>1 week % increase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Confirmed</td>
+      <td>1.000000</td>
+      <td>0.934698</td>
+      <td>0.906377</td>
+      <td>0.927018</td>
+      <td>0.909720</td>
+      <td>0.871683</td>
+      <td>0.859252</td>
+      <td>0.063550</td>
+      <td>-0.064815</td>
+      <td>0.025175</td>
+      <td>0.999127</td>
+      <td>0.954710</td>
+      <td>-0.010161</td>
+    </tr>
+    <tr>
+      <td>Deaths</td>
+      <td>0.934698</td>
+      <td>1.000000</td>
+      <td>0.832098</td>
+      <td>0.871586</td>
+      <td>0.806975</td>
+      <td>0.814161</td>
+      <td>0.765114</td>
+      <td>0.251565</td>
+      <td>-0.114529</td>
+      <td>0.169006</td>
+      <td>0.939082</td>
+      <td>0.855330</td>
+      <td>-0.034708</td>
+    </tr>
+    <tr>
+      <td>Recovered</td>
+      <td>0.906377</td>
+      <td>0.832098</td>
+      <td>1.000000</td>
+      <td>0.682103</td>
+      <td>0.818942</td>
+      <td>0.820338</td>
+      <td>0.919203</td>
+      <td>0.048438</td>
+      <td>0.026610</td>
+      <td>-0.027277</td>
+      <td>0.899312</td>
+      <td>0.910013</td>
+      <td>-0.013697</td>
+    </tr>
+    <tr>
+      <td>Active</td>
+      <td>0.927018</td>
+      <td>0.871586</td>
+      <td>0.682103</td>
+      <td>1.000000</td>
+      <td>0.851190</td>
+      <td>0.781123</td>
+      <td>0.673887</td>
+      <td>0.054380</td>
+      <td>-0.132618</td>
+      <td>0.058386</td>
+      <td>0.931459</td>
+      <td>0.847642</td>
+      <td>-0.003752</td>
+    </tr>
+    <tr>
+      <td>New cases</td>
+      <td>0.909720</td>
+      <td>0.806975</td>
+      <td>0.818942</td>
+      <td>0.851190</td>
+      <td>1.000000</td>
+      <td>0.935947</td>
+      <td>0.914765</td>
+      <td>0.020104</td>
+      <td>-0.078666</td>
+      <td>-0.011637</td>
+      <td>0.896084</td>
+      <td>0.959993</td>
+      <td>0.030791</td>
+    </tr>
+    <tr>
+      <td>New deaths</td>
+      <td>0.871683</td>
+      <td>0.814161</td>
+      <td>0.820338</td>
+      <td>0.781123</td>
+      <td>0.935947</td>
+      <td>1.000000</td>
+      <td>0.889234</td>
+      <td>0.060399</td>
+      <td>-0.062792</td>
+      <td>-0.020750</td>
+      <td>0.862118</td>
+      <td>0.894915</td>
+      <td>0.025293</td>
+    </tr>
+    <tr>
+      <td>New recovered</td>
+      <td>0.859252</td>
+      <td>0.765114</td>
+      <td>0.919203</td>
+      <td>0.673887</td>
+      <td>0.914765</td>
+      <td>0.889234</td>
+      <td>1.000000</td>
+      <td>0.017090</td>
+      <td>-0.024293</td>
+      <td>-0.023340</td>
+      <td>0.839692</td>
+      <td>0.954321</td>
+      <td>0.032662</td>
+    </tr>
+    <tr>
+      <td>Deaths / 100 Cases</td>
+      <td>0.063550</td>
+      <td>0.251565</td>
+      <td>0.048438</td>
+      <td>0.054380</td>
+      <td>0.020104</td>
+      <td>0.060399</td>
+      <td>0.017090</td>
+      <td>1.000000</td>
+      <td>-0.168920</td>
+      <td>0.334594</td>
+      <td>0.069894</td>
+      <td>0.015095</td>
+      <td>-0.134534</td>
+    </tr>
+    <tr>
+      <td>Recovered / 100 Cases</td>
+      <td>-0.064815</td>
+      <td>-0.114529</td>
+      <td>0.026610</td>
+      <td>-0.132618</td>
+      <td>-0.078666</td>
+      <td>-0.062792</td>
+      <td>-0.024293</td>
+      <td>-0.168920</td>
+      <td>1.000000</td>
+      <td>-0.295381</td>
+      <td>-0.064600</td>
+      <td>-0.063013</td>
+      <td>-0.394254</td>
+    </tr>
+    <tr>
+      <td>Deaths / 100 Recovered</td>
+      <td>0.025175</td>
+      <td>0.169006</td>
+      <td>-0.027277</td>
+      <td>0.058386</td>
+      <td>-0.011637</td>
+      <td>-0.020750</td>
+      <td>-0.023340</td>
+      <td>0.334594</td>
+      <td>-0.295381</td>
+      <td>1.000000</td>
+      <td>0.030460</td>
+      <td>-0.013763</td>
+      <td>-0.049083</td>
+    </tr>
+    <tr>
+      <td>Confirmed last week</td>
+      <td>0.999127</td>
+      <td>0.939082</td>
+      <td>0.899312</td>
+      <td>0.931459</td>
+      <td>0.896084</td>
+      <td>0.862118</td>
+      <td>0.839692</td>
+      <td>0.069894</td>
+      <td>-0.064600</td>
+      <td>0.030460</td>
+      <td>1.000000</td>
+      <td>0.941448</td>
+      <td>-0.015247</td>
+    </tr>
+    <tr>
+      <td>1 week change</td>
+      <td>0.954710</td>
+      <td>0.855330</td>
+      <td>0.910013</td>
+      <td>0.847642</td>
+      <td>0.959993</td>
+      <td>0.894915</td>
+      <td>0.954321</td>
+      <td>0.015095</td>
+      <td>-0.063013</td>
+      <td>-0.013763</td>
+      <td>0.941448</td>
+      <td>1.000000</td>
+      <td>0.026594</td>
+    </tr>
+    <tr>
+      <td>1 week % increase</td>
+      <td>-0.010161</td>
+      <td>-0.034708</td>
+      <td>-0.013697</td>
+      <td>-0.003752</td>
+      <td>0.030791</td>
+      <td>0.025293</td>
+      <td>0.032662</td>
+      <td>-0.134534</td>
+      <td>-0.394254</td>
+      <td>-0.049083</td>
+      <td>-0.015247</td>
+      <td>0.026594</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">covid</span><span class="p">.</span><span class="n">corr</span><span class="p">())</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="Seaborn_files/Seaborn_22_0.png" alt="png" /></p>
+
+:ET

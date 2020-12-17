@@ -5,12 +5,771 @@
     <description>Baesan's blog about developing</description>
     <link>http://localhost:4000http://localhost:4000/</link>
     <atom:link href="http://localhost:4000http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 15 Dec 2020 18:24:31 +0900</pubDate>
-    <lastBuildDate>Tue, 15 Dec 2020 18:24:31 +0900</lastBuildDate>
+    <pubDate>Wed, 16 Dec 2020 19:11:37 +0900</pubDate>
+    <lastBuildDate>Wed, 16 Dec 2020 19:11:37 +0900</lastBuildDate>
     <generator>Jekyll v4.1.1</generator>
     
       <item>
-        <title>Python으로 데이터다루기(pandas의 dataframe)</title>
+        <title>Python으로 시각화하기3(seaborn) </title>
+        <description>&lt;h2 id=&quot;4-seaborn&quot;&gt;4. SeaBorn&lt;/h2&gt;
+
+&lt;h3 id=&quot;matplotlib를-기반으로-더-다양한-시각화-방법을-제공하는-라이브러리&quot;&gt;Matplotlib를 기반으로 더 다양한 시각화 방법을 제공하는 라이브러리&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;커널밀도그림&lt;/li&gt;
+  &lt;li&gt;카운트그림&lt;/li&gt;
+  &lt;li&gt;캣그림&lt;/li&gt;
+  &lt;li&gt;스트립그림&lt;/li&gt;
+  &lt;li&gt;히트맵&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;seaborn-import-하기&quot;&gt;Seaborn import 하기&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;seaborn&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;커널밀도그림kernel-density-plot&quot;&gt;커널밀도그림(Kernel Density Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;히스토그램과 같은 연속적인 분포를 곡선화해서 그린 그림&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sns.kdeplot()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# in Histogram
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;randint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bins&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_5_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# kdeplot
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kdeplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_6_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 음영넣기
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kdeplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shade&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_7_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;카운트그림count-plot&quot;&gt;카운트그림(Count Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;범주형 column의 빈도수를 시각화 -&amp;gt; Groupby 후의 도수를 하는 것과 동일한 효과&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sns.countplot()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;vote_df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DataFrame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'Andy'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Bob'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'Cat'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;vote&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]})&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;vote_df&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div&gt;
+&lt;style scoped=&quot;&quot;&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: right;&quot;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;name&lt;/th&gt;
+      &lt;th&gt;vote&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;0&lt;/td&gt;
+      &lt;td&gt;Andy&lt;/td&gt;
+      &lt;td&gt;True&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;Bob&lt;/td&gt;
+      &lt;td&gt;True&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;Cat&lt;/td&gt;
+      &lt;td&gt;False&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# in matplotlib barplot
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;vote_count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vote_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupby&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'vote'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;vote_count&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div&gt;
+&lt;style scoped=&quot;&quot;&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: right;&quot;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;name&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;th&gt;vote&lt;/th&gt;
+      &lt;th&gt;&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;False&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;True&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vote_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'name'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_11_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# sns.countplot
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;countplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vote_df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'vote'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_12_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;캣-그림cat-plot&quot;&gt;캣 그림(Cat Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;숫자형 변수와 하나 이상의 범주형 변수의 관계를 보여주는 함수&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sns.catplot()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./country_wise_latest.csv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;WHO Region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Confirmed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_size_inches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# figure size 조정
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_15_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;catplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;WHO Region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Confirmed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kind&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'violin'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_size_inches&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# figure size 조정
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_16_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;스트립그림strip-plot&quot;&gt;스트립그림(Strip Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;scatter plot과 유사하게 데이터의 수치를 표현하는 그래프&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sns.stripplot()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stripplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;WHO Region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Recovered&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_18_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# cf) swarmplot
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;swarmplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;WHO Region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Recovered&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_19_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;히트맵-heatmap&quot;&gt;히트맵 (Heatmap)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;데이터의 행렬을 색상으로 표현해주는 그래프&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sns.heatmap()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 히트맵 예제
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;corr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# corr을 표현하기에 용이
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div&gt;
+&lt;style scoped=&quot;&quot;&gt;
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+&lt;/style&gt;
+&lt;table border=&quot;1&quot; class=&quot;dataframe&quot;&gt;
+  &lt;thead&gt;
+    &lt;tr style=&quot;text-align: right;&quot;&gt;
+      &lt;th&gt;&lt;/th&gt;
+      &lt;th&gt;Confirmed&lt;/th&gt;
+      &lt;th&gt;Deaths&lt;/th&gt;
+      &lt;th&gt;Recovered&lt;/th&gt;
+      &lt;th&gt;Active&lt;/th&gt;
+      &lt;th&gt;New cases&lt;/th&gt;
+      &lt;th&gt;New deaths&lt;/th&gt;
+      &lt;th&gt;New recovered&lt;/th&gt;
+      &lt;th&gt;Deaths / 100 Cases&lt;/th&gt;
+      &lt;th&gt;Recovered / 100 Cases&lt;/th&gt;
+      &lt;th&gt;Deaths / 100 Recovered&lt;/th&gt;
+      &lt;th&gt;Confirmed last week&lt;/th&gt;
+      &lt;th&gt;1 week change&lt;/th&gt;
+      &lt;th&gt;1 week % increase&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Confirmed&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.934698&lt;/td&gt;
+      &lt;td&gt;0.906377&lt;/td&gt;
+      &lt;td&gt;0.927018&lt;/td&gt;
+      &lt;td&gt;0.909720&lt;/td&gt;
+      &lt;td&gt;0.871683&lt;/td&gt;
+      &lt;td&gt;0.859252&lt;/td&gt;
+      &lt;td&gt;0.063550&lt;/td&gt;
+      &lt;td&gt;-0.064815&lt;/td&gt;
+      &lt;td&gt;0.025175&lt;/td&gt;
+      &lt;td&gt;0.999127&lt;/td&gt;
+      &lt;td&gt;0.954710&lt;/td&gt;
+      &lt;td&gt;-0.010161&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Deaths&lt;/td&gt;
+      &lt;td&gt;0.934698&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.832098&lt;/td&gt;
+      &lt;td&gt;0.871586&lt;/td&gt;
+      &lt;td&gt;0.806975&lt;/td&gt;
+      &lt;td&gt;0.814161&lt;/td&gt;
+      &lt;td&gt;0.765114&lt;/td&gt;
+      &lt;td&gt;0.251565&lt;/td&gt;
+      &lt;td&gt;-0.114529&lt;/td&gt;
+      &lt;td&gt;0.169006&lt;/td&gt;
+      &lt;td&gt;0.939082&lt;/td&gt;
+      &lt;td&gt;0.855330&lt;/td&gt;
+      &lt;td&gt;-0.034708&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Recovered&lt;/td&gt;
+      &lt;td&gt;0.906377&lt;/td&gt;
+      &lt;td&gt;0.832098&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.682103&lt;/td&gt;
+      &lt;td&gt;0.818942&lt;/td&gt;
+      &lt;td&gt;0.820338&lt;/td&gt;
+      &lt;td&gt;0.919203&lt;/td&gt;
+      &lt;td&gt;0.048438&lt;/td&gt;
+      &lt;td&gt;0.026610&lt;/td&gt;
+      &lt;td&gt;-0.027277&lt;/td&gt;
+      &lt;td&gt;0.899312&lt;/td&gt;
+      &lt;td&gt;0.910013&lt;/td&gt;
+      &lt;td&gt;-0.013697&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Active&lt;/td&gt;
+      &lt;td&gt;0.927018&lt;/td&gt;
+      &lt;td&gt;0.871586&lt;/td&gt;
+      &lt;td&gt;0.682103&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.851190&lt;/td&gt;
+      &lt;td&gt;0.781123&lt;/td&gt;
+      &lt;td&gt;0.673887&lt;/td&gt;
+      &lt;td&gt;0.054380&lt;/td&gt;
+      &lt;td&gt;-0.132618&lt;/td&gt;
+      &lt;td&gt;0.058386&lt;/td&gt;
+      &lt;td&gt;0.931459&lt;/td&gt;
+      &lt;td&gt;0.847642&lt;/td&gt;
+      &lt;td&gt;-0.003752&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;New cases&lt;/td&gt;
+      &lt;td&gt;0.909720&lt;/td&gt;
+      &lt;td&gt;0.806975&lt;/td&gt;
+      &lt;td&gt;0.818942&lt;/td&gt;
+      &lt;td&gt;0.851190&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.935947&lt;/td&gt;
+      &lt;td&gt;0.914765&lt;/td&gt;
+      &lt;td&gt;0.020104&lt;/td&gt;
+      &lt;td&gt;-0.078666&lt;/td&gt;
+      &lt;td&gt;-0.011637&lt;/td&gt;
+      &lt;td&gt;0.896084&lt;/td&gt;
+      &lt;td&gt;0.959993&lt;/td&gt;
+      &lt;td&gt;0.030791&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;New deaths&lt;/td&gt;
+      &lt;td&gt;0.871683&lt;/td&gt;
+      &lt;td&gt;0.814161&lt;/td&gt;
+      &lt;td&gt;0.820338&lt;/td&gt;
+      &lt;td&gt;0.781123&lt;/td&gt;
+      &lt;td&gt;0.935947&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.889234&lt;/td&gt;
+      &lt;td&gt;0.060399&lt;/td&gt;
+      &lt;td&gt;-0.062792&lt;/td&gt;
+      &lt;td&gt;-0.020750&lt;/td&gt;
+      &lt;td&gt;0.862118&lt;/td&gt;
+      &lt;td&gt;0.894915&lt;/td&gt;
+      &lt;td&gt;0.025293&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;New recovered&lt;/td&gt;
+      &lt;td&gt;0.859252&lt;/td&gt;
+      &lt;td&gt;0.765114&lt;/td&gt;
+      &lt;td&gt;0.919203&lt;/td&gt;
+      &lt;td&gt;0.673887&lt;/td&gt;
+      &lt;td&gt;0.914765&lt;/td&gt;
+      &lt;td&gt;0.889234&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.017090&lt;/td&gt;
+      &lt;td&gt;-0.024293&lt;/td&gt;
+      &lt;td&gt;-0.023340&lt;/td&gt;
+      &lt;td&gt;0.839692&lt;/td&gt;
+      &lt;td&gt;0.954321&lt;/td&gt;
+      &lt;td&gt;0.032662&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Deaths / 100 Cases&lt;/td&gt;
+      &lt;td&gt;0.063550&lt;/td&gt;
+      &lt;td&gt;0.251565&lt;/td&gt;
+      &lt;td&gt;0.048438&lt;/td&gt;
+      &lt;td&gt;0.054380&lt;/td&gt;
+      &lt;td&gt;0.020104&lt;/td&gt;
+      &lt;td&gt;0.060399&lt;/td&gt;
+      &lt;td&gt;0.017090&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;-0.168920&lt;/td&gt;
+      &lt;td&gt;0.334594&lt;/td&gt;
+      &lt;td&gt;0.069894&lt;/td&gt;
+      &lt;td&gt;0.015095&lt;/td&gt;
+      &lt;td&gt;-0.134534&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Recovered / 100 Cases&lt;/td&gt;
+      &lt;td&gt;-0.064815&lt;/td&gt;
+      &lt;td&gt;-0.114529&lt;/td&gt;
+      &lt;td&gt;0.026610&lt;/td&gt;
+      &lt;td&gt;-0.132618&lt;/td&gt;
+      &lt;td&gt;-0.078666&lt;/td&gt;
+      &lt;td&gt;-0.062792&lt;/td&gt;
+      &lt;td&gt;-0.024293&lt;/td&gt;
+      &lt;td&gt;-0.168920&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;-0.295381&lt;/td&gt;
+      &lt;td&gt;-0.064600&lt;/td&gt;
+      &lt;td&gt;-0.063013&lt;/td&gt;
+      &lt;td&gt;-0.394254&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Deaths / 100 Recovered&lt;/td&gt;
+      &lt;td&gt;0.025175&lt;/td&gt;
+      &lt;td&gt;0.169006&lt;/td&gt;
+      &lt;td&gt;-0.027277&lt;/td&gt;
+      &lt;td&gt;0.058386&lt;/td&gt;
+      &lt;td&gt;-0.011637&lt;/td&gt;
+      &lt;td&gt;-0.020750&lt;/td&gt;
+      &lt;td&gt;-0.023340&lt;/td&gt;
+      &lt;td&gt;0.334594&lt;/td&gt;
+      &lt;td&gt;-0.295381&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.030460&lt;/td&gt;
+      &lt;td&gt;-0.013763&lt;/td&gt;
+      &lt;td&gt;-0.049083&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Confirmed last week&lt;/td&gt;
+      &lt;td&gt;0.999127&lt;/td&gt;
+      &lt;td&gt;0.939082&lt;/td&gt;
+      &lt;td&gt;0.899312&lt;/td&gt;
+      &lt;td&gt;0.931459&lt;/td&gt;
+      &lt;td&gt;0.896084&lt;/td&gt;
+      &lt;td&gt;0.862118&lt;/td&gt;
+      &lt;td&gt;0.839692&lt;/td&gt;
+      &lt;td&gt;0.069894&lt;/td&gt;
+      &lt;td&gt;-0.064600&lt;/td&gt;
+      &lt;td&gt;0.030460&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.941448&lt;/td&gt;
+      &lt;td&gt;-0.015247&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1 week change&lt;/td&gt;
+      &lt;td&gt;0.954710&lt;/td&gt;
+      &lt;td&gt;0.855330&lt;/td&gt;
+      &lt;td&gt;0.910013&lt;/td&gt;
+      &lt;td&gt;0.847642&lt;/td&gt;
+      &lt;td&gt;0.959993&lt;/td&gt;
+      &lt;td&gt;0.894915&lt;/td&gt;
+      &lt;td&gt;0.954321&lt;/td&gt;
+      &lt;td&gt;0.015095&lt;/td&gt;
+      &lt;td&gt;-0.063013&lt;/td&gt;
+      &lt;td&gt;-0.013763&lt;/td&gt;
+      &lt;td&gt;0.941448&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+      &lt;td&gt;0.026594&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1 week % increase&lt;/td&gt;
+      &lt;td&gt;-0.010161&lt;/td&gt;
+      &lt;td&gt;-0.034708&lt;/td&gt;
+      &lt;td&gt;-0.013697&lt;/td&gt;
+      &lt;td&gt;-0.003752&lt;/td&gt;
+      &lt;td&gt;0.030791&lt;/td&gt;
+      &lt;td&gt;0.025293&lt;/td&gt;
+      &lt;td&gt;0.032662&lt;/td&gt;
+      &lt;td&gt;-0.134534&lt;/td&gt;
+      &lt;td&gt;-0.394254&lt;/td&gt;
+      &lt;td&gt;-0.049083&lt;/td&gt;
+      &lt;td&gt;-0.015247&lt;/td&gt;
+      &lt;td&gt;0.026594&lt;/td&gt;
+      &lt;td&gt;1.000000&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;sns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;heatmap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;covid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;corr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;Seaborn_files/Seaborn_22_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 15 Dec 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B03(Seaborn)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B03(Seaborn)</guid>
+        
+        <category>K-digital training</category>
+        
+        <category>week2_day5</category>
+        
+        <category>git</category>
+        
+        
+        <category>programmers</category>
+        
+      </item>
+    
+      <item>
+        <title>Python으로 시각화하기2(matplotlib의 여러 plot들) </title>
+        <description>&lt;h2 id=&quot;3-matplotlib-case-study&quot;&gt;3. Matplotlib Case Study&lt;/h2&gt;
+
+&lt;h3 id=&quot;꺾은선-그래프plot&quot;&gt;꺾은선 그래프(Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.plot&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#0~19
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;randint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#난수를 20번 생성
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# EXTRA : y축을 20까지 보이게 하고 싶다면? y축을 '5'단위로 보이게하고 싶다면?
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;21&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_2_files/matplotlib_2_3_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;산점도scatter-plot&quot;&gt;산점도(Scatter Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.scatter()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scatter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_2_files/matplotlib_2_5_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;박스-그림box-plot&quot;&gt;박스 그림(Box Plot)&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;수치형 테이터에 대한 정보(Q1, Q2, Q3, min, max)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.boxplot()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;boxplot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Extra: Plot의 title을 &quot;Box plot of y&quot;로 지정해보기
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Box plot of y&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_2_files/matplotlib_2_7_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;막대-그래프bar-plot&quot;&gt;막대 그래프(Bar Plot)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;범주형 데이터의 “값”과 그 값의 크기를 직사각형으로 나타낸 그림&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.bar()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Extra: xticks를 올바르게 처리해 봅시다.
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_2_files/matplotlib_2_9_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;histogram&quot;&gt;Histogram&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;도수분포를 직사각형의 막대 형태로 나타냈다.&lt;/li&gt;
+  &lt;li&gt;“계급”으로 나타낸 것이 특징 : 0, 1, 2가 아니라 0~2까지의 “범주형” 데이터로 구성 후 그림을 그림&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.hist()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bins&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Extra : xtics를 올바르게 고쳐봅시다
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_2_files/matplotlib_2_11_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;원형-그래프pie-chart&quot;&gt;원형 그래프(Pie Chart)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;데이터에서 전체에 대한 부분의 비율을 부채꼴로 나타낸 그래프&lt;/li&gt;
+  &lt;li&gt;다른 그래프에 비해서 &lt;strong&gt;비율&lt;/strong&gt; 확인에 용이&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.pie&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;400&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pie&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'one'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'two'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'three'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'four'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_2_files/matplotlib_2_13_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 15 Dec 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B02(Matplotlib%EC%9D%98-%EC%97%AC%EB%9F%AC-plot%EB%93%A4)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B02(Matplotlib%EC%9D%98-%EC%97%AC%EB%9F%AC-plot%EB%93%A4)</guid>
+        
+        <category>K-digital training</category>
+        
+        <category>week2_day5</category>
+        
+        <category>git</category>
+        
+        
+        <category>programmers</category>
+        
+      </item>
+    
+      <item>
+        <title>Python으로 시각화하기1(matplotlib 시작하기) </title>
+        <description>&lt;h2 id=&quot;1matplotlib-시작하기&quot;&gt;1.Matplotlib 시작하기&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;파이썬의 데이터 시각화 라이브러리
+    &lt;ul&gt;
+      &lt;li&gt;cf) 라이브러리(numpy, pandas, matplotlib, …) vs 프레임워크(django, flask, …)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%matplotlib inline&lt;/code&gt;을 통해서 활성화&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pd&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;matplotlib.pyplot&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;matplotlib&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inline&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;2-case-study-with-arguments&quot;&gt;2. Case Study with Arguments&lt;/h2&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 실제 plotting을 하는 함수 # y = x + 1
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#plt를 확인하는 명령
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_3_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;figsize-figure도면의-크기-조절&quot;&gt;Figsize: figure(도면)의 크기 조절&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;figure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;figsize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# plotting을 할 도면을 선언
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 실제 plotting을 하는 함수 # y = x + 1
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#plt를 확인하는 명령
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_5_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;2차함수-그래프-with-plot&quot;&gt;2차함수 그래프 with plot()&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 리스트를 이용해서 1차함수 y = x 를 그려보면 :
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_7_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# numpy.array()를 이용해서 함수 그래프 그리기
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 정의역
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# f(x)
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_8_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# np.arange(a, b, c) // a부터 b까지 c의 간격으로 생성
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_9_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# x, y 축에 설명 추가하기 (xlabel, ylabel)
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;x value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;f(x) value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_10_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# x축과 y축의 범위를 설정하기(axis)
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;x value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;f(x) value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_11_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# x, y축에 눈금 설정하기(xticks, yticks)
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;x value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;f(x) value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)])&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_12_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# graph에 title 달기, 그래프에 라벨달기
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xlabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;x value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ylabel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;f(x) value&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;axis&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yticks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)])&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;y = x^2 graph&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;trend&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;legend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;###
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;matplotlib_1_files/matplotlib_1_13_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Tue, 15 Dec 2020 00:00:00 +0900</pubDate>
+        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B01(Matplotlib-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B01(Matplotlib-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)</guid>
+        
+        <category>K-digital training</category>
+        
+        <category>week2_day5</category>
+        
+        <category>git</category>
+        
+        
+        <category>programmers</category>
+        
+      </item>
+    
+      <item>
+        <title>Python으로 데이터다루기4(pandas의 dataframe)</title>
         <description>&lt;h3 id=&quot;dataframe&quot;&gt;dataframe?&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;2차원 labeled &lt;strong&gt;table&lt;/strong&gt;&lt;/li&gt;
@@ -1440,8 +2199,8 @@ dtype: object
 
 </description>
         <pubDate>Tue, 15 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B0(pandas%EC%9D%98-Dataframe)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B0(pandas%EC%9D%98-Dataframe)</guid>
+        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B04(pandas%EC%9D%98-Dataframe)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B04(pandas%EC%9D%98-Dataframe)</guid>
         
         <category>K-digital training</category>
         
@@ -1455,7 +2214,7 @@ dtype: object
       </item>
     
       <item>
-        <title>Python으로 데이터다루기(pandas 시작하기)</title>
+        <title>Python으로 데이터다루기3(pandas 시작하기)</title>
         <description>&lt;h3 id=&quot;pandas-시작하기&quot;&gt;pandas 시작하기&lt;/h3&gt;
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import pandas&lt;/code&gt; 를 통해서 진행&lt;/p&gt;
 
@@ -1646,8 +2405,8 @@ Name: 임의의 난수, dtype: float64
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
         <pubDate>Tue, 15 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B0(pandas-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B0(pandas-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)</guid>
+        <link>http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B03(pandas-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B03(pandas-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)</guid>
         
         <category>K-digital training</category>
         
@@ -1780,7 +2539,7 @@ $ git checkout week3/임수민
       </item>
     
       <item>
-        <title>Python으로 데이터 다루기(numpy와 선형대수)</title>
+        <title>Python으로 데이터 다루기2(numpy와 선형대수)</title>
         <description>&lt;h3 id=&quot;영벡터행렬&quot;&gt;영벡터(행렬)&lt;/h3&gt;
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 원소가 모두 0인 벡터(행렬)
 - np.zeros(dim)을 통해서 생성, dim은 값, 혹은 튜플(,)
@@ -2061,8 +2820,8 @@ $ git checkout week3/임수민
 
 </description>
         <pubDate>Mon, 14 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0(Numpy%EC%99%80-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0(Numpy%EC%99%80-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98)</guid>
+        <link>http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B02(Numpy%EC%99%80-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B02(Numpy%EC%99%80-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98)</guid>
         
         <category>K-digital training</category>
         
@@ -2076,7 +2835,7 @@ $ git checkout week3/임수민
       </item>
     
       <item>
-        <title>Python으로 데이터 다루기(numpy)</title>
+        <title>Python으로 데이터 다루기1(numpy)</title>
         <description>&lt;h3 id=&quot;numpy로-연산하기&quot;&gt;Numpy로 연산하기&lt;/h3&gt;
 
 &lt;p&gt;벡터의 각 원소에 대해서 연산을 진행&lt;/p&gt;
@@ -2240,8 +2999,8 @@ $ git checkout week3/임수민
 
 </description>
         <pubDate>Mon, 14 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0(Numpy)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B0(Numpy)</guid>
+        <link>http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B01(Numpy)</link>
+        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B01(Numpy)</guid>
         
         <category>K-digital training</category>
         
@@ -2469,578 +3228,6 @@ zalpha : 1.959963984540054
         <category>K-digital training</category>
         
         <category>week2_day5</category>
-        
-        <category>인공지능 수학</category>
-        
-        
-        <category>programmers</category>
-        
-      </item>
-    
-      <item>
-        <title>인공지능수학(11)(엔트로피)</title>
-        <description>&lt;h2 id=&quot;엔트로피&quot;&gt;엔트로피&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;자기정보(self-information) : $i(A)$
-    &lt;ul&gt;
-      &lt;li&gt;A : 사건&lt;/li&gt;
-      &lt;li&gt;$ i(A) = {log_b({1\over {P(A)}})} = -log_bP(A)$&lt;/li&gt;
-      &lt;li&gt;확률이 높은 사건:
-        &lt;ul&gt;
-          &lt;li&gt;정보가 많지 않음&lt;/li&gt;
-          &lt;li&gt;예 : 도둑이 들었는데 개가 짖는 경우보다 도둑이 들었는데 개가 안 짖는 경우 더 많은 정보를 포함하고 있음&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;정보의 단위
-        &lt;ul&gt;
-          &lt;li&gt;b = 2 : bits&lt;/li&gt;
-          &lt;li&gt;b = e : nats&lt;/li&gt;
-          &lt;li&gt;b = 10 : hartley&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;특성
-        &lt;ul&gt;
-          &lt;li&gt;$ i(AB) ={log_b({1\over {P(A)P(B)}})} = {log_b({1\over {P(A)}})} + {log_b({1\over {P(B)}})} = i(A) + i(B)$&lt;/li&gt;
-          &lt;li&gt;따라서, 두 사건이 동시에 있어났을 때, 자기정보는 각 자기정보의 합과 같다.&lt;/li&gt;
-          &lt;li&gt;$ P(H) = {1\over8}, P(T) = {7\over8} $
-            &lt;ul&gt;
-              &lt;li&gt;$ i(H) = -log_bP(H) = -log_2{1 \over 8} = 3비트$&lt;/li&gt;
-              &lt;li&gt;$ i(H) = -log_bP(T) = -log_2{7 \over 8} = 0.193비트$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;엔트로피(entropy)
-    &lt;ul&gt;
-      &lt;li&gt;자기 정보의 평균&lt;/li&gt;
-      &lt;li&gt;$ H(X) = \sum_J P(A_j)i(A_j) = - \sum_jP(A_j)log_2 P(A_j) $&lt;/li&gt;
-      &lt;li&gt;특성
-        &lt;ul&gt;
-          &lt;li&gt;$ 0 \le H(X) \le log_2K $ ( K : 사건의 수)
-            &lt;ul&gt;
-              &lt;li&gt;엔트로피 $H(X)$의 최대값은 $P(A_j)$가 모두 ${1\K}$인 경우이고 그때의 값이 $log_2K$이다.&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;교차-엔트로피&quot;&gt;교차 엔트로피&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;확률분포 P와 Q
-    &lt;ul&gt;
-      &lt;li&gt;$ S = {A_j} $(사건 S)&lt;/li&gt;
-      &lt;li&gt;$ P(A_j)$ : 확률분포 P에서 사건 $A_j$가 발생할 확률&lt;/li&gt;
-      &lt;li&gt;$ Q(A_j)$ : 확률분포 Q에서 사건 $A_j$가 발생할 확률&lt;/li&gt;
-      &lt;li&gt;$ i(A_j)$ : 확률분포 Q에서 사건 $A_j$의 자기정보
-        &lt;ul&gt;
-          &lt;li&gt;$ i(A_j) = -log_2Q(Aj)$&lt;/li&gt;
-          &lt;li&gt;자기정보는 $A_j$를 표현하는 비트수&lt;/li&gt;
-          &lt;li&gt;잘못된 확률분포 Q를 사용하게 되면, 실제 최적의 비트수를 사용하지 못하게 됨.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;$H(P,Q)$
-    &lt;ul&gt;
-      &lt;li&gt;집합 S상에서 확률분포 P에 대한 확률분포 Q의 교차 엔트로피&lt;/li&gt;
-      &lt;li&gt;확률분포 P에서 $i(A_j)$의 평균
-        &lt;ul&gt;
-          &lt;li&gt;$ H(P, Q) = \sum_j P(A_j)i(A_j) = - \sum_j P(A_j)log_2Q(A_j) = - \sum_{x \in X}P(X)log_2Q(x) $&lt;/li&gt;
-          &lt;li&gt;이 값은 정확한 확률분포 P를 사용했을 때의 비트 수 보다 크게 됨
-            &lt;ul&gt;
-              &lt;li&gt;$ H(P,Q) = - \sum_{x \in X}P(X)log_2Q(x) \ge - \sum_{x \in X}P(X)log_2P(x) = H(P)$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-          &lt;li&gt;따라서 이 값은 P와 Q가 얼마나 비슷한지를 표현
-            &lt;ul&gt;
-              &lt;li&gt;같으면 $ H(P,Q) = H(P) $&lt;/li&gt;
-              &lt;li&gt;다르면 $ H(P,Q) &amp;gt; H(P) $&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;분류 문제에서의 손실함수
-    &lt;ul&gt;
-      &lt;li&gt;분류문제
-        &lt;ul&gt;
-          &lt;li&gt;주어진 대상이 A인지 아닌지를 판단&lt;/li&gt;
-          &lt;li&gt;주어진 대상이 A, B, C, … 중 어느 것인지를 판단&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;기계학습 에서는 주어진 대상이 각 그룹에 속할 확률을 제공
-        &lt;ul&gt;
-          &lt;li&gt;예) [0.8, 0.2]: A일 확률 0.8, 아닐확률 0.2&lt;/li&gt;
-          &lt;li&gt;이 값이 정답인 [1.0 ,0.0] 과 얼마나 다른지 측정 필요&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;원하는 답 $P = [p_1, p_2, …, p_n], p_1 + p_2 + … + p_n = 1$&lt;/li&gt;
-      &lt;li&gt;제시된 답 $Q = [q_1, q_2, …, q_n], q_1 + q_2 + … + q_n = 1$&lt;/li&gt;
-      &lt;li&gt;제곱합
-        &lt;ul&gt;
-          &lt;li&gt;$\sum(p_i - q_i)^2$&lt;/li&gt;
-          &lt;li&gt;확률이 다를수록 큰 값을 가짐&lt;/li&gt;
-          &lt;li&gt;하지만 학습 속도 느림&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;교차 엔트로피 H(P, Q)
-        &lt;ul&gt;
-          &lt;li&gt;확률이 다를수록 큰 값을 가짐&lt;/li&gt;
-          &lt;li&gt;학습 속도 빠름&lt;/li&gt;
-          &lt;li&gt;분류 문제에서 주로 교차 엔트로피 사용&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;참고) 분류문제에서 원하는 답
-        &lt;ul&gt;
-          &lt;li&gt;$P = [p_1, p_2, …, p_n]$에서 $p_i$중 하나만 1이고, 나머지는 다 0임. 즉, 엔트로피는 0 (H(P) = 0)&lt;/li&gt;
-          &lt;li&gt;$p_k = 1.0$ 이라고 하면, $q_k$의 값이 최대한 커지는 방향으로 학습 진행&lt;/li&gt;
-          &lt;li&gt;예시)
-            &lt;ul&gt;
-              &lt;li&gt;S = ${A, B}$&lt;/li&gt;
-              &lt;li&gt;P = $[1, 0]$&lt;/li&gt;
-              &lt;li&gt;예측 $Q(x)$
-                &lt;ul&gt;
-                  &lt;li&gt;$[0.8, 0.2]: Q(A) = 0.8. Q(B) = 0.2$
-                    &lt;ul&gt;
-                      &lt;li&gt;$H(P, Q) = - \sum_{x \in X}log_2Q(x) = -1 \times log_20.8 = 0.3219$&lt;/li&gt;
-                    &lt;/ul&gt;
-                  &lt;/li&gt;
-                  &lt;li&gt;$[0.5, 0.5]: Q(A) = 0.5. Q(B) = 0.5$
-                    &lt;ul&gt;
-                      &lt;li&gt;$H(P, Q) = - \sum_{x \in X}log_2Q(x) = -1 \times log_20.5 = 1$&lt;/li&gt;
-                    &lt;/ul&gt;
-                  &lt;/li&gt;
-                  &lt;li&gt;$[0.8, 0.2]: Q(A) = 0.8. Q(B) = 0.2$
-                    &lt;ul&gt;
-                      &lt;li&gt;$H(P, Q) = - \sum_{x \in X}log_2Q(x) = -1 \times log_20.2 = 2.32$&lt;/li&gt;
-                    &lt;/ul&gt;
-                  &lt;/li&gt;
-                &lt;/ul&gt;
-              &lt;/li&gt;
-              &lt;li&gt;H(P,Q)가 가장 작은 [0.8, 0.2]가 가장 정답에 가까움을 알 수 있다.&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;numpy&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;crossentropy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;log2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))])&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;crossentropy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 11 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(11)(%EC%97%94%ED%8A%B8%EB%A1%9C%ED%94%BC)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(11)(%EC%97%94%ED%8A%B8%EB%A1%9C%ED%94%BC)</guid>
-        
-        <category>K-digital training</category>
-        
-        <category>week2_day5</category>
-        
-        <category>인공지능 수학</category>
-        
-        
-        <category>programmers</category>
-        
-      </item>
-    
-      <item>
-        <title>인공지능수학(10)(검정)</title>
-        <description>&lt;h2 id=&quot;검정&quot;&gt;검정&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;가설 검정
-    &lt;ul&gt;
-      &lt;li&gt;예) 어떤 고등학교의 1학년 학생들의 평균키가 170.5cm로 알려져 있었다. 올해 새로 들어온 1학년 학생들 중 30명을 랜덤하게 선택하여 키를 잰 후 평균을 계산했더니 171.3cm이었다. 올해 신입생은 평균키가 170.5cm보다 더 크다고 할 수 있는가?&lt;/li&gt;
-      &lt;li&gt;표본평균 $\bar X$가 $\mu_0$보다 얼마나 커야 모평균 $\mu$가 $\mu_0$보다 크다고 할 수 있을 것인가?
-        &lt;ul&gt;
-          &lt;li&gt;표본 평균은 표번의 선택에 의해 달라지는 점에 주의해야 한다.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;귀무가설 $H_0 : \mu = \mu_0$&lt;/li&gt;
-      &lt;li&gt;대립가설 $H_1 : \mu &amp;gt; \mu_0$&lt;/li&gt;
-      &lt;li&gt;귀무가설(위 경우 모평균이 변하지 않았다는 가설)을 기각하기 위해서는 $\bar X$가 좀 큰 값이 나와야 한다.
-        &lt;ul&gt;
-          &lt;li&gt;귀무가설이 참이라고 가정할 때, 랜덤하게 선택한 표본에서 지금의 $\bar X$가 나올 확률을 계산할 필요&lt;/li&gt;
-          &lt;li&gt;이 확률이 낮다면 귀무가설이 참이 아니라고 판단.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;확률이 낮다는 기준점이 필요
-        &lt;ul&gt;
-          &lt;li&gt;유의수준 $\alpha$도입 필요&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;$P(\bar{X} \ge k) \le \alpha$가 되는 $k$를 찾아야함&lt;/li&gt;
-      &lt;li&gt;표준 정규확률 변수로 변환 $\to$ 검정 통계량 이라고 함
-        &lt;ul&gt;
-          &lt;li&gt;$Z = { {\bar{X} - \mu}\over{s \over \sqrt n} } \sim N(0,1)$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;따라서, $\bar X$를 $Z$로 변환한 후 $Z$값이 $z_a$보다 큰지를 검토
-        &lt;ul&gt;
-          &lt;li&gt;크다면 귀무가설 기각&lt;/li&gt;
-          &lt;li&gt;그렇지 않다면 귀무가설 채택&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;검정의 단계
-        &lt;ul&gt;
-          &lt;li&gt;$H_0, H_1$ 설정&lt;/li&gt;
-          &lt;li&gt;유의수준 $\alpha$설정&lt;/li&gt;
-          &lt;li&gt;검정통계량 계산&lt;/li&gt;
-          &lt;li&gt;기각역 또는 임계값 계산&lt;/li&gt;
-          &lt;li&gt;주어진 데이터로부터 유의성 판정&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;모평균의 검정
-    &lt;ul&gt;
-      &lt;li&gt;대립가설
-        &lt;ul&gt;
-          &lt;li&gt;문제에서 검정하고자 하는 것이 무엇인지 파악 필요
-            &lt;ul&gt;
-              &lt;li&gt;대립가설 $H_1$채택을 위한 통계적 증거 확보 필요&lt;/li&gt;
-              &lt;li&gt;증거가 없으면 귀무가설 $H_0$채택&lt;/li&gt;
-              &lt;li&gt;$H_1 : \mu \gt \mu_0$&lt;/li&gt;
-              &lt;li&gt;$H_1 : \mu \lt \mu_0$&lt;/li&gt;
-              &lt;li&gt;$H_1 : \mu \ne \mu_0$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-          &lt;li&gt;예시 : 어떤 농장에서 생산되는 계란의 평균 무게는 10.5그램으로 알려져 있다. 새로운 사료를 도입한 후에 생산된 계란 30개의 표본 평균을 계산했더니 11,4그램이 나왔다. 새로운 사료가 평균적으로 더 가벼운 계란을 생산한다고 할 수 있는가?
-            &lt;ul&gt;
-              &lt;li&gt;$H_0: \mu = 10.5$&lt;/li&gt;
-              &lt;li&gt;$H_1: \mu \lt 10.5$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-          &lt;li&gt;예시 : 어떤 농장에서 자신들이 생산하는 계란의 평균 무게가 10.5그램이라고 홍보하고 있다. 이에 생산된 계란 30개의 표본 평균을 계산했더니 9.4그램이 나왔다. 이 농장의 광고가 맞다고 할 수 있나?
-            &lt;ul&gt;
-              &lt;li&gt;$H_0: \mu = 10.5$&lt;/li&gt;
-              &lt;li&gt;$H_1: \mu \ne 10.5$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;검정 통계량
-        &lt;ul&gt;
-          &lt;li&gt;$n \ge 30$인 경우
-            &lt;ul&gt;
-              &lt;li&gt;중심극한 정리 사용&lt;/li&gt;
-              &lt;li&gt;$Z = { {\bar{X} - \mu}\over{s \over \sqrt n} } \sim (0,1)$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-          &lt;li&gt;모집단이 정규 모집단이고, 모표준편차 $\sigma$가 주어진 경우
-            &lt;ul&gt;
-              &lt;li&gt;$Z = { {\bar{X} - \mu}\over{\sigma \over \sqrt n} }\sim N(0,1)$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;기각역
-        &lt;ul&gt;
-          &lt;li&gt;$H_0 : \mu = 10.5$&lt;/li&gt;
-          &lt;li&gt;유의수준 : $\alpha$&lt;/li&gt;
-          &lt;li&gt;기각역
-            &lt;ul&gt;
-              &lt;li&gt;$H_1 : \mu \gt 10.5 \to Z \gt z_\alpha $&lt;/li&gt;
-              &lt;li&gt;$H_1 : \mu \lt 10.5 \to Z \lt -z_\alpha $&lt;/li&gt;
-              &lt;li&gt;$H_1 : \mu \ne 10.5 \to \vert Z \vert \gt z_{\alpha \over 2} $&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;실제 예 : 어떤 농장에서 자신들이 생산하는 계란의 평균 무기가 10.5그램 이라고 홍보하고 있다. 이에 생산된 계란 30개의 표본을 뽑았더니 그 무게가 아래와 같다. 이 농장의 홍보가 맞는지 유의수준 5%로 검정하시오.
-        &lt;ul&gt;
-          &lt;li&gt;w = [10.7, 11.7, …]&lt;/li&gt;
-          &lt;li&gt;$ H_0 : \mu = 10.5$&lt;/li&gt;
-          &lt;li&gt;$ H_1 : \mu \ne 10.5$&lt;/li&gt;
-          &lt;li&gt;$ \alpha = 0.05 $&lt;/li&gt;
-          &lt;li&gt;$ \bar {X} = 10.43$&lt;/li&gt;
-          &lt;li&gt;$ s = 1.11 $&lt;/li&gt;
-          &lt;li&gt;$Z = { {\bar{X} - \mu}\over{s \over \sqrt n} } = { {10.43 - 10.5} \over {1.11 \over {\sqrt{30}}}} = -0.351$&lt;/li&gt;
-          &lt;li&gt;$z_{\alpha \over 2} = z_{0.025} = 1.96 \gt \vert -0.351 \vert = \vert Z \vert$&lt;/li&gt;
-          &lt;li&gt;따라서 귀무가설을 기각 할 수 없다.&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Fri, 11 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(10)(%EA%B2%80%EC%A0%95)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(10)(%EA%B2%80%EC%A0%95)</guid>
-        
-        <category>K-digital training</category>
-        
-        <category>week2_day5</category>
-        
-        <category>인공지능 수학</category>
-        
-        
-        <category>programmers</category>
-        
-      </item>
-    
-      <item>
-        <title>인공지능수학(7)(확률분포)</title>
-        <description>&lt;h2 id=&quot;확률분포-관련-용어-정리&quot;&gt;확률분포 관련 용어 정리&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;확률 변수(random variable)
-    &lt;ul&gt;
-      &lt;li&gt;랜덤한 실험 결과에 의존하는 실수(표본 공간의 부분 집합에 대응하는 실수)&lt;/li&gt;
-      &lt;li&gt;보통 X나 Y같은 대문자로 표시&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;이산확률변수(discrete variable)
-    &lt;ul&gt;
-      &lt;li&gt;확률변수가 취할 수 있는 모든 수 값들을 하나씩 셀 수 있는 경우&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;연속 확률 변수(continuous random variable)
-    &lt;ul&gt;
-      &lt;li&gt;셀 수 없는 경우&lt;/li&gt;
-      &lt;li&gt;예 : 어느 학교에서 랜덤하게 선택된 남학생의 키&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;확률 분포(Probability Distribution)
-    &lt;ul&gt;
-      &lt;li&gt;확률변수가 가질 수 있는 값에 대해 확률을 대응시켜 주는 관계&lt;/li&gt;
-      &lt;li&gt;예 : 어떤 확률 변수 X가 가질 수 있는 값: 0, 1, 3, 8 일 때 각 값이 가질 수 있는 확률
-        &lt;ul&gt;
-          &lt;li&gt;$P(x=0) = 0.2$&lt;/li&gt;
-          &lt;li&gt;$P(x=1) = 0.1$&lt;/li&gt;
-          &lt;li&gt;$P(x=3) = 0.5$&lt;/li&gt;
-          &lt;li&gt;$P(x=8) = 0.2$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;이산확률변수의 평균
-    &lt;ul&gt;
-      &lt;li&gt;기대값(expected value)라고도 함.&lt;/li&gt;
-      &lt;li&gt;$E(X) = \sum _x xP(X=x) = \sum_x xf(x)$&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;이산확률변수의 분산
-    &lt;ul&gt;
-      &lt;li&gt;$(X-\mu)^2$의 평균&lt;/li&gt;
-      &lt;li&gt;$\sigma ^ 2 = E[(X-\mu)^2] = \sum_x(x-\mu)^2P(X=x)$&lt;/li&gt;
-      &lt;li&gt;$Var(X)$라고도 함&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;이산확률변수의 표준편차
-    &lt;ul&gt;
-      &lt;li&gt;$\sqrt {Var(X)}$&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;확률변수 X의 분산(간편식)
-    &lt;ul&gt;
-      &lt;li&gt;$\sigma^2 = E(X^2) - (E(X))^2$&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;결합확률 분포(Joint probability distribution)
-    &lt;ul&gt;
-      &lt;li&gt;두 개 이상의 확률 변수가 동시에 취하는 값들에 대해 확률을 대응시켜주는 관계&lt;/li&gt;
-      &lt;li&gt;예) 확률변수 X : 한 학생이 가지는 휴대폰의 수, 확률변수 Y : 한 학생이 가지는 노트북의 수&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;공분산(Covariance)
-    &lt;ul&gt;
-      &lt;li&gt;예시 : 고등학교 1학년 학생들
-        &lt;ul&gt;
-          &lt;li&gt;확률변수 X : 키&lt;/li&gt;
-          &lt;li&gt;확률변수 Y : 몸무게&lt;/li&gt;
-          &lt;li&gt;확률변수 Z : 수학성적&lt;/li&gt;
-          &lt;li&gt;$(X-\mu_x)(Y-\mu_y)$ : 양일 가능성 높음&lt;/li&gt;
-          &lt;li&gt;$(X-\mu_x)(Z-\mu_z)$ : 양과 음이 될 가능성이 비슷할 것&lt;/li&gt;
-          &lt;li&gt;$(X-\mu_x)(Y-\mu_y)$와 $(X-\mu_x)(Z-\mu_z)$
-            &lt;ul&gt;
-              &lt;li&gt;각가이 확률변수의 역할을 할 수 있음&lt;/li&gt;
-              &lt;li&gt;따라서 평균과 분산을 구할 수 있음&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;$Cov(X,Y) = E[(X-\mu_x)(Y-\mu_y)]$&lt;/li&gt;
-      &lt;li&gt;$E(XY) - \mu_x\mu_y = E[XY] - E[X]E[Y]$&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;상관계수(correlation coefficient)
-    &lt;ul&gt;
-      &lt;li&gt;공분산은 각 확률 변수의 절대적인 크기에 영향을 받음(단위에 의한 영향을 없앨 필요)&lt;/li&gt;
-      &lt;li&gt;$\rho = Corr(X,Y) = \frac{Cov(X,Y)}{\sigma_X \sigma_Y}$&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;몇-가지-확률분포&quot;&gt;몇 가지 확률분포&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;이항분포(bionomial distribution)
-    &lt;ul&gt;
-      &lt;li&gt;베르누이 시행(Bernoulli trial)
-        &lt;ul&gt;
-          &lt;li&gt;정확하게 2개의 결과만을 가지는 실험(예: 동정던지기)&lt;/li&gt;
-          &lt;li&gt;보통 성공과 실패로 결과를 구분&lt;/li&gt;
-          &lt;li&gt;성공의 확률 : p&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;확률변수 X
-        &lt;ul&gt;
-          &lt;li&gt;n번의 베르누이 시행에서 성공의 횟수&lt;/li&gt;
-          &lt;li&gt;이향확률변수라고 함&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;이항분포는 이항확률변수의 확률분포&lt;/li&gt;
-      &lt;li&gt;$f(x) = P[X = x] = \begin{pmatrix}n \cr x \end{pmatrix}p^x(1-p)^{n-x}$&lt;/li&gt;
-      &lt;li&gt;예시) 어떤 랜덤박스의 뽑기 성공 확률이 0.2이다 3개를 뽑았을 때, 적어도 하나 이상의 성공이 발생할 확률은?&lt;/li&gt;
-      &lt;li&gt;$P[X \ge 1] = 1 - P[X=0] = 1- \begin{pmatrix}3 \cr 0 \end{pmatrix}0.2^0(0.8)^{3-0} = 1 - 0.512 = 0.488$&lt;/li&gt;
-      &lt;li&gt;python으로의 구현
-        &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;scipy&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# binom.cdf는 입력값 0 보다 작거나 같은 값들의 확률을 구해줌. n은 시행회수 p는 확률
-&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;binom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-      &lt;li&gt;이항분포의 평균
-        &lt;ul&gt;
-          &lt;li&gt;$E(X) = np$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;이항분포의 분산
-        &lt;ul&gt;
-          &lt;li&gt;$Var(X) = np(1-p)$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;표준편차
-        &lt;ul&gt;
-          &lt;li&gt;$SD(X) = \sqrt{np(1-P})$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-
-    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;binom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;#평균은 0.6, 분산은 0.48
-&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.48&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;연속확률 변수의 확률분포
-    &lt;ul&gt;
-      &lt;li&gt;확률밀도함수(probability density function)를 써서 표현함&lt;/li&gt;
-      &lt;li&gt;$P[a \le x \le b] = \int_a^b f(x)dx$&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;정규분포
-    &lt;ul&gt;
-      &lt;li&gt;$f(x) = {1 \over {\sqrt{2 \pi}\sigma}} e^{-{1 \over 2}({\frac{x - \mu}{\sigma})^2}} $&lt;/li&gt;
-      &lt;li&gt;$x = \mu$일 때, 가장 높은 값을 가지는 좌우 대칭의 그래프 모양을 가진다.&lt;/li&gt;
-      &lt;li&gt;표현 : $X \sim N(\mu, \sigma^2)$&lt;/li&gt;
-      &lt;li&gt;표준정규확률변수(standart normaal random variable)
-        &lt;ul&gt;
-          &lt;li&gt;$Z = \frac{X - \mu}{\sigma}$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;표준정규분포(standart normal distribution)
-        &lt;ul&gt;
-          &lt;li&gt;$Z \sim N(0, 1)$&lt;/li&gt;
-          &lt;li&gt;표준 정규분포표
-            &lt;ul&gt;
-              &lt;li&gt;$P[X \le z]$&lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-          &lt;li&gt;예시: $X \sim N(4, 3)$ 에서 $P[X \le 4] = ??$
-            &lt;ul&gt;
-              &lt;li&gt;$P[ \frac{X - \mu}{\sigma} \le \frac{4 - \mu}{\sigma} ] = P[Z \le \frac {4 - 4}{3}] = P[Z \le 0] = 0.5$
-                &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;norm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;                &lt;/div&gt;
-              &lt;/li&gt;
-            &lt;/ul&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;포아송 분포(Poisson distribution)
-    &lt;ul&gt;
-      &lt;li&gt;일정한 시간단위 또는 공간 단위에서 발생하는 이벤트의 수의 확률분포
-        &lt;ul&gt;
-          &lt;li&gt;하루동안 어떤 웹사이트를 방문하는 방문자으 ㅣ수&lt;/li&gt;
-          &lt;li&gt;어떤 미용실에 한 시간동안 방문하는 손님의 수&lt;/li&gt;
-          &lt;li&gt;어떤 전기선 100미터당 발생하는 결함의 수&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;확률분포함수(확률질량함수)
-        &lt;ul&gt;
-          &lt;li&gt;$P[X = x] = f(x) = \lambda^x \frac{e^{-\lambda}}{x!}, x = 0,1,2,…$&lt;/li&gt;
-          &lt;li&gt;평균: $\lambda$&lt;/li&gt;
-          &lt;li&gt;분산: $\lambda$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;예시: 어느 웹사이트에 시간당 접속자 수는 평균이 3$(\lambda = 3)$인 포아송 분포를 따른다고 한다. 앞으로 1시간 동안 접속자 수가 2명 이하일 확률은?
-        &lt;ul&gt;
-          &lt;li&gt;$P[X \le 2] = P[X = 0] + p[X = 1] +P[X = 2] = 3^0 \frac{e^{-3}}{0!} + 3^1 \frac{e^{-3}}{1!} + 3^2 \frac{e^{-3}}{2!}$ 
-  $= 0.42319$
-            &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;poisson&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mu&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;mf&quot;&gt;0.42319008112684364&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;            &lt;/div&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;지수분포(exponential distribution)
-    &lt;ul&gt;
-      &lt;li&gt;포아송 분포에 의해 어떤 사건이 발생할 때, 어느 한 시점으로부터 이 사건이 발생할 때 까지 걸리는 시간에 대한 확률 분포&lt;/li&gt;
-      &lt;li&gt;확률밀도 함수
-        &lt;ul&gt;
-          &lt;li&gt;$f(t) = \lambda e^{-\lambda t}$&lt;/li&gt;
-          &lt;li&gt;$\lambda$ : 포아송분포의 평균&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;평균
-        &lt;ul&gt;
-          &lt;li&gt;$E(T) = {1 \over \lambda}$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;분산
-        &lt;ul&gt;
-          &lt;li&gt;$Var(T) = {1 \over \lambda^2}$&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;예시: 어느 웹사이트에 시간당 접속자 수는 $\lambda = 3$인 포아송 분포를 따른다고 한다. 지금부터 시작하여 첫번째 접속자가 30분 이내에 올 확률은($P[T\le 0.5])$?
-        &lt;ul&gt;
-          &lt;li&gt;$P[T\le 0.5]) = \int_0^{0.5}\lambda e^{-\lambda t}dt = \int_0^{0.5}3 e^{-3 t}dt = 0.7769$
-            &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;# 0.5는 시간 scale에는 표준편차를 넣어줌
-&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stats&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expon&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scale&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;            &lt;/div&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Thu, 10 Dec 2020 00:00:00 +0900</pubDate>
-        <link>http://localhost:4000http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(7)(%ED%99%95%EB%A5%A0%EB%B6%84%ED%8F%AC)</link>
-        <guid isPermaLink="true">http://localhost:4000http://localhost:4000/programmers/%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%EC%88%98%ED%95%99(7)(%ED%99%95%EB%A5%A0%EB%B6%84%ED%8F%AC)</guid>
-        
-        <category>K-digital training</category>
-        
-        <category>week2_day4</category>
         
         <category>인공지능 수학</category>
         
