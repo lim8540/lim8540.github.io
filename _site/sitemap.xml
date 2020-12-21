@@ -2,15 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_1</loc>
-<lastmod>2020-12-16T19:11:37+09:00</lastmod>
+<lastmod>2020-12-21T22:25:06+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_2</loc>
-<lastmod>2020-12-16T19:11:37+09:00</lastmod>
+<lastmod>2020-12-21T22:25:06+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series_2/demo_series_2_post_1</loc>
-<lastmod>2020-12-16T19:11:37+09:00</lastmod>
+<lastmod>2020-12-21T22:25:06+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo/Blogging</loc>
@@ -153,6 +153,14 @@
 <lastmod>2020-12-15T00:00:00+09:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/programmers/EDA-Project</loc>
+<lastmod>2020-12-16T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/programmers/Flask%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0</loc>
+<lastmod>2020-12-21T00:00:00+09:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/series/</loc>
 </url>
 <url>
@@ -181,5 +189,8 @@
 </url>
 <url>
 <loc>http://localhost:4000/page5/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page6/</loc>
 </url>
 </urlset>

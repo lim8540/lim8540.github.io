@@ -1,0 +1,99 @@
+I"� <h2 id="3-matplotlib-case-study">3. Matplotlib Case Study</h2>
+
+<h3 id="꺾은선-그래프plot">꺾은선 그래프(Plot)</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.plot</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="c1">#0~19
+</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span> <span class="c1">#난수를 20번 생성
+</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># EXTRA : y축을 20까지 보이게 하고 싶다면? y축을 '5'단위로 보이게하고 싶다면?
+</span><span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">yticks</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">5</span><span class="p">)])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="matplotlib_2_files/matplotlib_2_3_0.png" alt="png" /></p>
+
+<h3 id="산점도scatter-plot">산점도(Scatter Plot)</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">.scatter()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="matplotlib_2_files/matplotlib_2_5_0.png" alt="png" /></p>
+
+<h3 id="박스-그림box-plot">박스 그림(Box Plot)</h3>
+
+<ul>
+  <li>수치형 테이터에 대한 정보(Q1, Q2, Q3, min, max)</li>
+  <li><code class="language-plaintext highlighter-rouge">.boxplot()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">boxplot</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+
+<span class="c1"># Extra: Plot의 title을 "Box plot of y"로 지정해보기
+</span><span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"Box plot of y"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="matplotlib_2_files/matplotlib_2_7_0.png" alt="png" /></p>
+
+<h3 id="막대-그래프bar-plot">막대 그래프(Bar Plot)</h3>
+<ul>
+  <li>범주형 데이터의 “값”과 그 값의 크기를 직사각형으로 나타낸 그림</li>
+  <li><code class="language-plaintext highlighter-rouge">.bar()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Extra: xticks를 올바르게 처리해 봅시다.
+</span><span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="matplotlib_2_files/matplotlib_2_9_0.png" alt="png" /></p>
+
+<h3 id="histogram">Histogram</h3>
+<ul>
+  <li>도수분포를 직사각형의 막대 형태로 나타냈다.</li>
+  <li>“계급”으로 나타낸 것이 특징 : 0, 1, 2가 아니라 0~2까지의 “범주형” 데이터로 구성 후 그림을 그림</li>
+  <li><code class="language-plaintext highlighter-rouge">.hist()</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plt</span><span class="p">.</span><span class="n">hist</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c1"># Extra : xtics를 올바르게 고쳐봅시다
+</span><span class="n">plt</span><span class="p">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="matplotlib_2_files/matplotlib_2_11_0.png" alt="png" /></p>
+
+<h3 id="원형-그래프pie-chart">원형 그래프(Pie Chart)</h3>
+<ul>
+  <li>데이터에서 전체에 대한 부분의 비율을 부채꼴로 나타낸 그래프</li>
+  <li>다른 그래프에 비해서 <strong>비율</strong> 확인에 용이</li>
+  <li><code class="language-plaintext highlighter-rouge">.pie</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">z</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">pie</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s">'one'</span><span class="p">,</span> <span class="s">'two'</span><span class="p">,</span> <span class="s">'three'</span><span class="p">,</span> <span class="s">'four'</span><span class="p">])</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="matplotlib_2_files/matplotlib_2_13_0.png" alt="png" /></p>
+
+:ET

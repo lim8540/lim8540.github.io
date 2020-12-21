@@ -1,0 +1,101 @@
+<h2 id="추정">추정</h2>
+
+<ul>
+  <li>구간추정
+    <ul>
+      <li>모평균 $\mu$의 $100(1-\alpha)\%$ 신뢰구간(confidence interval)
+        <ul>
+          <li>$(\mu의 추정량) \pm z_{\alpha \over 2} (추정량의 표준편차)$</li>
+        </ul>
+      </li>
+      <li>정규분포에서 $\sigma$를 알 때,
+        <ul>
+          <li>$(\bar {x} - z_{\alpha / 2}{\sigma \over {\sqrt n}}  ,  \bar {x} + z_{\alpha / 2}{\sigma \over {\sqrt n}} )$</li>
+          <li>그러나 이 방법은 실용적이지 못하다: 정규분포가 아니거나 표준편차가 알려져 있지 않은 경우가 많다.</li>
+        </ul>
+      </li>
+      <li>표본의 크기가 클 때, 중심극한 정리를 사용한다.
+        <ul>
+          <li>$(\mu의 추정량) \pm z_{\alpha \over 2} (추정량의 표준편차)$
+            <ul>
+              <li>$(\bar {x} - z_{\alpha / 2}{s \over {\sqrt n}}  ,  \bar {x} + z_{\alpha / 2}{s \over {\sqrt n}} )$</li>
+              <li>$s$ : 표본표준편차</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>예시 : 어떤 학교의 고1 남학생의 평균키를 추정하기 위해 36명을 표본으로 추출하여 그 표본평균과 표본표준편차를 계산하여 그 결과가 아래와 같았다.
+      - $\bar {x} = 173.6, s = 3.6$
+      - 평균키에 대한 95% 신뢰구간을 구하시오.
+    <ul>
+      <li>해결 :
+        <ul>
+          <li>$\alpha = 0.05$(95%신뢰수준이므로)</li>
+          <li>$z_{\alpha / 2} = z_{0.025} = 1.96$</li>
+          <li>$z_{\alpha / 2}{s \over {\sqrt n}} = 1.96 \times {3.6 \over 6} = 1.176$</li>
+          <li>95% 신뢰구간 : $(173.6 - 1.176, 173.6 + 1.176) = (172.4, 174.8)$</li>
+        </ul>
+      </li>
+      <li>데이터가 주어졌을 때, python으로 계산하기
+        <ul>
+          <li>어떤 농장에서 생산된 계란 30개의 표본의 무게는 다음과 같았다. 계란의 평균 무게에 대한 95% 신뢰 구간을 구하시오.</li>
+          <li>$w = [10.7, 11.7, 9.8, …]$
+            <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">w</span>  <span class="o">=</span> <span class="p">[</span><span class="mf">10.7</span><span class="p">,</span> <span class="mf">11.7</span><span class="p">,</span> <span class="mf">9.8</span><span class="p">,</span> <span class="mf">11.4</span><span class="p">,</span> <span class="mf">10.8</span><span class="p">,</span> <span class="mf">9.9</span><span class="p">,</span> <span class="mf">10.1</span><span class="p">,</span> <span class="mf">8.8</span><span class="p">,</span> <span class="mf">12.2</span><span class="p">,</span> <span class="mf">11.0</span><span class="p">,</span> <span class="mf">11.3</span><span class="p">,</span> <span class="mf">11.1</span><span class="p">,</span> <span class="mf">10.3</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">9.9</span><span class="p">,</span> <span class="mf">11.1</span><span class="p">,</span> <span class="mf">11.7</span><span class="p">,</span> <span class="mf">11.5</span><span class="p">,</span> <span class="mf">9.1</span><span class="p">,</span> <span class="mf">10.3</span><span class="p">,</span> <span class="mf">8.6</span><span class="p">,</span> <span class="mf">12.1</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">,</span> <span class="mf">9.2</span><span class="p">,</span> <span class="mf">9.8</span><span class="p">,</span> <span class="mf">9.3</span><span class="p">,</span> <span class="mf">9.4</span><span class="p">,</span> <span class="mf">9.6</span><span class="p">,</span> <span class="mf">9.2</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">xbar</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">sd</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">std</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">ddof</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">scipy.stats</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="c1"># 전체 확률 1에서 오른쪽부분은 0.025를 뺀 부분의 z값
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">zalpha</span> <span class="o">=</span> <span class="n">scipy</span><span class="p">.</span><span class="n">stats</span><span class="p">.</span><span class="n">norm</span><span class="p">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alpha</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="s">"평균 %.2f, 표준편차: %.2f"</span> <span class="o">%</span><span class="p">(</span><span class="n">xbar</span><span class="p">,</span> <span class="n">sd</span><span class="p">))</span>
+<span class="n">평균</span> <span class="mf">10.43</span><span class="p">,</span> <span class="n">표준편차</span><span class="p">:</span> <span class="mf">1.11</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span><span class="p">(</span><span class="n">zalpha</span> <span class="p">:</span><span class="s">" zalpha)
+zalpha : 1.959963984540054
+</span></code></pre></div>            </div>
+            <p>따라서, 95% 신뢰 구간 : $(10.43 - 1.96 \times {1.11 \over {\sqrt 30}} , 10.43 + 1.96 \times {1.11 \over {\sqrt 30}}) = (10.033, 10.827)$</p>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>예시 2</p>
+
+    <ul>
+      <li>대학교 1학년생의 흡연율을 조사하기 위해 150명을 랜덤하게 선택하여 흡연여부를 조사하였다. 이 중 48명이 흡연을 하고 있었다. 이 대학교 1학년생의 흡연율의 평균을 점추정하시오.</li>
+      <li>점 추정
+        <ul>
+          <li>확률변수 X:
+            <ul>
+              <li>n개의 표본에서 특정 속성을 갖는 표본의 개수</li>
+            </ul>
+          </li>
+          <li>모비율 p의 점추정량
+            <ul>
+              <li>$\hat {p} = {x \over n}$</li>
+            </ul>
+          </li>
+          <li>$n = 150, X=48$</li>
+          <li>$\hat {p} = {X \over n} = {48 \over 150} = 0.32$</li>
+          <li>평균 흡연율은 32%로 추정됨</li>
+        </ul>
+      </li>
+      <li>구간추정
+        <ul>
+          <li>n이 충분히 클 때($n\hat{p} \gt 5, n(1-{\hat p }) \gt 5$일 때를 의미)</li>
+          <li>$X \sim N(np,np(1-p))$</li>
+          <li>모비율 p의 $100(1-\alpha)\%$ 신뢰구간 (confidence interval) (증명생략)
+            <ul>
+              <li>$(\hat{p} - z_{\alpha \over 2} {\sqrt { {\hat {p} (1 - \hat {p}) } \over n} }, \hat{p} + z_{\alpha \over 2} {\sqrt { {\hat {p} (1 - \hat {p}) } \over n} })$</li>
+            </ul>
+          </li>
+          <li>${\sqrt { {\hat {p} (1 - \hat {p}) } \over n} } = {\sqrt { {(0.32) (0.68) } \over 150} } = 0.038$</li>
+          <li>$(0.32 - 1.96 \times 0.038, 0.32 + 1.96 \times 0.038) = (0.245, 0.395)$</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>

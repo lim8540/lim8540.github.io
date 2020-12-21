@@ -1,0 +1,188 @@
+<h3 id="pandas-시작하기">pandas 시작하기</h3>
+<p><code class="language-plaintext highlighter-rouge">import pandas</code> 를 통해서 진행</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+</code></pre></div></div>
+
+<h3 id="pandas로-1차원-데이터-다루기---series">pandas로 1차원 데이터 다루기 - Series</h3>
+<ul>
+  <li>1차원 labeled <strong>array</strong></li>
+  <li>인덱스를 지정해 줄 수 있음</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">26</span><span class="p">])</span>
+<span class="n">s</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0     1
+1     4
+2     9
+3    16
+4    26
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">({</span><span class="s">'one'</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">'two'</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="s">'three'</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">'four'</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="s">'five'</span><span class="p">:</span><span class="mi">5</span><span class="p">})</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>one      1
+two      2
+three    3
+four     4
+five     5
+dtype: int64
+</code></pre></div></div>
+
+<h3 id="series--numpy">Series + Numpy</h3>
+<ul>
+  <li>Series는 ndarray와 유사하다</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>two      2
+three    3
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="p">[</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">s</span><span class="p">.</span><span class="n">median</span><span class="p">()]</span> <span class="c1"># 자기 자신의 median(중앙값)보다 큰 값들만 가지고 와라
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3    16
+4    26
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="p">[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span> <span class="c1"># 인덱스 여러개 묶어서 불러오는 것도 가능
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3    16
+1     4
+4    26
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="c1"># numpy의 함수도 pandas의 series에 적용가능
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0    2.718282e+00
+1    5.459815e+01
+2    8.103084e+03
+3    8.886111e+06
+4    1.957296e+11
+dtype: float64
+</code></pre></div></div>
+
+<h3 id="series--dict">Series + dict</h3>
+<ul>
+  <li>series는 dict와 유사점이 많다</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>one      1
+two      2
+three    3
+four     4
+five     5
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span><span class="p">[</span><span class="s">'one'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Series에 값 추가
+</span><span class="n">t</span><span class="p">[</span><span class="s">'six'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>one      1
+two      2
+three    3
+four     4
+five     5
+six      6
+dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># key가 있는지 확인
+</span><span class="s">'six'</span> <span class="ow">in</span> <span class="n">t</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 없는 키를 통해 불러오면 Keyerror가 뜸 Ex) t['seven'] 
+# 이를 방지하기 위해 dict처럼 get을 씀.
+# 없는 키를 통해 get으로 불러오면 아무값도 return하지 않음
+</span><span class="n">t</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'seven'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 값이 없는 경우 초기값 지정 가능
+</span><span class="n">t</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'seven'</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7
+</code></pre></div></div>
+
+<h3 id="series에-이름-붙이기">Series에 이름 붙이기</h3>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">name</code> 속성을 가지고 있다.</li>
+  <li>처음 Series를 만들 때 이름을 붙일 수 있다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"random_nums"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0    0.501364
+1    1.556853
+2   -0.604867
+3    1.001011
+4    1.327403
+Name: random_nums, dtype: float64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"임의의 난수"</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0    0.501364
+1    1.556853
+2   -0.604867
+3    1.001011
+4    1.327403
+Name: 임의의 난수, dtype: float64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>

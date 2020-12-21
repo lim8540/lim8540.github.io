@@ -1,0 +1,86 @@
+<h2 id="표본분포">표본분포</h2>
+
+<ul>
+  <li>랜덤한 숫자 생성하기
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">random</span>
+  <span class="o">&gt;&gt;&gt;</span> <span class="p">[</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+  <span class="p">[</span><span class="mi">546</span><span class="p">,</span> <span class="mi">749</span><span class="p">,</span> <span class="mi">982</span><span class="p">,</span> <span class="mi">877</span><span class="p">,</span> <span class="mi">839</span><span class="p">,</span> <span class="mi">533</span><span class="p">,</span> <span class="mi">234</span><span class="p">,</span> <span class="mi">790</span><span class="p">,</span> <span class="mi">652</span><span class="p">,</span> <span class="mi">199</span><span class="p">]</span>
+</code></pre></div>    </div>
+  </li>
+  <li>표본 평균이 가질 수 있는 값도 하나의 확률 분포를 가짐
+    <ul>
+      <li>예) 50만명의 전국 고등학교 1학년 학생의 키를 조사하기 위해 1000명을 표본 조사할 때, 표본의 선택에 따라 표본의 평균이 달라진다. 따라서 표본 평균은 일종의 확률 변수라고 할 수 있다.</li>
+      <li>통계량의 확률 분포를 표본분포(sampling distribution)</li>
+    </ul>
+  </li>
+  <li>표본 평균
+    <ul>
+      <li>모평균을 알아내는데 쓰이는 통계량</li>
+      <li>표본 평균의 분포
+        <ul>
+          <li>$x_1, x_2, …, x_n$
+            <ul>
+              <li>평균 : $\mu$, 분산 : $\sigma ^2$</li>
+              <li>정규모집단에서 추출된 표본의 측정값</li>
+            </ul>
+          </li>
+          <li>표본 평균
+            <ul>
+              <li>$\bar {x} = {1 \over n} \sum_1^nx_i$</li>
+              <li>$\bar {X} \sim N(\mu, {\sigma ^2 \over n})$</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="c1"># 10개짜리 랜덤 추출한 표본의 평균 10000개
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">xbars</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rang</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
+<span class="c1"># xbars(표본의 평균들)의 평균
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">xbars</span><span class="p">)</span>
+<span class="c1"># xbars(표본의 평균들)의 분산
+</span><span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="p">.</span><span class="n">var</span><span class="p">(</span><span class="n">xbars</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>중심 극한 정리(central limit theorem)
+    <ul>
+      <li>$x_1, x_2, …, x_n$
+        <ul>
+          <li>평균 : $\mu$, 분산 : $\sigma ^2$</li>
+          <li><del>정규</del>모집단에서 추출된 표본의 측정값</li>
+        </ul>
+      </li>
+      <li>표본 평균
+        <ul>
+          <li>$\bar {x} = {1 \over n} \sum_1^nx_i$</li>
+          <li>$n$이 충분히 큰 경우 $(n \ge 30)$,
+            <ul>
+              <li>근사적으로, $\bar {X} \sim N(\mu, {\sigma ^2 \over n})$</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+  <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span>
+  <span class="c1"># 표본의 개수는 3
+</span>  <span class="o">&gt;&gt;&gt;</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+  <span class="c1"># 0~10까지의 수에서 랜덤으로 3개를 뽑았을 때의 평균값을 10000개 뽑음
+</span>  <span class="o">&gt;&gt;&gt;</span> <span class="n">xbars</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10000</span><span class="p">)]</span>
+  <span class="o">&gt;&gt;&gt;</span> <span class="n">h</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="p">.</span><span class="n">pyplot</span><span class="p">.</span><span class="n">hist</span><span class="p">(</span><span class="n">xbars</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">bins</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
+</code></pre></div>    </div>
+    <p>n 이 3일 때,
+  <img src="https://user-images.githubusercontent.com/51064261/101873524-6cd0fc00-3bca-11eb-9aab-f146f11d577d.png" alt="다운로드" /></p>
+
+    <p>n 이 30일 때,
+  <img src="https://user-images.githubusercontent.com/51064261/101873903-2c25b280-3bcb-11eb-9a47-89da981ad022.png" alt="n30" /></p>
+
+    <p>n의 값이 커질 수록 정규분포에 가까워짐을 알 수 있다. <br />
+  지수분포도 마찬가지의 결과를 보인다.</p>
+  </li>
+</ul>

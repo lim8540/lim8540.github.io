@@ -1,0 +1,54 @@
+<h2 id="install--configuration">Install &amp; Configuration</h2>
+
+<h3 id="set-up-jekyll">Set up jekyll</h3>
+
+<p>Before anything, make sure you have set up jekyll correctly. See <a href="https://jekyllrb.com/docs/">the official jekyll doc</a>.</p>
+
+<h3 id="clone-this-repo">Clone this repo</h3>
+
+<p>Clone this repo into to your local machine, then <code class="language-plaintext highlighter-rouge">cd</code> to the root directory of your local copy. Here is an overview of the project’s file structure:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="go">jekyll-theme-textalic
+</span><span class="gp">├── 404.html                    #</span><span class="w"> </span>404 page
+<span class="go">├── Gemfile
+├── LICENCE
+</span><span class="gp">├── _config.yml                 #</span><span class="w"> </span>Main config
+<span class="go">├── _data
+</span><span class="gp">│   └── me.yml                  #</span><span class="w"> </span>Personal info config
+<span class="gp">├── _demo_series                #</span><span class="w"> </span>A demo series, add series into series folder
+<span class="go">│   └── demo_series_post_1.md
+├── _includes
+├── _layouts
+├── _posts
+</span><span class="gp">│   └── 2019-12-25-Intro.md     #</span><span class="w"> </span>Add new post here
+<span class="go">├── _sass
+</span><span class="gp">├── about                       #</span><span class="w"> </span>About page
+<span class="gp">├── assets                      #</span><span class="w"> </span>images, fonts, css, js...
+<span class="go">│   ├── img
+</span><span class="gp">│   │   ├── me.png              #</span><span class="w"> </span>Replace with your own, showed <span class="k">in</span> /about page
+<span class="gp">├── favicon.ico                 #</span><span class="w"> </span>Replace with your own
+<span class="go">├── feed.xml
+├── index.html
+├── resume
+</span><span class="gp">│   └── index.md                #</span><span class="w"> </span>You may write your resume here. linked <span class="k">in</span> /about page
+<span class="go">├── search.json
+├── series
+└── tag
+</span></code></pre></div></div>
+
+<h3 id="install-gems">Install gems</h3>
+
+<p>Run the following to install required gems defined in <code class="language-plaintext highlighter-rouge">Gemfile</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ bundle install
+</code></pre></div></div>
+
+<h3 id="customization">Customization</h3>
+
+<p>Edit <code class="language-plaintext highlighter-rouge">_config.yml</code> and <code class="language-plaintext highlighter-rouge">_data/me.yml</code> to tweek the site configuration to your need. See corresponding file’s comments for details.</p>
+
+<p>You also should replace the <code class="language-plaintext highlighter-rouge">/favicon.ico</code> and <code class="language-plaintext highlighter-rouge">/assets/img/me.png</code> file with your own.</p>
+
+<h3 id="run-locally">Run locally</h3>
+
+<p>Run <code class="language-plaintext highlighter-rouge">bundle exec serve --watch</code> to run it locally.</p>

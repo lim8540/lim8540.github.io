@@ -1,0 +1,9 @@
+I"}<h2 id="0-가상환경-설치하기">0. 가상환경 설치하기</h2>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 파이썬 가상환경 모듈 설치</span>
+  <span class="nv">$ </span>pip <span class="nb">install </span>cirtualenv
+<span class="c"># 현재 디렉토리에 새 virtualenv 가상환경 만들기</span>
+  <span class="nv">$ </span>virtualenv &lt;가상환경 이름&gt;
+<span class="c"># 가상환경에 진입(mac)</span>
+  <span class="nv">$ </span><span class="nb">source</span> &lt;가상환경 이름&gt;/bin/activate
+</code></pre></div></div>
+:ET

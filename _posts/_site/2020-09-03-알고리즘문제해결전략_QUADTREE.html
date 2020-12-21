@@ -1,0 +1,223 @@
+<h2 id="quadtree-문제-개요">QUADTREE 문제 개요</h2>
+
+<h4 id="문제">문제</h4>
+<p><img src="http://algospot.com/media/judge-attachments/0cafdb9ffa8ace4fb8315949d25d2fb3/quadtree.png" alt="example" title="exmaple" /><br />
+대량의 좌표 데이터를 메모리 안에 압축해 저장하기 위해 사용하는 여러 기법 중 쿼드 트리(quad tree)란 것이 있습니다. 주어진 공간을 항상 4개로 분할해 재귀적으로 표현하기 때문에 쿼드 트리라는 이름이 붙었는데, 이의 유명한 사용처 중 하나는 검은 색과 흰 색밖에 없는 흑백 그림을 압축해 표현하는 것입니다. 쿼드 트리는 2N × 2N 크기의 흑백 그림을 다음과 같은 과정을 거쳐 문자열로 압축합니다.</p>
+
+<ul>
+  <li>이 그림의 모든 픽셀이 검은 색일 경우 이 그림의 쿼드 트리 압축 결과는 그림의 크기에 관계없이 b가 됩니다.</li>
+  <li>이 그림의 모든 픽셀이 흰 색일 경우 이 그림의 쿼드 트리 압축 결과는 그림의 크기에 관계없이 w가 됩니다.</li>
+  <li>모든 픽셀이 같은 색이 아니라면, 쿼드 트리는 이 그림을 가로 세로로 각각 2등분해 4개의 조각으로 쪼갠 뒤 각각을 쿼드 트리 압축합니다. 이때 전체 그림의 압축 결과는 x(왼쪽 위 부분의 압축 결과)(오른쪽 위 부분의 압축 결과)(왼쪽 아래 부분의 압축 결과)(오른쪽 아래 부분의 압축 결과)가 됩니다. 예를 들어 그림 (a)의 왼쪽 위 4분면은 xwwwb로 압축됩니다.
+그림 (a)와 그림 (b)는 16×16 크기의 예제 그림을 쿼드 트리가 어떻게 분할해 압축하는지를 보여줍니다. 이때 전체 그림의 압축 결과는 xxwww bxwxw bbbww xxxww bbbww wwbb가 됩니다.</li>
+</ul>
+
+<p>쿼드 트리로 압축된 흑백 그림이 주어졌을 때, 이 그림을 상하로 뒤집은 그림 을 쿼드 트리 압축해서 출력하는 프로그램을 작성하세요.</p>
+
+<p><br /></p>
+
+<h4 id="입력">입력</h4>
+<p>첫 줄에 테스트 케이스의 개수 C (C≤50)가 주어집니다. 그 후 C줄에 하나씩 쿼드 트리로 압축한 그림이 주어집니다. 모든 문자열의 길이는 1,000 이하이며, 원본 그림의 크기는 220 × 220 을 넘지 않습니다.<br />
+<br /></p>
+
+<h4 id="출력">출력</h4>
+<p>각 테스트 케이스당 한 줄에 주어진 그림을 상하로 뒤집은 결과를 쿼드 트리 압축해서 출력합니다.<br />
+<br /></p>
+
+<h4 id="예제-입력">예제 입력</h4>
+<p>4<br />
+w<br />
+xbwwb<br />
+xbwxwbbwb<br />
+xxwwwbxwxwbbbwwxxxwwbbbwwwwbb</p>
+
+<h4 id="예제-출력">예제 출력</h4>
+<p>w<br />
+xwbbw<br />
+xxbwwbbbw<br />
+xxwbxwwxbbwwbwbxwbwwxwwwxbbwb</p>
+
+<p>출처: <a href="https://algospot.com/judge/problem/read/QUADTREE">Algospot</a></p>
+
+<h2 id="구현">구현</h2>
+
+<h4 id="설계">설계</h4>
+<p>책에 나온대로 분할 정복을 통해 구현하기로 하였다.</p>
+
+<ol>
+  <li>분할을 두 개로 하지 않고 문제에 맞게 4개로 나누어 하기로 함.</li>
+  <li>4구역으로 나누었을 때, 트리를 뒤집으면 아래의 두개와 위의 두 칸의 위치를 바꾸면 된다. 이를 전체 사각형에서 부터 모든 나누어진 사각형에 수행하면 답이 구해진다.</li>
+</ol>
+
+<h4 id="전체-코드">전체 코드</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;iostream&gt;
+#include &lt;string&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">TC</span><span class="p">;</span>
+
+<span class="n">string</span> <span class="nf">quardtree</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">input</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'x'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">input</span><span class="p">;</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">string</span> <span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">,</span> <span class="n">str3</span><span class="p">,</span> <span class="n">str4</span><span class="p">,</span> <span class="n">result</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">mark1</span><span class="p">,</span> <span class="n">mark2</span><span class="p">,</span> <span class="n">mark3</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">tofind</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+                <span class="n">tofind</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tofind</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">tofind</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mark1</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">mark1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+                <span class="n">tofind</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tofind</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">tofind</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mark2</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">mark2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+                <span class="n">tofind</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tofind</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">tofind</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mark3</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">str1</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">mark1</span><span class="p">);</span>
+        <span class="n">str2</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mark1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mark2</span> <span class="o">-</span> <span class="n">mark1</span><span class="p">);</span>
+        <span class="n">str3</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mark2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mark3</span> <span class="o">-</span> <span class="n">mark2</span><span class="p">);</span>
+        <span class="n">str4</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mark3</span> <span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s">"x"</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str3</span><span class="p">)</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str4</span><span class="p">)</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">TC</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">TC</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">string</span> <span class="n">input</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">input</span><span class="p">;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">quardtree</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">result</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<h4 id="main함수">main함수</h4>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">TC</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">TC</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">string</span> <span class="n">input</span><span class="p">;</span>
+        <span class="n">string</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">input</span><span class="p">;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">quardtree</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">result</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>main함수 너무 단순해서 할말이 없다.</p>
+
+<h4 id="recursive-함수quadtree">Recursive 함수(QUADTREE)</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="nf">quardtree</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">input</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">'x'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">input</span><span class="p">;</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">string</span> <span class="n">str1</span><span class="p">,</span> <span class="n">str2</span><span class="p">,</span> <span class="n">str3</span><span class="p">,</span> <span class="n">str4</span><span class="p">,</span> <span class="n">result</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">mark1</span><span class="p">,</span> <span class="n">mark2</span><span class="p">,</span> <span class="n">mark3</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">tofind</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+                <span class="n">tofind</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tofind</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">tofind</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mark1</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">mark1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+                <span class="n">tofind</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tofind</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">tofind</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mark2</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">mark2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">'x'</span><span class="p">)</span>
+                <span class="n">tofind</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">tofind</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">tofind</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">mark3</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">str1</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">mark1</span><span class="p">);</span>
+        <span class="n">str2</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mark1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mark2</span> <span class="o">-</span> <span class="n">mark1</span><span class="p">);</span>
+        <span class="n">str3</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mark2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mark3</span> <span class="o">-</span> <span class="n">mark2</span><span class="p">);</span>
+        <span class="n">str4</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mark3</span> <span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s">"x"</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str3</span><span class="p">)</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str4</span><span class="p">)</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span><span class="o">+</span><span class="n">quardtree</span><span class="p">(</span><span class="n">str2</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>구현의 설계를 마친후에 먼저 생각했던 점은 어떤 자료구조를 사용할까이다. Queue를 사용할까 했지만, stirng에도 필요한 기능이 다 구현되어 있어서 string을 그냥 사용하였다.<br />
+기저 사례는 x가 맨 앞에 나오지 않는 경우 이는 원소가 단 한개라는 뜻이므로, 그 값을 바로 return하도록 하였다. x가 나오는 경우 다시 네개의 부분으로 나누어서 각각을 다시 재귀함수에 넣도록 하였다. 구현 상에서 가장 시간이 많이 걸렸던 부분은 당연히 주어진 데이터를 네부분으로 나누는 것이었다. 이를 구현한 방법은 처음에 변수에 정수 4를 넣어주고 x가 아닌경우는 -1, x인 경우는 -1 + 4 의 값을 더해주는 식으로 하여 그 정수값(tofind)이 3 2 1인 경우를 경계로하여 입력받은 string을 나누어 주었다. 이처럼 구현한 원리는 x가 나왔을 때, 뒤에 4개의 원소가 필요로하기 때문에 4로 시작을 하여 x가 아닌 값들은 바로 그 원소의 기능(가지)을 하므로, 값을하나 빼주고, x가 나온 경우도 원소가 되므로 1을 빼주지만 그 뒤에 x자신의 원소가 4개 나와야하므로 4를 다시 더해주어야한다는 것이다. 이렇게 나누어진 string들을 위와 아래의 순서를 바꾸어서 다시 합쳐주는 것으로 함수를 끝낸다.</p>
+
+<p><br /></p>
+
+<h2 id="정리">정리</h2>
+<ol>
+  <li>string을 제대로 다루지 못해서 시간이 걸렸던 것 같다. 기초적인 공부가 좀 더 필요해 보인다.</li>
+</ol>
+
+<p>끝!</p>
