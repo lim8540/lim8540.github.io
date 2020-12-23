@@ -1,0 +1,116 @@
+I"� <h2 id="django-시작하기">Django 시작하기</h2>
+
+<h3 id="django-설치">django 설치</h3>
+<p>가상환경을 만들어준 후에 그 가상환경 안에서 django를 설치한다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>pip <span class="nb">install </span>django
+</code></pre></div></div>
+
+<h3 id="django-project-시작하기">django project 시작하기</h3>
+<p>설치를 마친 후에는 django-admin을 통해 프로젝트를 만들어 준다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>django-admin startproject &lt;프로젝트 이름<span class="o">(</span>webproj<span class="o">)&gt;</span>
+</code></pre></div></div>
+
+<p>만들어진 프로젝트의 manage.py를 통해 서버를 열 수 있다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py runserver
+</code></pre></div></div>
+
+<h3 id="django-app-만들기">django App 만들기</h3>
+<p>새로운 앱 생성(project 디렉토리 내에서 실행)</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>django-admin startapp &lt;앱 이름<span class="o">(</span>homepage<span class="o">)&gt;</span>
+</code></pre></div></div>
+
+<h2 id="view로-request-handling하기">View로 Request Handling하기</h2>
+
+<p>view는 url을 받아서 model이나 template으로 보내주는 역할을 한다.</p>
+
+<h3 id="views-만들기">views 만들기</h3>
+<p>다음과 같이 간단한 view를 만들 수 있다. <br />
+<strong>/webproj/homepage/views.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="url-연결">url 연결</h3>
+<p>만들어진 view를 보여줄 url을 만들어 주어야 한다. <br />
+<strong>/webproj/webproj/urls.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">homepage.views</span> <span class="kn">import</span> <span class="n">index</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">'admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="p">.</span><span class="n">site</span><span class="p">.</span><span class="n">urls</span><span class="p">),</span> <span class="c1"># 127.0.0.1/admin/
+</span>    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="c1"># 127.0.0.1/
+</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="settingspy-수정">settings.py 수정</h3>
+<p>settings.py를 수정해 주어야 한다.(Installed_APPS에 homepage추가) <br />
+<strong>/webproj/webproj/settings.py</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+    <span class="s">'homepage'</span>
+<span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="admin-계정-만들기">Admin 계정 만들기</h2>
+
+<p>migration을 해주는 것 잊지말자!!</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py migrate
+</code></pre></div></div>
+
+<p>Admin 계정 만드는 방법</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python manage.py createsuperuser
+</code></pre></div></div>
+
+<h2 id="template으로-보여줄-화면-구성하기">Template으로 보여줄 화면 구성하기</h2>
+
+<h3 id="html문서-작성">Html문서 작성</h3>
+<p><strong>homepage/template/index.html</strong></p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span> 
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>
+            Python django example
+        <span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Title<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;p&gt;</span>blah blah blah<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<h3 id="viewspy-에서-render함수-지정해주기">views.py 에서 render함수 지정해주기</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span> <span class="p">,</span> <span class="s">'index.html'</span><span class="p">,</span> <span class="p">{})</span>
+</code></pre></div></div>
+
+<h3 id="settingspy-수정해주기">settings.py 수정해주기</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">"homepage"</span><span class="p">,</span> <span class="s">"template"</span><span class="p">)</span>
+            <span class="p">],</span>
+        <span class="s">'APP_DIRS'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s">'OPTIONS'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">'django.template.context_processors.debug'</span><span class="p">,</span>
+                <span class="s">'django.template.context_processors.request'</span><span class="p">,</span>
+                <span class="s">'django.contrib.auth.context_processors.auth'</span><span class="p">,</span>
+                <span class="s">'django.contrib.messages.context_processors.messages'</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div></div>
+:ET

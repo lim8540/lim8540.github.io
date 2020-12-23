@@ -1,0 +1,165 @@
+I";<h2 id="클라우드-서비스-제공-모델">클라우드 서비스 제공 모델</h2>
+
+<ol>
+  <li>On-Premise: 사용자가 모든것을 관리하는 모델</li>
+  <li>IaaS : Infra적인 측면은 Cloud에서 사용, 나머지는 직접 관리</li>
+  <li>PasS : Platform까지 Cloud가 제공, 나머지는 직접 관리</li>
+  <li>SaaS : SoftWare까지 모두 제공받는 모델</li>
+</ol>
+
+<h2 id="inference를-위한-model-handler-개발">Inference를 위한 model handler 개발</h2>
+<h3 id="skeleton-code">skeleton code</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MLModeHandler</span><span class="p">(</span><span class="n">BaseHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div></div>
+
+<h3 id="handle">handle()</h3>
+<ul>
+  <li>요청 정보를 받아 적절한 응답을 반환
+    <ol>
+      <li>정의된 양식으로 데이터가 입력됐는지 확인</li>
+      <li>입력 값에 대한 전처리 및 모델에 입력하기 위한 형태로 변환</li>
+      <li>모델 추론</li>
+      <li>모델 반환값의 후처리 작업</li>
+      <li>결과 반환</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">model_output</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">inference</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">model_output</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="initialize">initialize()</h3>
+<ul>
+  <li>데이터 처리나 모델, configuration 등 초기화
+    <ol>
+      <li>Configuration 등 초기화</li>
+      <li>(Optional) 신경망을 구성하고 초기화</li>
+      <li>사전 학습한 모델이나 전처리기 불러오기 (De-serialization)</li>
+    </ol>
+  </li>
+  <li>모델은 전역변수로 불러와야 한다. 만약 inference를 할 때마다 모델을 불러오도록 한다면 그로 인해 발생하는 시간이나 자원 등의 낭비가 발생합니다.</li>
+  <li>일반적으로 요청을 처리하기 전에 모델을 불러 옵니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">):</span>
+        <span class="c1"># De-serializing model and loading vectorizer
+</span>        <span class="kn">import</span> <span class="nn">joblib</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'model/ml_model.pkl'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">joblib</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'model/ml_vectorizer.pkl'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="preprocess">Preprocess()</h3>
+<ul>
+  <li>Raw input을 전처리 및 모델 입력 가능형태로 변환
+    <ol>
+      <li>Raw input 전처리</li>
+    </ol>
+    <ul>
+      <li>데이터 클린징의 목적과 학습 된 모델의 학습 당시 scaling이나 처리 방식과 맞춰주는 것이 필요
+        <ol>
+          <li>모델에 입력가능한 형태로 변환(vectorization, converting to id)등의 작업</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="c1"># cleansing raw text
+</span>        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># vectorizing cleaned text
+</span>        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">vectorizer</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model_input</span>
+</code></pre></div></div>
+
+<h3 id="inference">inference()</h3>
+<ul>
+  <li>입력된 값에 대한 예측/추론
+    <ol>
+      <li>각 모델의 predict 방식으로 예측 확률분포 값 반환</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_input</span><span class="p">):</span>
+        <span class="c1"># get predictions from model as probabilities
+</span>        <span class="n">model_output</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model_output</span>
+</code></pre></div></div>
+
+<h3 id="postprocess">postprocess()</h3>
+<ul>
+  <li>모델의 예측값을 response에 맞게 후처리 작업
+    <ol>
+      <li>예측된 결과에 대한 후처리 작업</li>
+      <li>보통 모델이 반환하는 건 확률 분포와 같은 값이기 때문에 response에서 받아야 하는 정보로 처리하는 역할을 많이 함</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_output</span><span class="p">):</span>
+        <span class="c1"># process predictions to predicted label and output format
+</span>        <span class="n">predicted_probabilities</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">predicted_ids</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">predicted_labels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">id2label</span><span class="p">[</span><span class="n">id_</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">predicted_ids</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">predicted_labels</span><span class="p">,</span> <span class="n">predicted_probabilities</span>
+</code></pre></div></div>
+
+<h3 id="종합">종합</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MLModelHandler</span><span class="p">(</span><span class="n">ModelHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">initialize</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">):</span>
+        <span class="c1"># De-serializing model and loading vectorizer
+</span>        <span class="kn">import</span> <span class="nn">joblib</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">joblib</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'model/ml_model.pkl'</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">vectorizer</span> <span class="o">=</span> <span class="n">joblib</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">'model/ml_vectorizer.pkl'</span><span class="p">)</span>
+        
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="c1"># cleansing raw text
+</span>        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_clean_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># vectorizing cleaned text
+</span>        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">vectorizer</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model_input</span>
+
+    <span class="k">def</span> <span class="nf">inference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_input</span><span class="p">):</span>
+        <span class="c1"># get predictions from model as probabilities
+</span>        <span class="n">model_output</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">model</span><span class="p">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">model_output</span>
+
+    <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_output</span><span class="p">):</span>
+        <span class="c1"># process predictions to predicted label and output format
+</span>        <span class="n">predicted_probabilities</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">predicted_ids</span> <span class="o">=</span> <span class="n">model_output</span><span class="p">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">predicted_labels</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">id2label</span><span class="p">[</span><span class="n">id_</span><span class="p">]</span> <span class="k">for</span> <span class="n">id_</span> <span class="ow">in</span> <span class="n">predicted_ids</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">predicted_labels</span><span class="p">,</span> <span class="n">predicted_probabilities</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="c1"># do above processes
+</span>        <span class="n">model_input</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">model_output</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">inference</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">postprocess</span><span class="p">(</span><span class="n">model_output</span><span class="p">)</span>
+</code></pre></div></div>
+:ET

@@ -1,6 +1,24 @@
 [
   
     {
+      "title"    : "Django",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, git",
+      "url"      : "/programmers/Django",
+      "date"     : "2020-12-23 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Aws",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week2_day5, git",
+      "url"      : "/programmers/AWS",
+      "date"     : "2020-12-22 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "Flask시작하기",
       "category" : "programmers",
       "tags"     : "K-digital training, week2_day5, git",
