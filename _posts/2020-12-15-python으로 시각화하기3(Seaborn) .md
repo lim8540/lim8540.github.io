@@ -1,6 +1,6 @@
 ---
 category: programmers
-tags: [K-digital training, week2_day5, git]
+tags: [K-digital training, week3_day2, seaborn]
 use_math: true
 ---
 

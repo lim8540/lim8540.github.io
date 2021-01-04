@@ -1,0 +1,25 @@
+I"�<h2 id="확률이론-probability-theory">확률이론 (Probability Theory)</h2>
+
+<h3 id="확률변수random-variable">확률변수(Random Variable)</h3>
+<ul>
+  <li>확률변수 $X$는 표본의 집합 $S$의 원소 $e$를 실수 값 $X(e) = x$에 대응시키는 함수이다.
+    <ul>
+      <li>대문자 $X,Y,…$ : 확률변수</li>
+      <li>소문자 $x, y, …$ : 확률변수가 가질 수 있는 값</li>
+      <li>확률 $P$는 집합 $S$의 부분집합을 실수 값에 대응시키는 함수
+        <ul>
+          <li>$P[X=x]$</li>
+          <li>$P[X \le x]$</li>
+          <li>$X = x, X \le x$는 집합 $S$의 부분집합을 정의한다.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="연속확률변수continuous-random-variables">연속확률변수(Continuous Random Variables)</h3>
+<ul>
+  <li>누적분포함수(cumulative distribution funcion, CDF): $F(x) = P[X \in (-\infty,x)]$</li>
+  <li>누적분포함수 $F(x)$를 가진 확률변수 $X$에 대해서 다음을 만족하는 함수 $f(x)$가 존재한다면 $X$를 연속확률 변수라고 부르고 $f(x)$를 X의 확률밀도함수(probability density function, pdf)라고 부른다. $F(x) = \int_{-\infty}^xf(t)dt$</li>
+</ul>
+:ET

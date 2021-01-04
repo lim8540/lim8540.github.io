@@ -1,6 +1,6 @@
 ---
 category: programmers
-tags: [K-digital training, week2_day5, numpy]
+tags: [K-digital training, week3_day1, numpy]
 use_math: true
 ---
 

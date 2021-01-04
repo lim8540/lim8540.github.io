@@ -1,9 +1,27 @@
 [
   
     {
+      "title"    : "확률이론",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week5_day1, ml_basics, 확률이론",
+      "url"      : "/programmers/%ED%99%95%EB%A5%A0%EC%9D%B4%EB%A1%A0",
+      "date"     : "2021-01-04 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Machin learning ",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week5_day1, ml_basics",
+      "url"      : "/programmers/Machin-Learning",
+      "date"     : "2021-01-04 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "Django",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day3, django",
       "url"      : "/programmers/Django",
       "date"     : "2020-12-23 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -12,7 +30,7 @@
     {
       "title"    : "Aws",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week4_day3, aws",
       "url"      : "/programmers/AWS",
       "date"     : "2020-12-22 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -21,7 +39,7 @@
     {
       "title"    : "Flask시작하기",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week4_day1, flask",
       "url"      : "/programmers/Flask%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0",
       "date"     : "2020-12-21 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -30,7 +48,7 @@
     {
       "title"    : "Eda project",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day3, eda",
       "url"      : "/programmers/EDA-Project",
       "date"     : "2020-12-16 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -39,7 +57,7 @@
     {
       "title"    : "Python으로 시각화하기3(seaborn) ",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day2, seaborn",
       "url"      : "/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B03(Seaborn)",
       "date"     : "2020-12-15 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -48,7 +66,7 @@
     {
       "title"    : "Python으로 시각화하기2(matplotlib의 여러 plot들) ",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day2, matplotlib",
       "url"      : "/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B02(Matplotlib%EC%9D%98-%EC%97%AC%EB%9F%AC-plot%EB%93%A4)",
       "date"     : "2020-12-15 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -57,7 +75,7 @@
     {
       "title"    : "Python으로 시각화하기1(matplotlib 시작하기) ",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day2, matplotlib",
       "url"      : "/programmers/python%EC%9C%BC%EB%A1%9C-%EC%8B%9C%EA%B0%81%ED%99%94%ED%95%98%EA%B8%B01(Matplotlib-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)",
       "date"     : "2020-12-15 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -66,7 +84,7 @@
     {
       "title"    : "Python으로 데이터다루기4(pandas의 dataframe)",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day2, dataframe",
       "url"      : "/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B04(pandas%EC%9D%98-Dataframe)",
       "date"     : "2020-12-15 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -75,7 +93,7 @@
     {
       "title"    : "Python으로 데이터다루기3(pandas 시작하기)",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day2, pandas",
       "url"      : "/programmers/python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%8B%A4%EB%A3%A8%EA%B8%B03(pandas-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0)",
       "date"     : "2020-12-15 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -84,7 +102,7 @@
     {
       "title"    : "깃(git)의 활용",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, git",
+      "tags"     : "K-digital training, week3_day1, git",
       "url"      : "/programmers/%EA%B9%83(git)%EC%9D%98-%ED%99%9C%EC%9A%A9",
       "date"     : "2020-12-14 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -93,7 +111,7 @@
     {
       "title"    : "Python으로 데이터 다루기2(numpy와 선형대수)",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, numpy",
+      "tags"     : "K-digital training, week3_day1, numpy",
       "url"      : "/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B02(Numpy%EC%99%80-%EC%84%A0%ED%98%95%EB%8C%80%EC%88%98)",
       "date"     : "2020-12-14 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
@@ -102,7 +120,7 @@
     {
       "title"    : "Python으로 데이터 다루기1(numpy)",
       "category" : "programmers",
-      "tags"     : "K-digital training, week2_day5, numpy",
+      "tags"     : "K-digital training, week3_day1, numpy",
       "url"      : "/programmers/Python%EC%9C%BC%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%8B%A4%EB%A3%A8%EA%B8%B01(Numpy)",
       "date"     : "2020-12-14 00:00:00 +0900",
       "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
