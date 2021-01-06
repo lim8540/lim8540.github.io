@@ -1,6 +1,15 @@
 [
   
     {
+      "title"    : "E2e ml프로젝트",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week5_day3, ml_basics, E2E",
+      "url"      : "/programmers/E2E-ML%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8",
+      "date"     : "2021-01-06 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "선형회귀",
       "category" : "programmers",
       "tags"     : "K-digital training, week5_day2, ml_basics, 선형회귀",

@@ -1,0 +1,3048 @@
+I"ӆ<h1 id="end-to-end-머신러닝-프로젝트">End-to-End 머신러닝 프로젝트</h1>
+
+<p>부동산 회사에 막 고용된 데이터 과학자라고 가정하고 예제 프로젝트를 처음부터 끝까지 (End-to-Enf) 진행하겠습니다. 주요 단계는 다음과 같습니다</p>
+
+<ol>
+  <li>큰 그림을 봅니다 (look at the big picture).</li>
+  <li>데이터를 구합니다 (get the data).</li>
+  <li>데이터로부터 통찰을 얻기 위해 탐색하고 시각화합니다 (discover and visualize the data to gain insights).</li>
+  <li>머신러닝 알고리즘을 위해 데이터를 준비합니다 (prepare the data for Machine Learning algorithms).</li>
+  <li>모델을 선택하고 훈련시킵니다 (select a model and train it).</li>
+  <li>모델을 상세하게 조정합니다 (fine-tune your model).</li>
+  <li>솔루션을 제시합니다 (present your solution).</li>
+  <li>시스템을 론칭하고 모니터링하고 유지 보수합니다 (launch, monitor, and maintain your system).</li>
+</ol>
+
+<p>이 예제 프로젝트를 위해서 캘리포니아 주택 가격 데이터셋을 사용합니다. 이 데이터셋은 1990년 캘리포니아 인구조사 데이터를 기반으로 합니다.</p>
+
+<h2 id="1-큰-그림-보기-look-at-the-big-picture">1. 큰 그림 보기 (Look at the Big Picture)</h2>
+
+<p>풀어야 할 문제: 캘리포니아 인구조사 데이터를 사용해 캘리포니아의 주택 가격 모델을 만드는 것</p>
+
+<p>이 모델이 전체 시스템 안에서 어떻게 사용될 지를 이해하는 것이 중요합니다.</p>
+
+<p>중요한 질문: 현재 솔루션은? 전문가가 수동으로? 복잡한 규칙? 머신러닝?</p>
+
+<h3 id="문제-정의">문제 정의</h3>
+<ul>
+  <li>지도학습(supervised learning), 비지도학습(unsupervised learning), 강화학습(reinforcement learning) 중에 어떤 경우에 해당하는가?
+    <ul>
+      <li>이 데이터의 경우 주택 값이 이미 데이터에 포함되어 있으므로, 지도학습의 경우에 해당.</li>
+    </ul>
+  </li>
+  <li>분류문제(classification)인가 아니면 회귀문제(regresssion)인가?
+    <ul>
+      <li>분류문제는 이항데이터를 기반으로 함으로 집값 문제는 회귀문제에 속한다.</li>
+    </ul>
+  </li>
+  <li>배치학습(batch learning), 온라인학습(online learning) 중 어떤 것을 사용해야 하는가?
+    <ul>
+      <li>배치학습은 한번에 학습하는것, 온라인 학습은 지속적으로 데이터가 추가되는것. 이 경우는 데이터를 추가적으로 더하는 것이 아니므로 배치학습에 해당된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="성능측정지표performance-measure-선택">성능측정지표(performance measure) 선택</h3>
+
+<p>평균제곱근 오차(root mean square error (RMSE))</p>
+
+<p>$\mathrm{RMSE}(\mathbf{X}, h) = \sqrt{\frac{1}{m}\sum_{i=1}^{m}\left(h\left(\mathbf{x}^{(i)}\right)-y^{(i)}\right)^2}$</p>
+
+<ul>
+  <li>$m$: 데이터셋에 있는 샘플 수</li>
+  <li>$\mathbf{x}^{(i)}$: $i$번째 샘플의 전체 특성값의 벡터(vector)</li>
+  <li>$y^{(i)}$: $i$번째 샘플의 label(해당 샘플의 기대 출력값)
+\begin{align<em>}
+\mathbf{x}^{(1)} = \begin{bmatrix}
+         -118.29 <br />
+         33.91 <br />
+         1,416 <br />
+         38,372
+\end{bmatrix}
+\end{align</em>}</li>
+</ul>
+
+<p>\(y^{(1)} = 156,400\)</p>
+<ul>
+  <li>
+    <p>$\mathbf{X}$: 데이터셋 모든 샘플의 모든 특성값(features)을 포함하는 행렬(matrix)
+\begin{align<em>}
+\mathbf{X} = \begin{bmatrix}
+         \left(\mathbf{x}^{(1)}\right)^T <br />
+         \left(\mathbf{x}^{(2)}\right)^T <br />
+         \vdots <br />
+         \left(\mathbf{x}^{(2000)}\right)^T
+         \end{bmatrix}
+         = \begin{bmatrix}
+         -188.29 &amp; 33.91 &amp; 1,416 &amp; 38,372 <br />
+         \vdots &amp; \vdots &amp; \vdots &amp; \vdots
+         \end{bmatrix}
+\end{align</em>}</p>
+  </li>
+  <li>$h$: 예측함수(prediction function). 하나의 샘플 $\mathbf{x}^{(i)}$에 대해 예측값 $\hat{y}^{(i)} = h\left(\mathbf{x}^{(i)}\right)$를 출력함.</li>
+  <li>$\mathrm{RMSE}(\mathbf{X}, h)$: 모델 $h$가 얼마나 좋은지 평가하는 지표, 또는 비용함수(cost function)</li>
+</ul>
+
+<h2 id="2-데이터-가져오기-get-the-data">2. 데이터 가져오기 (Get the Data)</h2>
+
+<ul>
+  <li>작업환경 설정</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ export ML_PATH="$HOME/ml" # You can change the path if you prefer
+$ mkdir -p $ML_PATH
+
+$ python3 -m pip --version
+pip 19.3.1 from [...]/lib/python3.7/site-packages/pip (python 3.7)
+
+$ python3 -m pip install --user -U pip
+Collecting pip
+[...]
+Successfully installed pip-19.3.1
+</code></pre></div></div>
+
+<ul>
+  <li>독립적인 환경(isolated environment) 만들기</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python3 -m pip install --user -U virtualenv
+Collecting virtualenv
+[...]
+Successfully installed virtualenv-16.7.6
+
+$ cd $ML_PATH
+$ python3 -m virtualenv my_env
+Using base prefix '[...]'
+New python executable in [...]/ml/my_env/bin/python3
+Also creating executable in [...]/ml/my_env/
+
+$ cd $ML_PATH
+$ source my_env/bin/activate # on Linux or macOS
+$ .\my_env\Scripts\activate # on Windows
+</code></pre></div></div>
+
+<ul>
+  <li>필요한 패키지들 설치하기</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python3 -m pip install -U jupyter matplotlib numpy pandas scipy scikit-learn
+Collecting jupyter
+Downloading https://[...]/jupyter-1.0.0-py2.py3-none-any.whl
+Collecting matplotlib
+[...]
+</code></pre></div></div>
+
+<ul>
+  <li>커널을 Jupyter에 등록하고 이름 정하기
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python3 -m ipykernel install --user --name=python3
+</code></pre></div>    </div>
+  </li>
+  <li>Jupyter 실행
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ jupyter notebook
+[...] Serving notebooks from local directory: [...]/ml
+[...] The Jupyter Notebook is running at:
+[...] http://localhost:8888/?token=60995e108e44ac8d8865a[...]
+[...] or http://127.0.0.1:8889/?token=60995e108e44ac8d8865a[...]
+[...] Use Control-C to stop this server and shut down all kernels [...]
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="데이터-다운로드">데이터 다운로드</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Python ≥3.5 is required
+</span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">assert</span> <span class="n">sys</span><span class="p">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Scikit-Learn ≥0.20 is required
+</span><span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="k">assert</span> <span class="n">sklearn</span><span class="p">.</span><span class="n">__version__</span> <span class="o">&gt;=</span> <span class="s">"0.20"</span>
+
+<span class="c1"># Common imports
+</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># To plot pretty figures
+</span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="n">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">mpl</span><span class="p">.</span><span class="n">rc</span><span class="p">(</span><span class="s">'axes'</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">mpl</span><span class="p">.</span><span class="n">rc</span><span class="p">(</span><span class="s">'xtick'</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">mpl</span><span class="p">.</span><span class="n">rc</span><span class="p">(</span><span class="s">'ytick'</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># Where to save the figures
+</span><span class="n">PROJECT_ROOT_DIR</span> <span class="o">=</span> <span class="s">"."</span>
+<span class="n">CHAPTER_ID</span> <span class="o">=</span> <span class="s">"end_to_end_project"</span>
+<span class="n">IMAGES_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">PROJECT_ROOT_DIR</span><span class="p">,</span> <span class="s">"images"</span><span class="p">,</span> <span class="n">CHAPTER_ID</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">IMAGES_PATH</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">save_fig</span><span class="p">(</span><span class="n">fig_id</span><span class="p">,</span> <span class="n">tight_layout</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fig_extension</span><span class="o">=</span><span class="s">"png"</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">IMAGES_PATH</span><span class="p">,</span> <span class="n">fig_id</span> <span class="o">+</span> <span class="s">"."</span> <span class="o">+</span> <span class="n">fig_extension</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Saving figure"</span><span class="p">,</span> <span class="n">fig_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tight_layout</span><span class="p">:</span>
+        <span class="n">plt</span><span class="p">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="p">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">fig_extension</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
+
+<span class="c1"># Ignore useless warnings (see SciPy issue #5998)
+</span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="p">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s">"ignore"</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s">"^internal gelsd"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+
+<span class="n">DOWNLOAD_ROOT</span> <span class="o">=</span> <span class="s">"https://raw.githubusercontent.com/ageron/handson-ml2/master/"</span>
+<span class="n">HOUSING_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="s">"datasets"</span><span class="p">,</span> <span class="s">"housing"</span><span class="p">)</span>
+<span class="n">HOUSING_URL</span> <span class="o">=</span> <span class="n">DOWNLOAD_ROOT</span> <span class="o">+</span> <span class="s">"datasets/housing/housing.tgz"</span>
+
+<span class="k">def</span> <span class="nf">fetch_housing_data</span><span class="p">(</span><span class="n">housing_url</span><span class="o">=</span><span class="n">HOUSING_URL</span><span class="p">,</span> <span class="n">housing_path</span><span class="o">=</span><span class="n">HOUSING_PATH</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">housing_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">housing_path</span><span class="p">)</span>
+    <span class="n">tgz_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">housing_path</span><span class="p">,</span> <span class="s">"housing.tgz"</span><span class="p">)</span>
+    <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">housing_url</span><span class="p">,</span> <span class="n">tgz_path</span><span class="p">)</span>
+    <span class="n">housing_tgz</span> <span class="o">=</span> <span class="n">tarfile</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">tgz_path</span><span class="p">)</span>
+    <span class="n">housing_tgz</span><span class="p">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">housing_path</span><span class="p">)</span>
+    <span class="n">housing_tgz</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>fetch_housing_data를 호출하면 현재 작업공간에 datasets/housing 디렉토리를 만들고 housing.tgz 파일을 내려받고 압축을 풀어 housing.csv 파일을 만듭니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fetch_housing_data</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+
+<span class="k">def</span> <span class="nf">load_housing_data</span><span class="p">(</span><span class="n">housing_path</span><span class="o">=</span><span class="n">HOUSING_PATH</span><span class="p">):</span>
+    <span class="n">csv_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">housing_path</span><span class="p">,</span> <span class="s">"housing.csv"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_path</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="데이터-구조-훑어보기">데이터 구조 훑어보기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span> <span class="o">=</span> <span class="n">load_housing_data</span><span class="p">()</span>
+<span class="n">housing</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>-122.23</td>
+      <td>37.88</td>
+      <td>41.0</td>
+      <td>880.0</td>
+      <td>129.0</td>
+      <td>322.0</td>
+      <td>126.0</td>
+      <td>8.3252</td>
+      <td>452600.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>-122.22</td>
+      <td>37.86</td>
+      <td>21.0</td>
+      <td>7099.0</td>
+      <td>1106.0</td>
+      <td>2401.0</td>
+      <td>1138.0</td>
+      <td>8.3014</td>
+      <td>358500.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>-122.24</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1467.0</td>
+      <td>190.0</td>
+      <td>496.0</td>
+      <td>177.0</td>
+      <td>7.2574</td>
+      <td>352100.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1274.0</td>
+      <td>235.0</td>
+      <td>558.0</td>
+      <td>219.0</td>
+      <td>5.6431</td>
+      <td>341300.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1627.0</td>
+      <td>280.0</td>
+      <td>565.0</td>
+      <td>259.0</td>
+      <td>3.8462</td>
+      <td>342200.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># total_bedrooms의 경우 전체 자료수보다 적은 데이터를 가지고 있다.(결측값이있다.)
+</span><span class="n">housing</span><span class="p">.</span><span class="n">info</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 20640 entries, 0 to 20639
+Data columns (total 10 columns):
+longitude             20640 non-null float64
+latitude              20640 non-null float64
+housing_median_age    20640 non-null float64
+total_rooms           20640 non-null float64
+total_bedrooms        20433 non-null float64
+population            20640 non-null float64
+households            20640 non-null float64
+median_income         20640 non-null float64
+median_house_value    20640 non-null float64
+ocean_proximity       20640 non-null object
+dtypes: float64(9), object(1)
+memory usage: 1.6+ MB
+</code></pre></div></div>
+
+<p>ocean_proximity: 범주형(categorical) 필드</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">[</span><span class="s">"ocean_proximity"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;1H OCEAN     9136
+INLAND        6551
+NEAR OCEAN    2658
+NEAR BAY      2290
+ISLAND           5
+Name: ocean_proximity, dtype: int64
+</code></pre></div></div>
+
+<p>describe(): 숫자형 특성의 정보를 요약</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">.</span><span class="n">describe</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>count</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20433.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+      <td>20640.000000</td>
+    </tr>
+    <tr>
+      <td>mean</td>
+      <td>-119.569704</td>
+      <td>35.631861</td>
+      <td>28.639486</td>
+      <td>2635.763081</td>
+      <td>537.870553</td>
+      <td>1425.476744</td>
+      <td>499.539680</td>
+      <td>3.870671</td>
+      <td>206855.816909</td>
+    </tr>
+    <tr>
+      <td>std</td>
+      <td>2.003532</td>
+      <td>2.135952</td>
+      <td>12.585558</td>
+      <td>2181.615252</td>
+      <td>421.385070</td>
+      <td>1132.462122</td>
+      <td>382.329753</td>
+      <td>1.899822</td>
+      <td>115395.615874</td>
+    </tr>
+    <tr>
+      <td>min</td>
+      <td>-124.350000</td>
+      <td>32.540000</td>
+      <td>1.000000</td>
+      <td>2.000000</td>
+      <td>1.000000</td>
+      <td>3.000000</td>
+      <td>1.000000</td>
+      <td>0.499900</td>
+      <td>14999.000000</td>
+    </tr>
+    <tr>
+      <td>25%</td>
+      <td>-121.800000</td>
+      <td>33.930000</td>
+      <td>18.000000</td>
+      <td>1447.750000</td>
+      <td>296.000000</td>
+      <td>787.000000</td>
+      <td>280.000000</td>
+      <td>2.563400</td>
+      <td>119600.000000</td>
+    </tr>
+    <tr>
+      <td>50%</td>
+      <td>-118.490000</td>
+      <td>34.260000</td>
+      <td>29.000000</td>
+      <td>2127.000000</td>
+      <td>435.000000</td>
+      <td>1166.000000</td>
+      <td>409.000000</td>
+      <td>3.534800</td>
+      <td>179700.000000</td>
+    </tr>
+    <tr>
+      <td>75%</td>
+      <td>-118.010000</td>
+      <td>37.710000</td>
+      <td>37.000000</td>
+      <td>3148.000000</td>
+      <td>647.000000</td>
+      <td>1725.000000</td>
+      <td>605.000000</td>
+      <td>4.743250</td>
+      <td>264725.000000</td>
+    </tr>
+    <tr>
+      <td>max</td>
+      <td>-114.310000</td>
+      <td>41.950000</td>
+      <td>52.000000</td>
+      <td>39320.000000</td>
+      <td>6445.000000</td>
+      <td>35682.000000</td>
+      <td>6082.000000</td>
+      <td>15.000100</td>
+      <td>500001.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>히스토그램으로 데이터 분석해보기</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="n">housing</span><span class="p">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">15</span><span class="p">))</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"attribute_histogram_plots"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># housing_median_age나 median_house_value같은 값들은 맨 마지막 수치에 많은 데이터들이 몰려있음을 알 수 있다.
+# 이는 특정 값 이상의 값들을 전부 maximum값으로 처리했을 가능성이 있다.
+# 이를 반드시 확인하고 넘어가야한다.
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure attribute_histogram_plots
+</code></pre></div></div>
+
+<p><img src="/image/ML_E2E_files/ML_E2E_19_1.png" alt="png" /></p>
+
+<h3 id="테스트-데이터셋-만들기">테스트 데이터셋 만들기</h3>
+
+<p>좋은 모델을 만들기 위해선 훈련에 사용되지 않고 모델평가만을 위해서 사용될 “테스트 데이터셋”을 따로 구분하는 것이 필요합니다. 테스트 데이터셋을 별도로 생성할 수도 있지만 프로젝트 초기의 경우 하나의 데이터셋을 훈련, 테스트용으로 분리하는 것이 일반적입니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># to make this notebook's output identical at every run
+</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># For illustration only. Sklearn has train_test_split()
+</span><span class="k">def</span> <span class="nf">split_train_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">test_ratio</span><span class="p">):</span>
+    <span class="n">shuffled_indices</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">test_set_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">test_ratio</span><span class="p">)</span>
+    <span class="n">test_indices</span> <span class="o">=</span> <span class="n">shuffled_indices</span><span class="p">[:</span><span class="n">test_set_size</span><span class="p">]</span>
+    <span class="n">train_indices</span> <span class="o">=</span> <span class="n">shuffled_indices</span><span class="p">[</span><span class="n">test_set_size</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">train_indices</span><span class="p">],</span> <span class="n">data</span><span class="p">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">test_indices</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># random.permutaion의 기능
+</span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">permutation</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">a</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([4, 2, 0, 8, 6, 9, 3, 7, 5, 1])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">split_train_test</span><span class="p">(</span><span class="n">housing</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">train_set</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_set</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(16512, 4128)
+</code></pre></div></div>
+
+<ul>
+  <li>위 방법은 문제점은?
+    <ul>
+      <li>새로운 데이터가 들어왔을 때, 이전에 train data에 있던 data가 test data에 포함되기도 하는 문제점이 있다(이 함수를 다시 실행하면 두 데이터가 섞이는 문제 발생).</li>
+    </ul>
+  </li>
+  <li>해결방안: 각 샘플의 식별자(identifier)를 사용해서 분할</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">zlib</span> <span class="kn">import</span> <span class="n">crc32</span>
+
+<span class="k">def</span> <span class="nf">test_set_check</span><span class="p">(</span><span class="n">identifier</span><span class="p">,</span> <span class="n">test_ratio</span><span class="p">):</span>
+    <span class="c1"># crc32는 hashing함수 / &amp; 0xffffffff를 처리하면 2^32으로 값을 나눈 나머지값이 나옴
+</span>    <span class="c1"># 이 값이 test_ratio * 2^32보다 작으면 test data로 판단한다.
+</span>    <span class="k">return</span> <span class="n">crc32</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">int64</span><span class="p">(</span><span class="n">identifier</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xffffffff</span> <span class="o">&lt;</span> <span class="n">test_ratio</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span>
+
+<span class="k">def</span> <span class="nf">split_train_test_by_id</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">test_ratio</span><span class="p">,</span> <span class="n">id_column</span><span class="p">):</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">id_column</span><span class="p">]</span>
+    <span class="n">in_test_set</span> <span class="o">=</span> <span class="n">ids</span><span class="p">.</span><span class="nb">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">id_</span><span class="p">:</span> <span class="n">test_set_check</span><span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">test_ratio</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">in_test_set</span><span class="p">],</span> <span class="n">data</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">in_test_set</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>인덱스를 id로 추가하기</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_with_id</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">reset_index</span><span class="p">()</span>   <span class="c1"># adds an `index` column
+</span><span class="n">housing_with_id</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>-122.23</td>
+      <td>37.88</td>
+      <td>41.0</td>
+      <td>880.0</td>
+      <td>129.0</td>
+      <td>322.0</td>
+      <td>126.0</td>
+      <td>8.3252</td>
+      <td>452600.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>-122.22</td>
+      <td>37.86</td>
+      <td>21.0</td>
+      <td>7099.0</td>
+      <td>1106.0</td>
+      <td>2401.0</td>
+      <td>1138.0</td>
+      <td>8.3014</td>
+      <td>358500.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>-122.24</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1467.0</td>
+      <td>190.0</td>
+      <td>496.0</td>
+      <td>177.0</td>
+      <td>7.2574</td>
+      <td>352100.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1274.0</td>
+      <td>235.0</td>
+      <td>558.0</td>
+      <td>219.0</td>
+      <td>5.6431</td>
+      <td>341300.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>4</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1627.0</td>
+      <td>280.0</td>
+      <td>565.0</td>
+      <td>259.0</td>
+      <td>3.8462</td>
+      <td>342200.0</td>
+      <td>NEAR BAY</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">split_train_test_by_id</span><span class="p">(</span><span class="n">housing_with_id</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s">"index"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<ul>
+  <li>위 방법의 문제점은?</li>
+  <li>Id를 만드는 데 안전한 feature들을 사용해야 함</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_with_id</span><span class="p">[</span><span class="s">"id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[</span><span class="s">"longitude"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="n">housing</span><span class="p">[</span><span class="s">"latitude"</span><span class="p">]</span>
+<span class="n">housing_with_id</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+      <th>ocean_proximity</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>-122.23</td>
+      <td>37.88</td>
+      <td>41.0</td>
+      <td>880.0</td>
+      <td>129.0</td>
+      <td>322.0</td>
+      <td>126.0</td>
+      <td>8.3252</td>
+      <td>452600.0</td>
+      <td>NEAR BAY</td>
+      <td>-122192.12</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>-122.22</td>
+      <td>37.86</td>
+      <td>21.0</td>
+      <td>7099.0</td>
+      <td>1106.0</td>
+      <td>2401.0</td>
+      <td>1138.0</td>
+      <td>8.3014</td>
+      <td>358500.0</td>
+      <td>NEAR BAY</td>
+      <td>-122182.14</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>-122.24</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1467.0</td>
+      <td>190.0</td>
+      <td>496.0</td>
+      <td>177.0</td>
+      <td>7.2574</td>
+      <td>352100.0</td>
+      <td>NEAR BAY</td>
+      <td>-122202.15</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1274.0</td>
+      <td>235.0</td>
+      <td>558.0</td>
+      <td>219.0</td>
+      <td>5.6431</td>
+      <td>341300.0</td>
+      <td>NEAR BAY</td>
+      <td>-122212.15</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>4</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1627.0</td>
+      <td>280.0</td>
+      <td>565.0</td>
+      <td>259.0</td>
+      <td>3.8462</td>
+      <td>342200.0</td>
+      <td>NEAR BAY</td>
+      <td>-122212.15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">split_train_test_by_id</span><span class="p">(</span><span class="n">housing_with_id</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s">"id"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">train_set</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+      <th>ocean_proximity</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0</td>
+      <td>-122.23</td>
+      <td>37.88</td>
+      <td>41.0</td>
+      <td>880.0</td>
+      <td>129.0</td>
+      <td>322.0</td>
+      <td>126.0</td>
+      <td>8.3252</td>
+      <td>452600.0</td>
+      <td>NEAR BAY</td>
+      <td>-122192.12</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>1</td>
+      <td>-122.22</td>
+      <td>37.86</td>
+      <td>21.0</td>
+      <td>7099.0</td>
+      <td>1106.0</td>
+      <td>2401.0</td>
+      <td>1138.0</td>
+      <td>8.3014</td>
+      <td>358500.0</td>
+      <td>NEAR BAY</td>
+      <td>-122182.14</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>2</td>
+      <td>-122.24</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1467.0</td>
+      <td>190.0</td>
+      <td>496.0</td>
+      <td>177.0</td>
+      <td>7.2574</td>
+      <td>352100.0</td>
+      <td>NEAR BAY</td>
+      <td>-122202.15</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>3</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1274.0</td>
+      <td>235.0</td>
+      <td>558.0</td>
+      <td>219.0</td>
+      <td>5.6431</td>
+      <td>341300.0</td>
+      <td>NEAR BAY</td>
+      <td>-122212.15</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>4</td>
+      <td>-122.25</td>
+      <td>37.85</td>
+      <td>52.0</td>
+      <td>1627.0</td>
+      <td>280.0</td>
+      <td>565.0</td>
+      <td>259.0</td>
+      <td>3.8462</td>
+      <td>342200.0</td>
+      <td>NEAR BAY</td>
+      <td>-122212.15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">test_set</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>index</th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>median_house_value</th>
+      <th>ocean_proximity</th>
+      <th>id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>59</td>
+      <td>59</td>
+      <td>-122.29</td>
+      <td>37.82</td>
+      <td>2.0</td>
+      <td>158.0</td>
+      <td>43.0</td>
+      <td>94.0</td>
+      <td>57.0</td>
+      <td>2.5625</td>
+      <td>60000.0</td>
+      <td>NEAR BAY</td>
+      <td>-122252.18</td>
+    </tr>
+    <tr>
+      <td>60</td>
+      <td>60</td>
+      <td>-122.29</td>
+      <td>37.83</td>
+      <td>52.0</td>
+      <td>1121.0</td>
+      <td>211.0</td>
+      <td>554.0</td>
+      <td>187.0</td>
+      <td>3.3929</td>
+      <td>75700.0</td>
+      <td>NEAR BAY</td>
+      <td>-122252.17</td>
+    </tr>
+    <tr>
+      <td>61</td>
+      <td>61</td>
+      <td>-122.29</td>
+      <td>37.82</td>
+      <td>49.0</td>
+      <td>135.0</td>
+      <td>29.0</td>
+      <td>86.0</td>
+      <td>23.0</td>
+      <td>6.1183</td>
+      <td>75000.0</td>
+      <td>NEAR BAY</td>
+      <td>-122252.18</td>
+    </tr>
+    <tr>
+      <td>62</td>
+      <td>62</td>
+      <td>-122.29</td>
+      <td>37.81</td>
+      <td>50.0</td>
+      <td>760.0</td>
+      <td>190.0</td>
+      <td>377.0</td>
+      <td>122.0</td>
+      <td>0.9011</td>
+      <td>86100.0</td>
+      <td>NEAR BAY</td>
+      <td>-122252.19</td>
+    </tr>
+    <tr>
+      <td>67</td>
+      <td>67</td>
+      <td>-122.29</td>
+      <td>37.80</td>
+      <td>52.0</td>
+      <td>1027.0</td>
+      <td>244.0</td>
+      <td>492.0</td>
+      <td>147.0</td>
+      <td>2.6094</td>
+      <td>81300.0</td>
+      <td>NEAR BAY</td>
+      <td>-122252.20</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>Scikit-Learn에서 기본적으로 제공되는 데이터분할 함수</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">housing</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="계층적-샘플링stratified-sampling">계층적 샘플링(stratified sampling)</h4>
+<ul>
+  <li>전체 데이터를 계층(strata)라는 동질의 그룹으로 나누고, 테스트 데이터가 전체 데이터를 잘 대표하도록 각 계층에서 올바른 수의 샘플을 추출</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">[</span><span class="s">"median_income"</span><span class="p">].</span><span class="n">hist</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7feea4bc6f50&gt;
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_39_1.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># bins : 데아터를 구분시켜주는 기준 값.
+# labels : 해당 그룹들에 붙여주는 이름
+</span><span class="n">housing</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">cut</span><span class="p">(</span><span class="n">housing</span><span class="p">[</span><span class="s">"median_income"</span><span class="p">],</span>
+                               <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">6.</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">inf</span><span class="p">],</span>
+                               <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3    7236
+2    6581
+4    3639
+5    2362
+1     822
+Name: income_cat, dtype: int64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">].</span><span class="n">hist</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7feea4c44610&gt;
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_42_1.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">StratifiedShuffleSplit</span>
+
+<span class="c1"># 만들어놨던 income_cat을 기준으로 계층적으로 샘플링을 해올 수 있다.
+</span><span class="n">split</span> <span class="o">=</span> <span class="n">StratifiedShuffleSplit</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">train_index</span><span class="p">,</span> <span class="n">test_index</span> <span class="ow">in</span> <span class="n">split</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="n">housing</span><span class="p">,</span> <span class="n">housing</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">]):</span>
+    <span class="n">strat_train_set</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">train_index</span><span class="p">]</span>
+    <span class="n">strat_test_set</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">test_index</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">strat_train_set</span><span class="p">.</span><span class="n">info</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 16512 entries, 17606 to 15775
+Data columns (total 11 columns):
+longitude             16512 non-null float64
+latitude              16512 non-null float64
+housing_median_age    16512 non-null float64
+total_rooms           16512 non-null float64
+total_bedrooms        16354 non-null float64
+population            16512 non-null float64
+households            16512 non-null float64
+median_income         16512 non-null float64
+median_house_value    16512 non-null float64
+ocean_proximity       16512 non-null object
+income_cat            16512 non-null category
+dtypes: category(1), float64(9), object(1)
+memory usage: 1.4+ MB
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">strat_test_set</span><span class="p">.</span><span class="n">info</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+Int64Index: 4128 entries, 5241 to 2398
+Data columns (total 11 columns):
+longitude             4128 non-null float64
+latitude              4128 non-null float64
+housing_median_age    4128 non-null float64
+total_rooms           4128 non-null float64
+total_bedrooms        4079 non-null float64
+population            4128 non-null float64
+households            4128 non-null float64
+median_income         4128 non-null float64
+median_house_value    4128 non-null float64
+ocean_proximity       4128 non-null object
+income_cat            4128 non-null category
+dtypes: category(1), float64(9), object(1)
+memory usage: 359.0+ KB
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">housing</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3    0.350581
+2    0.318847
+4    0.176308
+5    0.114438
+1    0.039826
+Name: income_cat, dtype: float64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test set 과 전체 set의 income_cat의 비율이 거의 동일하게 데이터가 분배됨을 알 수 있다.
+</span><span class="n">strat_test_set</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">strat_test_set</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3    0.350533
+2    0.318798
+4    0.176357
+5    0.114583
+1    0.039729
+Name: income_cat, dtype: float64
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">income_cat_proportions</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="s">"income_cat"</span><span class="p">].</span><span class="n">value_counts</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">housing</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">compare_props</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s">"Overall"</span><span class="p">:</span> <span class="n">income_cat_proportions</span><span class="p">(</span><span class="n">housing</span><span class="p">),</span>
+    <span class="s">"Stratified"</span><span class="p">:</span> <span class="n">income_cat_proportions</span><span class="p">(</span><span class="n">strat_test_set</span><span class="p">),</span>
+    <span class="s">"Random"</span><span class="p">:</span> <span class="n">income_cat_proportions</span><span class="p">(</span><span class="n">test_set</span><span class="p">),</span>
+<span class="p">}).</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">compare_props</span><span class="p">[</span><span class="s">"Rand. %error"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">compare_props</span><span class="p">[</span><span class="s">"Random"</span><span class="p">]</span> <span class="o">/</span> <span class="n">compare_props</span><span class="p">[</span><span class="s">"Overall"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">100</span>
+<span class="n">compare_props</span><span class="p">[</span><span class="s">"Strat. %error"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">compare_props</span><span class="p">[</span><span class="s">"Stratified"</span><span class="p">]</span> <span class="o">/</span> <span class="n">compare_props</span><span class="p">[</span><span class="s">"Overall"</span><span class="p">]</span> <span class="o">-</span> <span class="mi">100</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># random하게 sampling한 결과와 계층적 sampling을 한 결과의 비교. random으로 sampling한 결과가 에러값이 높다.
+</span><span class="n">compare_props</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Overall</th>
+      <th>Stratified</th>
+      <th>Random</th>
+      <th>Rand. %error</th>
+      <th>Strat. %error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>0.039826</td>
+      <td>0.039729</td>
+      <td>0.040213</td>
+      <td>0.973236</td>
+      <td>-0.243309</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>0.318847</td>
+      <td>0.318798</td>
+      <td>0.324370</td>
+      <td>1.732260</td>
+      <td>-0.015195</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>0.350581</td>
+      <td>0.350533</td>
+      <td>0.358527</td>
+      <td>2.266446</td>
+      <td>-0.013820</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>0.176308</td>
+      <td>0.176357</td>
+      <td>0.167393</td>
+      <td>-5.056334</td>
+      <td>0.027480</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>0.114438</td>
+      <td>0.114583</td>
+      <td>0.109496</td>
+      <td>-4.318374</td>
+      <td>0.127011</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 원래 상태로 되돌림
+</span><span class="k">for</span> <span class="n">set_</span> <span class="ow">in</span> <span class="p">(</span><span class="n">strat_train_set</span><span class="p">,</span> <span class="n">strat_test_set</span><span class="p">):</span>
+    <span class="n">set_</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"income_cat"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="데이터-이해를-위한-탐색과-시각화">데이터 이해를 위한 탐색과 시각화</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 데이터 복사본 만들기 (훈련데이터를 손상시키지 않기 위해)
+</span><span class="n">housing</span> <span class="o">=</span> <span class="n">strat_train_set</span><span class="p">.</span><span class="n">copy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="지리적-데이터-시각화">지리적 데이터 시각화</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"scatter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">"longitude"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"latitude"</span><span class="p">)</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"bad_visualization_plot"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure bad_visualization_plot
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_54_1.png" alt="png" /></p>
+
+<h4 id="밀집된-영역-표시">밀집된 영역 표시</h4>
+
+<ul>
+  <li>alpha옵션
+    <ul>
+      <li>밀집된 부분은 진하게 아닌부분은 흐리게 해주는 옵션</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"scatter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">"longitude"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"latitude"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"better_visualization_plot"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure better_visualization_plot
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_56_1.png" alt="png" /></p>
+
+<h4 id="더-다양한-정보-표시">더 다양한 정보 표시</h4>
+
+<ul>
+  <li>s: 원의 반지름 =&gt; 인구</li>
+  <li>c: 색상 =&gt; 가격</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"scatter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">"longitude"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"latitude"</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+    <span class="n">s</span><span class="o">=</span><span class="n">housing</span><span class="p">[</span><span class="s">"population"</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">"population"</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span>
+    <span class="n">c</span><span class="o">=</span><span class="s">"median_house_value"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">"jet"</span><span class="p">),</span> <span class="n">colorbar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">sharex</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"housing_prices_scatterplot"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure housing_prices_scatterplot
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_58_1.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Download the California image
+</span><span class="n">images_path</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">PROJECT_ROOT_DIR</span><span class="p">,</span> <span class="s">"images"</span><span class="p">,</span> <span class="s">"end_to_end_project"</span><span class="p">)</span>
+<span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">DOWNLOAD_ROOT</span> <span class="o">=</span> <span class="s">"https://raw.githubusercontent.com/ageron/handson-ml2/master/"</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s">"california.png"</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="n">mpimg</span>
+<span class="n">california_img</span><span class="o">=</span><span class="n">mpimg</span><span class="p">.</span><span class="n">imread</span><span class="p">(</span><span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">images_path</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"scatter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">"longitude"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"latitude"</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span>
+                       <span class="n">s</span><span class="o">=</span><span class="n">housing</span><span class="p">[</span><span class="s">'population'</span><span class="p">]</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">"Population"</span><span class="p">,</span>
+                       <span class="n">c</span><span class="o">=</span><span class="s">"median_house_value"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">"jet"</span><span class="p">),</span>
+                       <span class="n">colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                      <span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">california_img</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">124.55</span><span class="p">,</span> <span class="o">-</span><span class="mf">113.80</span><span class="p">,</span> <span class="mf">32.45</span><span class="p">,</span> <span class="mf">42.05</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+           <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="p">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">"jet"</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">"Latitude"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">"Longitude"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">prices</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[</span><span class="s">"median_house_value"</span><span class="p">]</span>
+<span class="n">tick_values</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">prices</span><span class="p">.</span><span class="nb">min</span><span class="p">(),</span> <span class="n">prices</span><span class="p">.</span><span class="nb">max</span><span class="p">(),</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">cbar</span><span class="p">.</span><span class="n">ax</span><span class="p">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s">"$%dk"</span><span class="o">%</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">v</span><span class="o">/</span><span class="mi">1000</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">tick_values</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">cbar</span><span class="p">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">'Median House Value'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"california_housing_prices_plot"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure california_housing_prices_plot
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_60_1.png" alt="png" /></p>
+
+<p>위에서 관찰할 수 있는 사실은(주택가격이 높은 지역)?</p>
+
+<h4 id="상관관계correlations-관찰하기">상관관계(Correlations) 관찰하기</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">corr</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">corr_matrix</span><span class="p">[</span><span class="s">"median_house_value"</span><span class="p">].</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>median_house_value    1.000000
+median_income         0.687160
+total_rooms           0.135097
+housing_median_age    0.114110
+households            0.064506
+total_bedrooms        0.047689
+population           -0.026920
+longitude            -0.047432
+latitude             -0.142724
+Name: median_house_value, dtype: float64
+</code></pre></div></div>
+
+<h4 id="scatter_matrix-사용해서-상관관계-확인하기">scatter_matrix 사용해서 상관관계 확인하기</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># from pandas.tools.plotting import scatter_matrix # For older versions of Pandas
+</span><span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="kn">import</span> <span class="n">scatter_matrix</span>
+
+<span class="c1"># 특성 몇 개만 살펴봄 
+</span><span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s">"median_house_value"</span><span class="p">,</span> <span class="s">"median_income"</span><span class="p">,</span> <span class="s">"total_rooms"</span><span class="p">,</span>
+              <span class="s">"housing_median_age"</span><span class="p">]</span>
+<span class="n">scatter_matrix</span><span class="p">(</span><span class="n">housing</span><span class="p">[</span><span class="n">attributes</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"scatter_matrix_plot"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure scatter_matrix_plot
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_66_1.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s">"scatter"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s">"median_income"</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">"median_house_value"</span><span class="p">,</span>
+             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">550000</span><span class="p">])</span>
+<span class="n">save_fig</span><span class="p">(</span><span class="s">"income_vs_house_value_scatterplot"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Saving figure income_vs_house_value_scatterplot
+</code></pre></div></div>
+
+<p><img src="ML_E2E_files/ML_E2E_67_1.png" alt="png" /></p>
+
+<h2 id="위에서-관찰할-수-있는-사실들">위에서 관찰할 수 있는 사실들?</h2>
+
+<h4 id="특성-조합들-실험">특성 조합들 실험</h4>
+
+<ul>
+  <li>여러 특성(feature, attribute)들의 조합으로 새로운 특성을 정의해볼 수 있음</li>
+  <li>예를 들자면, 가구당 방 개수, 침대방(bedroom)의 비율, 가구당 인원</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">[</span><span class="s">"rooms_per_household"</span><span class="p">]</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[</span><span class="s">"total_rooms"</span><span class="p">]</span><span class="o">/</span><span class="n">housing</span><span class="p">[</span><span class="s">"households"</span><span class="p">]</span>
+<span class="n">housing</span><span class="p">[</span><span class="s">"bedrooms_per_room"</span><span class="p">]</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[</span><span class="s">"total_bedrooms"</span><span class="p">]</span><span class="o">/</span><span class="n">housing</span><span class="p">[</span><span class="s">"total_rooms"</span><span class="p">]</span>
+<span class="n">housing</span><span class="p">[</span><span class="s">"population_per_household"</span><span class="p">]</span><span class="o">=</span><span class="n">housing</span><span class="p">[</span><span class="s">"population"</span><span class="p">]</span><span class="o">/</span><span class="n">housing</span><span class="p">[</span><span class="s">"households"</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">corr_matrix</span><span class="p">[</span><span class="s">"median_house_value"</span><span class="p">].</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>median_house_value          1.000000
+median_income               0.687160
+rooms_per_household         0.146285
+total_rooms                 0.135097
+housing_median_age          0.114110
+households                  0.064506
+total_bedrooms              0.047689
+population_per_household   -0.021985
+population                 -0.026920
+longitude                  -0.047432
+latitude                   -0.142724
+bedrooms_per_room          -0.259984
+Name: median_house_value, dtype: float64
+</code></pre></div></div>
+
+<p>위에서 관찰할 수 있는 사실들?</p>
+<ul>
+  <li>bedrooms_per_room
+    <ul>
+      <li>강한 음의 상관관계를 가짐 -&gt; 방중에 침실이 차지하는 비율이 많을 수록 가격이 싸다.</li>
+    </ul>
+  </li>
+  <li>rooms_per_household
+    <ul>
+      <li>강한 양의 상관관계를 가짐 -&gt; 집에 방이 많을수록 비싸다.
+데이터 탐색과정은 대부분 한 번으로 끝나지 않고 모델을 만들고 문제점을 분석한 뒤 다시 실행하게 됩니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="머신러닝-알고리즘을-위한-데이터-준비">머신러닝 알고리즘을 위한 데이터 준비</h3>
+
+<p>데이터 준비는 데이터 변환(data transformation)과정으로 볼 수 있습니다.</p>
+
+<p>데이터 수동변환 vs. 자동변환(함수만들기)</p>
+
+<p>데이터 자동변환의 장점들</p>
+<ul>
+  <li>새로운 데이터에 대한 변환을 손쉽게 재생산(reproduce)할 수 있습니다.</li>
+  <li>향후에 재사용(reuse)할 수 있는 라이브러리를 구축하게 됩니다.</li>
+  <li>실제 시스템에서 가공되지 않은 데이터(raw data)를 알고리즘에 쉽게 입력으로 사용할 수 있도록 해줍니다.</li>
+  <li>여러 데이터 변환 방법을 쉽게 시도해 볼 수 있습니다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span> <span class="o">=</span> <span class="n">strat_train_set</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"median_house_value"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># drop labels for training set
+</span><span class="n">housing_labels</span> <span class="o">=</span> <span class="n">strat_train_set</span><span class="p">[</span><span class="s">"median_house_value"</span><span class="p">].</span><span class="n">copy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="데이터-정제data-cleaning">데이터 정제(Data Cleaning)</h3>
+
+<p>누락된 특성(missing features) 다루는 방법들</p>
+<ul>
+  <li>해당 구역을 제거(행을 제거)</li>
+  <li>해당 특성을 제거(열을 제거)</li>
+  <li>어떤 값으로 채움(0, 평균, 중간값 등)</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>17606    False
+18632    False
+14650    False
+3230     False
+3555     False
+         ...  
+6563     False
+12053    False
+13908    False
+11159    False
+15775    False
+Length: 16512, dtype: bool
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sample_incomplete_rows</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[</span><span class="n">housing</span><span class="p">.</span><span class="n">isnull</span><span class="p">().</span><span class="nb">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)].</span><span class="n">head</span><span class="p">()</span> <span class="c1"># True if there is a null feature
+</span><span class="n">sample_incomplete_rows</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4629</td>
+      <td>-118.30</td>
+      <td>34.07</td>
+      <td>18.0</td>
+      <td>3759.0</td>
+      <td>NaN</td>
+      <td>3296.0</td>
+      <td>1462.0</td>
+      <td>2.2708</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>6068</td>
+      <td>-117.86</td>
+      <td>34.01</td>
+      <td>16.0</td>
+      <td>4632.0</td>
+      <td>NaN</td>
+      <td>3038.0</td>
+      <td>727.0</td>
+      <td>5.1762</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>17923</td>
+      <td>-121.97</td>
+      <td>37.35</td>
+      <td>30.0</td>
+      <td>1955.0</td>
+      <td>NaN</td>
+      <td>999.0</td>
+      <td>386.0</td>
+      <td>4.6328</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>13656</td>
+      <td>-117.30</td>
+      <td>34.05</td>
+      <td>6.0</td>
+      <td>2155.0</td>
+      <td>NaN</td>
+      <td>1039.0</td>
+      <td>391.0</td>
+      <td>1.6675</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>19252</td>
+      <td>-122.79</td>
+      <td>38.48</td>
+      <td>7.0</td>
+      <td>6837.0</td>
+      <td>NaN</td>
+      <td>3468.0</td>
+      <td>1405.0</td>
+      <td>3.1662</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sample_incomplete_rows</span><span class="p">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s">"total_bedrooms"</span><span class="p">])</span>    <span class="c1"># option 1
+</span></code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sample_incomplete_rows</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"total_bedrooms"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>       <span class="c1"># option 2
+</span></code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4629</td>
+      <td>-118.30</td>
+      <td>34.07</td>
+      <td>18.0</td>
+      <td>3759.0</td>
+      <td>3296.0</td>
+      <td>1462.0</td>
+      <td>2.2708</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>6068</td>
+      <td>-117.86</td>
+      <td>34.01</td>
+      <td>16.0</td>
+      <td>4632.0</td>
+      <td>3038.0</td>
+      <td>727.0</td>
+      <td>5.1762</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>17923</td>
+      <td>-121.97</td>
+      <td>37.35</td>
+      <td>30.0</td>
+      <td>1955.0</td>
+      <td>999.0</td>
+      <td>386.0</td>
+      <td>4.6328</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>13656</td>
+      <td>-117.30</td>
+      <td>34.05</td>
+      <td>6.0</td>
+      <td>2155.0</td>
+      <td>1039.0</td>
+      <td>391.0</td>
+      <td>1.6675</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>19252</td>
+      <td>-122.79</td>
+      <td>38.48</td>
+      <td>7.0</td>
+      <td>6837.0</td>
+      <td>3468.0</td>
+      <td>1405.0</td>
+      <td>3.1662</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 중간값으로 채워넣음
+</span><span class="n">median</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[</span><span class="s">"total_bedrooms"</span><span class="p">].</span><span class="n">median</span><span class="p">()</span>
+<span class="n">sample_incomplete_rows</span><span class="p">[</span><span class="s">"total_bedrooms"</span><span class="p">].</span><span class="n">fillna</span><span class="p">(</span><span class="n">median</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="c1"># option 3
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">median</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>433.0
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sample_incomplete_rows</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4629</td>
+      <td>-118.30</td>
+      <td>34.07</td>
+      <td>18.0</td>
+      <td>3759.0</td>
+      <td>433.0</td>
+      <td>3296.0</td>
+      <td>1462.0</td>
+      <td>2.2708</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>6068</td>
+      <td>-117.86</td>
+      <td>34.01</td>
+      <td>16.0</td>
+      <td>4632.0</td>
+      <td>433.0</td>
+      <td>3038.0</td>
+      <td>727.0</td>
+      <td>5.1762</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>17923</td>
+      <td>-121.97</td>
+      <td>37.35</td>
+      <td>30.0</td>
+      <td>1955.0</td>
+      <td>433.0</td>
+      <td>999.0</td>
+      <td>386.0</td>
+      <td>4.6328</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>13656</td>
+      <td>-117.30</td>
+      <td>34.05</td>
+      <td>6.0</td>
+      <td>2155.0</td>
+      <td>433.0</td>
+      <td>1039.0</td>
+      <td>391.0</td>
+      <td>1.6675</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>19252</td>
+      <td>-122.79</td>
+      <td>38.48</td>
+      <td>7.0</td>
+      <td>6837.0</td>
+      <td>433.0</td>
+      <td>3468.0</td>
+      <td>1405.0</td>
+      <td>3.1662</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>SimpleImputer 사용하기</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+
+<span class="c1"># 데이터가 없는 경우 median값으로 채워줌
+</span><span class="n">imputer</span> <span class="o">=</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s">"median"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 중간값은 수치형 특성에서만 계산될 수 있기 때문에 텍스트 특성을 제외한 복사본을 생성
+</span><span class="n">housing_num</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"ocean_proximity"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">imputer</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing_num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SimpleImputer(add_indicator=False, copy=True, fill_value=None,
+              missing_values=nan, strategy='median', verbose=0)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">imputer</span><span class="p">.</span><span class="n">statistics_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([-118.51  ,   34.26  ,   29.    , 2119.5   ,  433.    , 1164.    ,
+        408.    ,    3.5409])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_num</span><span class="p">.</span><span class="n">median</span><span class="p">().</span><span class="n">values</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([-118.51  ,   34.26  ,   29.    , 2119.5   ,  433.    , 1164.    ,
+        408.    ,    3.5409])
+</code></pre></div></div>
+
+<p>이제 학습된 imputer 객체를 사용해 누락된 값을 중간값으로 바꿀 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span> <span class="o">=</span> <span class="n">imputer</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">housing_num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>위 X는 NumPy array입니다. 이를 다시 pandas DataFrame으로 되돌릴 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">X</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[-121.89  ,   37.29  ,   38.    , ...,  710.    ,  339.    ,
+           2.7042],
+       [-121.93  ,   37.05  ,   14.    , ...,  306.    ,  113.    ,
+           6.4214],
+       [-117.2   ,   32.77  ,   31.    , ...,  936.    ,  462.    ,
+           2.8621],
+       ...,
+       [-116.4   ,   34.09  ,    9.    , ..., 2098.    ,  765.    ,
+           3.2723],
+       [-118.01  ,   33.82  ,   31.    , ..., 1356.    ,  356.    ,
+           4.0625],
+       [-122.45  ,   37.77  ,   52.    , ..., 1269.    ,  639.    ,
+           3.575 ]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_tr</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">housing_num</span><span class="p">.</span><span class="n">columns</span><span class="p">,</span>
+                          <span class="n">index</span><span class="o">=</span><span class="n">housing</span><span class="p">.</span><span class="n">index</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>제대로 채워져 있는지 확인해봅니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sample_incomplete_rows</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">values</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([ 4629,  6068, 17923, 13656, 19252])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_num</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sample_incomplete_rows</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">values</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4629</td>
+      <td>-118.30</td>
+      <td>34.07</td>
+      <td>18.0</td>
+      <td>3759.0</td>
+      <td>NaN</td>
+      <td>3296.0</td>
+      <td>1462.0</td>
+      <td>2.2708</td>
+    </tr>
+    <tr>
+      <td>6068</td>
+      <td>-117.86</td>
+      <td>34.01</td>
+      <td>16.0</td>
+      <td>4632.0</td>
+      <td>NaN</td>
+      <td>3038.0</td>
+      <td>727.0</td>
+      <td>5.1762</td>
+    </tr>
+    <tr>
+      <td>17923</td>
+      <td>-121.97</td>
+      <td>37.35</td>
+      <td>30.0</td>
+      <td>1955.0</td>
+      <td>NaN</td>
+      <td>999.0</td>
+      <td>386.0</td>
+      <td>4.6328</td>
+    </tr>
+    <tr>
+      <td>13656</td>
+      <td>-117.30</td>
+      <td>34.05</td>
+      <td>6.0</td>
+      <td>2155.0</td>
+      <td>NaN</td>
+      <td>1039.0</td>
+      <td>391.0</td>
+      <td>1.6675</td>
+    </tr>
+    <tr>
+      <td>19252</td>
+      <td>-122.79</td>
+      <td>38.48</td>
+      <td>7.0</td>
+      <td>6837.0</td>
+      <td>NaN</td>
+      <td>3468.0</td>
+      <td>1405.0</td>
+      <td>3.1662</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_tr</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sample_incomplete_rows</span><span class="p">.</span><span class="n">index</span><span class="p">.</span><span class="n">values</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>4629</td>
+      <td>-118.30</td>
+      <td>34.07</td>
+      <td>18.0</td>
+      <td>3759.0</td>
+      <td>433.0</td>
+      <td>3296.0</td>
+      <td>1462.0</td>
+      <td>2.2708</td>
+    </tr>
+    <tr>
+      <td>6068</td>
+      <td>-117.86</td>
+      <td>34.01</td>
+      <td>16.0</td>
+      <td>4632.0</td>
+      <td>433.0</td>
+      <td>3038.0</td>
+      <td>727.0</td>
+      <td>5.1762</td>
+    </tr>
+    <tr>
+      <td>17923</td>
+      <td>-121.97</td>
+      <td>37.35</td>
+      <td>30.0</td>
+      <td>1955.0</td>
+      <td>433.0</td>
+      <td>999.0</td>
+      <td>386.0</td>
+      <td>4.6328</td>
+    </tr>
+    <tr>
+      <td>13656</td>
+      <td>-117.30</td>
+      <td>34.05</td>
+      <td>6.0</td>
+      <td>2155.0</td>
+      <td>433.0</td>
+      <td>1039.0</td>
+      <td>391.0</td>
+      <td>1.6675</td>
+    </tr>
+    <tr>
+      <td>19252</td>
+      <td>-122.79</td>
+      <td>38.48</td>
+      <td>7.0</td>
+      <td>6837.0</td>
+      <td>433.0</td>
+      <td>3468.0</td>
+      <td>1405.0</td>
+      <td>3.1662</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="estimator-transformer-predictor">Estimator, Transformer, Predictor</h3>
+
+<ul>
+  <li>
+    <p>추정기(estimator): 데이터셋을 기반으로 모델 파라미터들을 추정하는 객체를 추정기라고 합니다(예를 들자면 imputer). 추정자체는 fit() method에 의해서 수행되고 하나의 데이터셋을 매개변수로 전달받습니다(지도학습의 경우 label을 담고 있는 데이터셋을 추가적인 매개변수로 전달).</p>
+  </li>
+  <li>
+    <p>변환기(transformer): (imputer같이) 데이터셋을 변환하는 추정기를 변환기라고 합니다. 변환은 transform() method가 수행합니다. 그리고 변환된 데이터셋을 반환합니다.</p>
+  </li>
+  <li>
+    <p>예측기(predictor): 일부 추정기는 주어진 새로운 데이터셋에 대해 예측값을 생성할 수 있습니다. 앞에서 사용했던 LinearRegression도 예측기입니다. 예측기의 predict() method는 새로운 데이터셋을 받아 예측값을 반환합니다. 그리고 score() method는 예측값에 대한 평가지표를 반환합니다.</p>
+  </li>
+</ul>
+
+<h3 id="텍스트와-범주형-특성-다루기">텍스트와 범주형 특성 다루기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_cat</span> <span class="o">=</span> <span class="n">housing</span><span class="p">[[</span><span class="s">"ocean_proximity"</span><span class="p">]]</span>
+<span class="n">housing_cat</span><span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>17606</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>18632</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>14650</td>
+      <td>NEAR OCEAN</td>
+    </tr>
+    <tr>
+      <td>3230</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>3555</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>19480</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>8879</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>13685</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>4937</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>4861</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OrdinalEncoder</span>
+
+<span class="n">ordinal_encoder</span> <span class="o">=</span> <span class="n">OrdinalEncoder</span><span class="p">()</span>
+<span class="n">housing_cat_encoded</span> <span class="o">=</span> <span class="n">ordinal_encoder</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">housing_cat</span><span class="p">)</span>
+<span class="n">housing_cat_encoded</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[0.],
+       [0.],
+       [4.],
+       [1.],
+       [0.],
+       [1.],
+       [0.],
+       [1.],
+       [0.],
+       [0.]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ordinal_encoder</span><span class="p">.</span><span class="n">categories_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[array(['&lt;1H OCEAN', 'INLAND', 'ISLAND', 'NEAR BAY', 'NEAR OCEAN'],
+       dtype=object)]
+</code></pre></div></div>
+
+<p>이 표현방식의 문제점?</p>
+
+<ul>
+  <li>“특성의 값이 비슷할수록 두 개의 샘플이 비슷하다”가 성립할 때 모델학습이 쉬워짐</li>
+</ul>
+
+<p>One-hot encoding</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span>
+
+<span class="n">cat_encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">()</span>
+<span class="n">housing_cat_1hot</span> <span class="o">=</span> <span class="n">cat_encoder</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">housing_cat</span><span class="p">)</span>
+<span class="n">housing_cat_1hot</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;16512x5 sparse matrix of type '&lt;class 'numpy.float64'&gt;'
+	with 16512 stored elements in Compressed Sparse Row format&gt;
+</code></pre></div></div>
+
+<p>위 출력을 보면 일반적인 배열이 아니고 “sparse matrix”임을 알 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_cat_1hot</span><span class="p">.</span><span class="n">toarray</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1., 0., 0., 0., 0.],
+       [1., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 1.],
+       ...,
+       [0., 1., 0., 0., 0.],
+       [1., 0., 0., 0., 0.],
+       [0., 0., 0., 1., 0.]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cat_encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">housing_cat_1hot</span> <span class="o">=</span> <span class="n">cat_encoder</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">housing_cat</span><span class="p">)</span>
+<span class="n">housing_cat_1hot</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1., 0., 0., 0., 0.],
+       [1., 0., 0., 0., 0.],
+       [0., 0., 0., 0., 1.],
+       ...,
+       [0., 1., 0., 0., 0.],
+       [1., 0., 0., 0., 0.],
+       [0., 0., 0., 1., 0.]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cat_encoder</span><span class="p">.</span><span class="n">categories_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[array(['&lt;1H OCEAN', 'INLAND', 'ISLAND', 'NEAR BAY', 'NEAR OCEAN'],
+       dtype=object)]
+</code></pre></div></div>
+
+<h3 id="나만의-변환기custom-transformers-만들기">나만의 변환기(Custom Transformers) 만들기</h3>
+
+<p>Scikit-Learn이 유용한 변환기를 많이 제공하지만 프로젝트를 위해 특별한 데이터 처리 작업을 해야 할 경우가 많습니다. 이 때 나만의 변환기를 만들 수 있습니다.</p>
+
+<p>반드시 구현해야 할 method들</p>
+<ul>
+  <li>fit()</li>
+  <li>transform()</li>
+</ul>
+
+<p>아래의 custom tranformer는 rooms_per_household, population_per_household 두 개의 새로운 특성을 데이터셋에 추가하며 add_bedrooms_per_room = True로 주어지면 bedrooms_per_room 특성까지 추가합니다. add_bedrooms_per_room은 하이퍼파라미터.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+
+<span class="c1"># column index
+</span><span class="n">rooms_ix</span><span class="p">,</span> <span class="n">bedrooms_ix</span><span class="p">,</span> <span class="n">population_ix</span><span class="p">,</span> <span class="n">households_ix</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span>
+
+<span class="k">class</span> <span class="nc">CombinedAttributesAdder</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">add_bedrooms_per_room</span> <span class="o">=</span> <span class="bp">True</span><span class="p">):</span> <span class="c1"># no *args or **kargs
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">add_bedrooms_per_room</span> <span class="o">=</span> <span class="n">add_bedrooms_per_room</span>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>  <span class="c1"># nothing else to do
+</span>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">rooms_per_household</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">rooms_ix</span><span class="p">]</span> <span class="o">/</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">households_ix</span><span class="p">]</span>
+        <span class="n">population_per_household</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">population_ix</span><span class="p">]</span> <span class="o">/</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">households_ix</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">add_bedrooms_per_room</span><span class="p">:</span>
+            <span class="n">bedrooms_per_room</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">bedrooms_ix</span><span class="p">]</span> <span class="o">/</span> <span class="n">X</span><span class="p">[:,</span> <span class="n">rooms_ix</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">c_</span><span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">rooms_per_household</span><span class="p">,</span> <span class="n">population_per_household</span><span class="p">,</span>
+                         <span class="n">bedrooms_per_room</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">c_</span><span class="p">[</span><span class="n">X</span><span class="p">,</span> <span class="n">rooms_per_household</span><span class="p">,</span> <span class="n">population_per_household</span><span class="p">]</span>
+
+<span class="n">attr_adder</span> <span class="o">=</span> <span class="n">CombinedAttributesAdder</span><span class="p">(</span><span class="n">add_bedrooms_per_room</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">housing_extra_attribs</span> <span class="o">=</span> <span class="n">attr_adder</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">housing</span><span class="p">.</span><span class="n">values</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Numpy데이터를 DataFrame으로 변환</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_extra_attribs</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">housing_extra_attribs</span><span class="p">,</span>
+    <span class="n">columns</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">housing</span><span class="p">.</span><span class="n">columns</span><span class="p">)</span><span class="o">+</span><span class="p">[</span><span class="s">"rooms_per_household"</span><span class="p">,</span> <span class="s">"population_per_household"</span><span class="p">],</span>
+    <span class="n">index</span><span class="o">=</span><span class="n">housing</span><span class="p">.</span><span class="n">index</span><span class="p">)</span>
+<span class="n">housing_extra_attribs</span><span class="p">.</span><span class="n">head</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+      <th>rooms_per_household</th>
+      <th>population_per_household</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>17606</td>
+      <td>-121.89</td>
+      <td>37.29</td>
+      <td>38</td>
+      <td>1568</td>
+      <td>351</td>
+      <td>710</td>
+      <td>339</td>
+      <td>2.7042</td>
+      <td>&lt;1H OCEAN</td>
+      <td>4.62537</td>
+      <td>2.0944</td>
+    </tr>
+    <tr>
+      <td>18632</td>
+      <td>-121.93</td>
+      <td>37.05</td>
+      <td>14</td>
+      <td>679</td>
+      <td>108</td>
+      <td>306</td>
+      <td>113</td>
+      <td>6.4214</td>
+      <td>&lt;1H OCEAN</td>
+      <td>6.00885</td>
+      <td>2.70796</td>
+    </tr>
+    <tr>
+      <td>14650</td>
+      <td>-117.2</td>
+      <td>32.77</td>
+      <td>31</td>
+      <td>1952</td>
+      <td>471</td>
+      <td>936</td>
+      <td>462</td>
+      <td>2.8621</td>
+      <td>NEAR OCEAN</td>
+      <td>4.22511</td>
+      <td>2.02597</td>
+    </tr>
+    <tr>
+      <td>3230</td>
+      <td>-119.61</td>
+      <td>36.31</td>
+      <td>25</td>
+      <td>1847</td>
+      <td>371</td>
+      <td>1460</td>
+      <td>353</td>
+      <td>1.8839</td>
+      <td>INLAND</td>
+      <td>5.23229</td>
+      <td>4.13598</td>
+    </tr>
+    <tr>
+      <td>3555</td>
+      <td>-118.59</td>
+      <td>34.23</td>
+      <td>17</td>
+      <td>6592</td>
+      <td>1525</td>
+      <td>4459</td>
+      <td>1463</td>
+      <td>3.0347</td>
+      <td>&lt;1H OCEAN</td>
+      <td>4.50581</td>
+      <td>3.04785</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 id="특성-스케일링feature-scaling">특성 스케일링(Feature Scaling)</h3>
+
+<ul>
+  <li>Min-max scaling: 0과 1사이의 값이 되도록 조정</li>
+  <li>표준화(standardization): 평균이 0, 분산이 1이 되도록 만들어 줌(사이킷런의 StandardScaler사용)</li>
+</ul>
+
+<h3 id="변환-파이프라인transformation-pipelines">변환 파이프라인(Transformation Pipelines)</h3>
+
+<p>여러 개의 변환이 순차적으로 이루어져야 할 경우 Pipeline class를 사용하면 편합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">num_pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s">'imputer'</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s">"median"</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s">'attribs_adder'</span><span class="p">,</span> <span class="n">CombinedAttributesAdder</span><span class="p">()),</span>
+        <span class="p">(</span><span class="s">'std_scaler'</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">()),</span>
+    <span class="p">])</span>
+
+<span class="n">housing_num_tr</span> <span class="o">=</span> <span class="n">num_pipeline</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">housing_num</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>이름, 추정기 쌍의 목록</p>
+
+<p>마지막 단계를 제외하고 모두 변환기여야 합니다(fit_transform() method를 가지고 있어야 함).</p>
+
+<p>파이프라인의 fit() method를 호출하면 모든 변환기의 fit_transform() method를 순서대로 호출하면서 한 단계의 출력을 다음 단계의 입력으로 전달합니다. 마지막 단계에서는 fit() method만 호출합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_num_tr</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[-1.15604281,  0.77194962,  0.74333089, ..., -0.31205452,
+        -0.08649871,  0.15531753],
+       [-1.17602483,  0.6596948 , -1.1653172 , ...,  0.21768338,
+        -0.03353391, -0.83628902],
+       [ 1.18684903, -1.34218285,  0.18664186, ..., -0.46531516,
+        -0.09240499,  0.4222004 ],
+       ...,
+       [ 1.58648943, -0.72478134, -1.56295222, ...,  0.3469342 ,
+        -0.03055414, -0.52177644],
+       [ 0.78221312, -0.85106801,  0.18664186, ...,  0.02499488,
+         0.06150916, -0.30340741],
+       [-1.43579109,  0.99645926,  1.85670895, ..., -0.22852947,
+        -0.09586294,  0.10180567]])
+</code></pre></div></div>
+
+<p>각 열(column) 마다 다른 파이프라인을 적용할 수도 있습니다! 예를 들어 수치형 특성들과 범주형 특성들에 대해 별도의 변환이 필요하다면 아래와 같이 ColumnTransformer를 사용하면 됩니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">ColumnTransformer</span>
+
+<span class="n">num_attribs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">housing_num</span><span class="p">)</span>
+<span class="n">cat_attribs</span> <span class="o">=</span> <span class="p">[</span><span class="s">"ocean_proximity"</span><span class="p">]</span>
+
+<span class="n">full_pipeline</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">([</span>
+        <span class="p">(</span><span class="s">"num"</span><span class="p">,</span> <span class="n">num_pipeline</span><span class="p">,</span> <span class="n">num_attribs</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">"cat"</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(),</span> <span class="n">cat_attribs</span><span class="p">),</span>
+    <span class="p">])</span>
+
+<span class="n">housing_prepared</span> <span class="o">=</span> <span class="n">full_pipeline</span><span class="p">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">housing</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_prepared</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[-1.15604281,  0.77194962,  0.74333089, ...,  0.        ,
+         0.        ,  0.        ],
+       [-1.17602483,  0.6596948 , -1.1653172 , ...,  0.        ,
+         0.        ,  0.        ],
+       [ 1.18684903, -1.34218285,  0.18664186, ...,  0.        ,
+         0.        ,  1.        ],
+       ...,
+       [ 1.58648943, -0.72478134, -1.56295222, ...,  0.        ,
+         0.        ,  0.        ],
+       [ 0.78221312, -0.85106801,  0.18664186, ...,  0.        ,
+         0.        ,  0.        ],
+       [-1.43579109,  0.99645926,  1.85670895, ...,  0.        ,
+         1.        ,  0.        ]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_prepared</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">housing</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>((16512, 16), (16512, 9))
+</code></pre></div></div>
+
+<h3 id="모델-훈련train-a-model">모델 훈련(Train a Model)</h3>
+
+<p>드디어 모델을 훈련시킬 준비가 되었습니다! 지난 시간에 배웠던 선형회귀모델(linear regression)을 사용해보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="n">lin_reg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">lin_reg</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LinearRegression(copy_X=True, fit_intercept=True, n_jobs=None, normalize=False)
+</code></pre></div></div>
+
+<p>모델훈련은 딱 3줄의 코드면 충분합니다!</p>
+
+<p>몇 개의 샘플에 모델을 적용해서 예측값을 확인해보고 실제값과 비교해보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lin_reg</span><span class="p">.</span><span class="n">coef_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([-55650.4116403 , -56716.45236929,  13732.83841856,  -1933.1277138 ,
+         7330.04062103, -45708.26306673,  45455.47519691,  74714.39134154,
+         6605.12802802,   1042.95709453,   9249.75886697, -18016.52432168,
+       -55219.15208555, 110357.78363967, -22479.84008184, -14642.2671506 ])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">extra_attribs</span> <span class="o">=</span> <span class="p">[</span><span class="s">"rooms_per_hhold"</span><span class="p">,</span> <span class="s">"pop_per_hhold"</span><span class="p">,</span> <span class="s">"bedrooms_per_room"</span><span class="p">]</span>
+<span class="n">cat_encoder</span> <span class="o">=</span> <span class="n">full_pipeline</span><span class="p">.</span><span class="n">named_transformers_</span><span class="p">[</span><span class="s">"cat"</span><span class="p">]</span>
+<span class="n">cat_one_hot_attribs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cat_encoder</span><span class="p">.</span><span class="n">categories_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">attributes</span> <span class="o">=</span> <span class="n">num_attribs</span> <span class="o">+</span> <span class="n">extra_attribs</span> <span class="o">+</span> <span class="n">cat_one_hot_attribs</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lin_reg</span><span class="p">.</span><span class="n">coef_</span><span class="p">,</span> <span class="n">attributes</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[(110357.78363966981, 'ISLAND'),
+ (74714.39134153818, 'median_income'),
+ (45455.475196914485, 'households'),
+ (13732.838418555337, 'housing_median_age'),
+ (9249.758866973598, 'bedrooms_per_room'),
+ (7330.040621029485, 'total_bedrooms'),
+ (6605.128028015083, 'rooms_per_hhold'),
+ (1042.9570945282446, 'pop_per_hhold'),
+ (-1933.1277138004637, 'total_rooms'),
+ (-14642.2671505983, 'NEAR OCEAN'),
+ (-18016.524321682988, '&lt;1H OCEAN'),
+ (-22479.840081835016, 'NEAR BAY'),
+ (-45708.26306672838, 'population'),
+ (-55219.15208555338, 'INLAND'),
+ (-55650.411640302256, 'longitude'),
+ (-56716.45236929205, 'latitude')]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 몇 개의 샘플에 대해 데이터변환 및 예측을 해보자
+</span><span class="n">some_data</span> <span class="o">=</span> <span class="n">housing</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">some_labels</span> <span class="o">=</span> <span class="n">housing_labels</span><span class="p">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">some_data_prepared</span> <span class="o">=</span> <span class="n">full_pipeline</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">some_data</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Predictions:"</span><span class="p">,</span> <span class="n">lin_reg</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">some_data_prepared</span><span class="p">).</span><span class="nb">round</span><span class="p">(</span><span class="n">decimals</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Predictions: [210644.6 317768.8 210956.4  59219.  189747.6]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">"Labels:"</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">some_labels</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Labels: [286600.0, 340600.0, 196900.0, 46300.0, 254500.0]
+</code></pre></div></div>
+
+<p>전체 훈련 데이터셋에 대한 RMSE를 측정해보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_squared_error</span>
+
+<span class="n">housing_predictions</span> <span class="o">=</span> <span class="n">lin_reg</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">)</span>
+<span class="n">lin_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">housing_labels</span><span class="p">,</span> <span class="n">housing_predictions</span><span class="p">)</span>
+<span class="n">lin_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">lin_mse</span><span class="p">)</span>
+<span class="n">lin_rmse</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>68628.19819848923
+</code></pre></div></div>
+
+<p>훈련 데이터셋의 RMSE가 이 경우처럼 큰 경우 =&gt; 과소적합(under-fitting)</p>
+
+<p>과소적합이 일어나는 이유?</p>
+<ul>
+  <li>특성들(features)이 충분한 정보를 제공하지 못함</li>
+  <li>모델이 충분히 강력하지 못함</li>
+</ul>
+
+<p>강력한 비선형모델인 DecisionTreeRegressor를 사용해보겠습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+
+<span class="n">tree_reg</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">tree_reg</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>DecisionTreeRegressor(criterion='mse', max_depth=None, max_features=None,
+                      max_leaf_nodes=None, min_impurity_decrease=0.0,
+                      min_impurity_split=None, min_samples_leaf=1,
+                      min_samples_split=2, min_weight_fraction_leaf=0.0,
+                      presort=False, random_state=42, splitter='best')
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_predictions</span> <span class="o">=</span> <span class="n">tree_reg</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">)</span>
+<span class="n">tree_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">housing_labels</span><span class="p">,</span> <span class="n">housing_predictions</span><span class="p">)</span>
+<span class="n">tree_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tree_mse</span><span class="p">)</span>
+<span class="n">tree_rmse</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0.0
+</code></pre></div></div>
+
+<p>이 모델이 선형모델보다 낫다고 말할 수 있을까요? 어떻게 알 수 있을까요?</p>
+
+<ul>
+  <li>테스트 데이터셋을 이용한 검증</li>
+  <li>훈련 데이터셋의 일부를 검증데이터(validation data)셋으로 분리해서 검증</li>
+  <li>k-겹 교차 검증(k-fold cross-validation)</li>
+</ul>
+
+<h3 id="교차-검증cross-validation을-사용한-평가">교차 검증(Cross-Validation)을 사용한 평가</h3>
+
+<p>결정트리 모델에 대한 평가</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">tree_reg</span><span class="p">,</span> <span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">,</span>
+                         <span class="n">scoring</span><span class="o">=</span><span class="s">"neg_mean_squared_error"</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">tree_rmse_scores</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">scores</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">display_scores</span><span class="p">(</span><span class="n">scores</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Scores:"</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Mean:"</span><span class="p">,</span> <span class="n">scores</span><span class="p">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Standard deviation:"</span><span class="p">,</span> <span class="n">scores</span><span class="p">.</span><span class="n">std</span><span class="p">())</span>
+
+<span class="n">display_scores</span><span class="p">(</span><span class="n">tree_rmse_scores</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Scores: [70194.33680785 66855.16363941 72432.58244769 70758.73896782
+ 71115.88230639 75585.14172901 70262.86139133 70273.6325285
+ 75366.87952553 71231.65726027]
+Mean: 71407.68766037929
+Standard deviation: 2439.4345041191004
+</code></pre></div></div>
+
+<p>선형회귀모델에 대한 평가</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lin_scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">lin_reg</span><span class="p">,</span> <span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">,</span>
+                             <span class="n">scoring</span><span class="o">=</span><span class="s">"neg_mean_squared_error"</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">lin_rmse_scores</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">lin_scores</span><span class="p">)</span>
+<span class="n">display_scores</span><span class="p">(</span><span class="n">lin_rmse_scores</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Scores: [66782.73843989 66960.118071   70347.95244419 74739.57052552
+ 68031.13388938 71193.84183426 64969.63056405 68281.61137997
+ 71552.91566558 67665.10082067]
+Mean: 69052.46136345083
+Standard deviation: 2731.674001798346
+</code></pre></div></div>
+
+<p>RandomForestRegressor에 대한 평가</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+
+<span class="n">forest_reg</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">forest_reg</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None,
+                      max_features='auto', max_leaf_nodes=None,
+                      min_impurity_decrease=0.0, min_impurity_split=None,
+                      min_samples_leaf=1, min_samples_split=2,
+                      min_weight_fraction_leaf=0.0, n_estimators=100,
+                      n_jobs=None, oob_score=False, random_state=42, verbose=0,
+                      warm_start=False)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">housing_predictions</span> <span class="o">=</span> <span class="n">forest_reg</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">)</span>
+<span class="n">forest_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">housing_labels</span><span class="p">,</span> <span class="n">housing_predictions</span><span class="p">)</span>
+<span class="n">forest_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">forest_mse</span><span class="p">)</span>
+<span class="n">forest_rmse</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>18603.515021376355
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
+
+<span class="n">forest_scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">forest_reg</span><span class="p">,</span> <span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">,</span>
+                                <span class="n">scoring</span><span class="o">=</span><span class="s">"neg_mean_squared_error"</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">forest_rmse_scores</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">forest_scores</span><span class="p">)</span>
+<span class="n">display_scores</span><span class="p">(</span><span class="n">forest_rmse_scores</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Scores: [49519.80364233 47461.9115823  50029.02762854 52325.28068953
+ 49308.39426421 53446.37892622 48634.8036574  47585.73832311
+ 53490.10699751 50021.5852922 ]
+Mean: 50182.303100336096
+Standard deviation: 2097.0810550985693
+</code></pre></div></div>
+
+<h3 id="모델-세부-튜닝fine-tune-your-model">모델 세부 튜닝(Fine-Tune Your Model)</h3>
+
+<p>모델의 종류를 선택한 후에 모델을 세부 튜닝하는 것이 필요합니다. 모델 학습을 위한 최적의 하이퍼파라미터를 찾는 과정이라고 말할 수 있습니다.</p>
+
+<h4 id="그리드-참색grid-search">그리드 참색(Grid Search)</h4>
+
+<p>수동으로 하이퍼파라미터 조합을 시도하는 대신 GridSearchCV를 사용하는 것이 좋습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c1"># try 12 (3×4) combinations of hyperparameters
+</span>    <span class="p">{</span><span class="s">'n_estimators'</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="s">'max_features'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]},</span>
+    <span class="c1"># then try 6 (2×3) combinations with bootstrap set as False
+</span>    <span class="p">{</span><span class="s">'bootstrap'</span><span class="p">:</span> <span class="p">[</span><span class="bp">False</span><span class="p">],</span> <span class="s">'n_estimators'</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="s">'max_features'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]},</span>
+  <span class="p">]</span>
+
+<span class="n">forest_reg</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="c1"># train across 5 folds, that's a total of (12+6)*5=90 rounds of training 
+</span><span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">forest_reg</span><span class="p">,</span> <span class="n">param_grid</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                           <span class="n">scoring</span><span class="o">=</span><span class="s">'neg_mean_squared_error'</span><span class="p">,</span>
+                           <span class="n">return_train_score</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">grid_search</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GridSearchCV(cv=5, error_score='raise-deprecating',
+             estimator=RandomForestRegressor(bootstrap=True, criterion='mse',
+                                             max_depth=None,
+                                             max_features='auto',
+                                             max_leaf_nodes=None,
+                                             min_impurity_decrease=0.0,
+                                             min_impurity_split=None,
+                                             min_samples_leaf=1,
+                                             min_samples_split=2,
+                                             min_weight_fraction_leaf=0.0,
+                                             n_estimators='warn', n_jobs=None,
+                                             oob_score=False, random_state=42,
+                                             verbose=0, warm_start=False),
+             iid='warn', n_jobs=None,
+             param_grid=[{'max_features': [2, 4, 6, 8],
+                          'n_estimators': [3, 10, 30]},
+                         {'bootstrap': [False], 'max_features': [2, 3, 4],
+                          'n_estimators': [3, 10]}],
+             pre_dispatch='2*n_jobs', refit=True, return_train_score=True,
+             scoring='neg_mean_squared_error', verbose=0)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid_search</span><span class="p">.</span><span class="n">best_params_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'max_features': 8, 'n_estimators': 30}
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grid_search</span><span class="p">.</span><span class="n">best_estimator_</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None,
+                      max_features=8, max_leaf_nodes=None,
+                      min_impurity_decrease=0.0, min_impurity_split=None,
+                      min_samples_leaf=1, min_samples_split=2,
+                      min_weight_fraction_leaf=0.0, n_estimators=30,
+                      n_jobs=None, oob_score=False, random_state=42, verbose=0,
+                      warm_start=False)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cvres</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">.</span><span class="n">cv_results_</span>
+<span class="k">for</span> <span class="n">mean_score</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cvres</span><span class="p">[</span><span class="s">"mean_test_score"</span><span class="p">],</span> <span class="n">cvres</span><span class="p">[</span><span class="s">"params"</span><span class="p">]):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">mean_score</span><span class="p">),</span> <span class="n">params</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>63669.05791727153 {'max_features': 2, 'n_estimators': 3}
+55627.16171305252 {'max_features': 2, 'n_estimators': 10}
+53384.57867637289 {'max_features': 2, 'n_estimators': 30}
+60965.99185930139 {'max_features': 4, 'n_estimators': 3}
+52740.98248528835 {'max_features': 4, 'n_estimators': 10}
+50377.344409590376 {'max_features': 4, 'n_estimators': 30}
+58663.84733372485 {'max_features': 6, 'n_estimators': 3}
+52006.15355973719 {'max_features': 6, 'n_estimators': 10}
+50146.465964159885 {'max_features': 6, 'n_estimators': 30}
+57869.25504027614 {'max_features': 8, 'n_estimators': 3}
+51711.09443660957 {'max_features': 8, 'n_estimators': 10}
+49682.25345942335 {'max_features': 8, 'n_estimators': 30}
+62895.088889905004 {'bootstrap': False, 'max_features': 2, 'n_estimators': 3}
+54658.14484390074 {'bootstrap': False, 'max_features': 2, 'n_estimators': 10}
+59470.399594730654 {'bootstrap': False, 'max_features': 3, 'n_estimators': 3}
+52725.01091081235 {'bootstrap': False, 'max_features': 3, 'n_estimators': 10}
+57490.612956065226 {'bootstrap': False, 'max_features': 4, 'n_estimators': 3}
+51009.51445842374 {'bootstrap': False, 'max_features': 4, 'n_estimators': 10}
+</code></pre></div></div>
+
+<h4 id="랜덤-탐색randomized-search">랜덤 탐색(Randomized Search)</h4>
+
+<p>하이퍼파라미터 조합의 수가 큰 경우에 유리. 지정한 횟수만큼만 평가.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RandomizedSearchCV</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<span class="n">param_distribs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'n_estimators'</span><span class="p">:</span> <span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+        <span class="s">'max_features'</span><span class="p">:</span> <span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span>
+    <span class="p">}</span>
+
+<span class="n">forest_reg</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">rnd_search</span> <span class="o">=</span> <span class="n">RandomizedSearchCV</span><span class="p">(</span><span class="n">forest_reg</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="n">param_distribs</span><span class="p">,</span>
+                                <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s">'neg_mean_squared_error'</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">rnd_search</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing_prepared</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RandomizedSearchCV(cv=5, error_score='raise-deprecating',
+                   estimator=RandomForestRegressor(bootstrap=True,
+                                                   criterion='mse',
+                                                   max_depth=None,
+                                                   max_features='auto',
+                                                   max_leaf_nodes=None,
+                                                   min_impurity_decrease=0.0,
+                                                   min_impurity_split=None,
+                                                   min_samples_leaf=1,
+                                                   min_samples_split=2,
+                                                   min_weight_fraction_leaf=0.0,
+                                                   n_estimators='warn',
+                                                   n_jobs=None, oob_score=False,
+                                                   random_sta...
+                                                   warm_start=False),
+                   iid='warn', n_iter=10, n_jobs=None,
+                   param_distributions={'max_features': &lt;scipy.stats._distn_infrastructure.rv_frozen object at 0x7feea83c2b90&gt;,
+                                        'n_estimators': &lt;scipy.stats._distn_infrastructure.rv_frozen object at 0x7feea83c2d90&gt;},
+                   pre_dispatch='2*n_jobs', random_state=42, refit=True,
+                   return_train_score=False, scoring='neg_mean_squared_error',
+                   verbose=0)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cvres</span> <span class="o">=</span> <span class="n">rnd_search</span><span class="p">.</span><span class="n">cv_results_</span>
+<span class="k">for</span> <span class="n">mean_score</span><span class="p">,</span> <span class="n">params</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cvres</span><span class="p">[</span><span class="s">"mean_test_score"</span><span class="p">],</span> <span class="n">cvres</span><span class="p">[</span><span class="s">"params"</span><span class="p">]):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">mean_score</span><span class="p">),</span> <span class="n">params</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>49150.657232934034 {'max_features': 7, 'n_estimators': 180}
+51389.85295710133 {'max_features': 5, 'n_estimators': 15}
+50796.12045980556 {'max_features': 3, 'n_estimators': 72}
+50835.09932039744 {'max_features': 5, 'n_estimators': 21}
+49280.90117886215 {'max_features': 7, 'n_estimators': 122}
+50774.86679035961 {'max_features': 3, 'n_estimators': 75}
+50682.75001237282 {'max_features': 3, 'n_estimators': 88}
+49608.94061293652 {'max_features': 5, 'n_estimators': 100}
+50473.57642831875 {'max_features': 3, 'n_estimators': 150}
+64429.763804893395 {'max_features': 5, 'n_estimators': 2}
+</code></pre></div></div>
+
+<h4 id="특성-중요도-에러-분석">특성 중요도, 에러 분석</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">feature_importances</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">.</span><span class="n">best_estimator_</span><span class="p">.</span><span class="n">feature_importances_</span>
+<span class="n">feature_importances</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([7.33442355e-02, 6.29090705e-02, 4.11437985e-02, 1.46726854e-02,
+       1.41064835e-02, 1.48742809e-02, 1.42575993e-02, 3.66158981e-01,
+       5.64191792e-02, 1.08792957e-01, 5.33510773e-02, 1.03114883e-02,
+       1.64780994e-01, 6.02803867e-05, 1.96041560e-03, 2.85647464e-03])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">extra_attribs</span> <span class="o">=</span> <span class="p">[</span><span class="s">"rooms_per_hhold"</span><span class="p">,</span> <span class="s">"pop_per_hhold"</span><span class="p">,</span> <span class="s">"bedrooms_per_room"</span><span class="p">]</span>
+<span class="c1">#cat_encoder = cat_pipeline.named_steps["cat_encoder"] # old solution
+</span><span class="n">cat_encoder</span> <span class="o">=</span> <span class="n">full_pipeline</span><span class="p">.</span><span class="n">named_transformers_</span><span class="p">[</span><span class="s">"cat"</span><span class="p">]</span>
+<span class="n">cat_one_hot_attribs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cat_encoder</span><span class="p">.</span><span class="n">categories_</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">attributes</span> <span class="o">=</span> <span class="n">num_attribs</span> <span class="o">+</span> <span class="n">extra_attribs</span> <span class="o">+</span> <span class="n">cat_one_hot_attribs</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">feature_importances</span><span class="p">,</span> <span class="n">attributes</span><span class="p">),</span> <span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[(0.36615898061813423, 'median_income'),
+ (0.16478099356159054, 'INLAND'),
+ (0.10879295677551575, 'pop_per_hhold'),
+ (0.07334423551601243, 'longitude'),
+ (0.06290907048262032, 'latitude'),
+ (0.056419179181954014, 'rooms_per_hhold'),
+ (0.053351077347675815, 'bedrooms_per_room'),
+ (0.04114379847872964, 'housing_median_age'),
+ (0.014874280890402769, 'population'),
+ (0.014672685420543239, 'total_rooms'),
+ (0.014257599323407808, 'households'),
+ (0.014106483453584104, 'total_bedrooms'),
+ (0.010311488326303788, '&lt;1H OCEAN'),
+ (0.0028564746373201584, 'NEAR OCEAN'),
+ (0.0019604155994780706, 'NEAR BAY'),
+ (6.0280386727366e-05, 'ISLAND')]
+</code></pre></div></div>
+
+<h3 id="테스트-데이터셋으로-최종-평가하기">테스트 데이터셋으로 최종 평가하기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">final_model</span> <span class="o">=</span> <span class="n">grid_search</span><span class="p">.</span><span class="n">best_estimator_</span>
+
+<span class="n">X_test</span> <span class="o">=</span> <span class="n">strat_test_set</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="s">"median_house_value"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">strat_test_set</span><span class="p">[</span><span class="s">"median_house_value"</span><span class="p">].</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">X_test_prepared</span> <span class="o">=</span> <span class="n">full_pipeline</span><span class="p">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">final_predictions</span> <span class="o">=</span> <span class="n">final_model</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_prepared</span><span class="p">)</span>
+
+<span class="n">final_mse</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">final_predictions</span><span class="p">)</span>
+<span class="n">final_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">final_mse</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">final_rmse</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>47730.22690385927
+</code></pre></div></div>
+
+<h3 id="론칭-모니터링-시스템-유지-보수">론칭, 모니터링, 시스템 유지 보수</h3>
+
+<p>상용환경에 배포하기 위해서 데이터 전처리와 모델의 예측이 포함된 파이프라인을 만들어 저장하는 것이 좋습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">full_pipeline_with_predictor</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s">"preparation"</span><span class="p">,</span> <span class="n">full_pipeline</span><span class="p">),</span>
+        <span class="p">(</span><span class="s">"linear"</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">())</span>
+    <span class="p">])</span>
+
+<span class="n">full_pipeline_with_predictor</span><span class="p">.</span><span class="n">fit</span><span class="p">(</span><span class="n">housing</span><span class="p">,</span> <span class="n">housing_labels</span><span class="p">)</span>
+<span class="n">full_pipeline_with_predictor</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">some_data</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([210644.60459286, 317768.80697211, 210956.43331178,  59218.98886849,
+       189747.55849879])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">some_data</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>housing_median_age</th>
+      <th>total_rooms</th>
+      <th>total_bedrooms</th>
+      <th>population</th>
+      <th>households</th>
+      <th>median_income</th>
+      <th>ocean_proximity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>17606</td>
+      <td>-121.89</td>
+      <td>37.29</td>
+      <td>38.0</td>
+      <td>1568.0</td>
+      <td>351.0</td>
+      <td>710.0</td>
+      <td>339.0</td>
+      <td>2.7042</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>18632</td>
+      <td>-121.93</td>
+      <td>37.05</td>
+      <td>14.0</td>
+      <td>679.0</td>
+      <td>108.0</td>
+      <td>306.0</td>
+      <td>113.0</td>
+      <td>6.4214</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+    <tr>
+      <td>14650</td>
+      <td>-117.20</td>
+      <td>32.77</td>
+      <td>31.0</td>
+      <td>1952.0</td>
+      <td>471.0</td>
+      <td>936.0</td>
+      <td>462.0</td>
+      <td>2.8621</td>
+      <td>NEAR OCEAN</td>
+    </tr>
+    <tr>
+      <td>3230</td>
+      <td>-119.61</td>
+      <td>36.31</td>
+      <td>25.0</td>
+      <td>1847.0</td>
+      <td>371.0</td>
+      <td>1460.0</td>
+      <td>353.0</td>
+      <td>1.8839</td>
+      <td>INLAND</td>
+    </tr>
+    <tr>
+      <td>3555</td>
+      <td>-118.59</td>
+      <td>34.23</td>
+      <td>17.0</td>
+      <td>6592.0</td>
+      <td>1525.0</td>
+      <td>4459.0</td>
+      <td>1463.0</td>
+      <td>3.0347</td>
+      <td>&lt;1H OCEAN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_model</span> <span class="o">=</span> <span class="n">full_pipeline_with_predictor</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">joblib</span>
+<span class="n">joblib</span><span class="p">.</span><span class="n">dump</span><span class="p">(</span><span class="n">my_model</span><span class="p">,</span> <span class="s">"my_model.pkl"</span><span class="p">)</span>
+<span class="c1">#...
+</span><span class="n">my_model_loaded</span> <span class="o">=</span> <span class="n">joblib</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">"my_model.pkl"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_model_loaded</span><span class="p">.</span><span class="n">predict</span><span class="p">(</span><span class="n">some_data</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([210644.60459286, 317768.80697211, 210956.43331178,  59218.98886849,
+       189747.55849879])
+</code></pre></div></div>
+
+<h3 id="론칭후-시스템-모니터링">론칭후 시스템 모니터링</h3>
+
+<ul>
+  <li>
+    <p>시간이 지나면 모델이 낙후되면서 성능이 저하</p>
+  </li>
+  <li>
+    <p>자동모니터링: 추천시스템의 경우, 추천된 상품의 판매량이 줄어드는지?</p>
+  </li>
+  <li>
+    <p>수동모니터링: 이미지 분류의 경우, 분류된 이미지들 중 일부를 전문가에게 검토시킴</p>
+  </li>
+  <li>
+    <p>결과가 나빠진 경우</p>
+    <ul>
+      <li>데이터 입력의 품질이 나빠졌는지? 센서고장?</li>
+      <li>트렌드의 변화? 계절적 요인?</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="유지보수">유지보수</h3>
+
+<ul>
+  <li>
+    <p>정기적으로 새로운 데이터 수집(레이블)</p>
+  </li>
+  <li>
+    <p>새로운 데이터를 테스트 데이터로, 현재의 테스트 데이터는 학습데이터로 편입</p>
+  </li>
+  <li>
+    <p>다시 학습후, 새로운 테스트 데이터에 기반해 현재 모델과 새 모델을 평가, 비교</p>
+  </li>
+</ul>
+
+<h3 id="전체-프로세스에-고르게-시간을-배분해야-합니다">전체 프로세스에 고르게 시간을 배분해야 합니다!</h3>
+:ET
