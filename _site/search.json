@@ -1,6 +1,24 @@
 [
   
     {
+      "title"    : "Probability",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week5_day4, ml_basics, Linear algebra",
+      "url"      : "/programmers/Probability",
+      "date"     : "2021-01-08 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Linear algebra",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week5_day4, ml_basics, Linear algebra",
+      "url"      : "/programmers/Linear-algebra",
+      "date"     : "2021-01-07 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "E2e ml프로젝트",
       "category" : "programmers",
       "tags"     : "K-digital training, week5_day3, ml_basics, E2E",

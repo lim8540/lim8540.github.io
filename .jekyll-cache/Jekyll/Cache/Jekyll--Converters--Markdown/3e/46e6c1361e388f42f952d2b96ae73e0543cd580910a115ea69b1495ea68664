@@ -1,0 +1,1451 @@
+I"4<p><img src="/image/ML_E2E_files/ML_E2E_19_1.png" alt="some discription" title="some discription" /></p>
+
+<h2 id="왜-선형대수를-알아야-하는가">왜 선형대수를 알아야 하는가?</h2>
+
+<p>Deep learning을 이해하기 위해서 반드시 선형대수 + 행렬미분 + 확률의 탄탄한 기초가 필요하다.</p>
+
+<p>예) Transformer의 attention matrix:</p>
+
+<p>$\mathrm{Att}_{\leftrightarrow}(Q, K, V) = D^{-1}AV, ~A = \exp(QK^T/\sqrt{d}), ~D = \mathrm{diag}(A1_L)$</p>
+
+<p>이렇게 핵심 아이디어가 행렬에 관한 식으로 표현되는 경우가 많다.</p>
+
+<h4 id="목표-선형대수와-행렬미분의-기초를-배우고-간단한-머신러닝-알고리즘pca을-유도해보고자-한다">목표: 선형대수와 행렬미분의 기초를 배우고 간단한 머신러닝 알고리즘(PCA)을 유도해보고자 한다.</h4>
+
+<h2 id="기본-표기법-basic-notation">기본 표기법 (Basic Notation)</h2>
+
+<ul>
+  <li>$A\in \mathbb{R}^{m\times n}$는 $m$개의 행과 $n$개의 열을 가진 행렬을 의미한다.</li>
+  <li>$x \in \mathbb{R}^n$는 $n$개의 원소를 가진 벡터를 의미한다. $n$차원 벡터는 $n$개의 행과 1개의 열을 가진 행렬로 생각할 수도 있다. 이것을 열벡터(column vector)로 부르기도 한다. 만약, 명시적으로 행벡터(row vector)를 표현하고자 한다면, $x^T$($T$는 transpose를 의미)로 쓴다.</li>
+  <li>벡터 $x$의 $i$번째 원소는 $x_i$로 표시한다.
+\begin{align<em>}
+x = \begin{bmatrix}
+  x_1<br />
+  x_2<br />
+  \vdots<br />
+  x_n
+\end{bmatrix}
+\end{align</em>}</li>
+  <li>$a_{ij}$(또는 $A_{ij}, A_{i,j}$)는 행렬 $A$의 $i$번째 행, $j$번째 열에 있는 원소를 표시한다.
+\begin{align<em>}
+A = \begin{bmatrix}
+  a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1n}<br />
+  a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2n}<br />
+  \vdots &amp; \vdots &amp; \ddots &amp; \vdots<br />
+  a_{m1} &amp; a_{m2} &amp; \cdots &amp; a_{mn}
+\end{bmatrix}
+\end{align</em>}</li>
+  <li>$A$의 $j$번째 열을 $a_j$ 혹은 $A_{:,j}$로 표시한다.
+\begin{align<em>}
+A = \begin{bmatrix}
+  \vert &amp; \vert &amp; &amp; \vert<br />
+  a_1 &amp; a_2 &amp; \cdots &amp; a_n<br />
+  \vert &amp; \vert &amp; &amp; \vert
+\end{bmatrix}
+\end{align</em>}</li>
+  <li>$A$의 $i$번째 행을 $a_i^T$ 혹은 $A_{i,:}$로 표시한다.
+\begin{align<em>}
+A = \begin{bmatrix}
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+   &amp; \vdots &amp;<br />
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_m^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}
+\end{align</em>}</li>
+</ul>
+
+<p>Python에서의 벡터, 행렬 표현방법</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mf">10.5</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[10.5, 5.2, 3.25, 7.0]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.5</span><span class="p">,</span> <span class="mf">5.2</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(3,)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3.25
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">).</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(3, 1)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">60</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">A</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[10, 20, 30],
+       [40, 50, 60]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(2, 3)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">j</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>30
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># column vector
+</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">A</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([20, 50])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># row vector
+</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([40, 50, 60])
+</code></pre></div></div>
+
+<h2 id="행렬의-곱셉-matrix-multiplication">행렬의 곱셉 (Matrix Multiplication)</h2>
+
+<p>두 개의 행렬 $A\in \mathbb{R}^{m\times n}$, $B\in \mathbb{R}^{n\times p}$의 곱 $C = AB \in \mathbb{R}^{m\times p}$는 다음과 같이 정의된다.</p>
+
+\[C_{ij} = \sum_{k=1}^n A_{ik}B_{kj}\]
+
+<p>행렬의 곱셈을 이해하는 몇 가지 방식들</p>
+<ul>
+  <li>벡터 $\times$ 벡터</li>
+  <li>행렬 $\times$ 벡터</li>
+  <li>행렬 $\times$ 행렬</li>
+</ul>
+
+<h3 id="벡터-times-벡터-vector-vector-products">벡터 $\times$ 벡터 (Vector-Vector Products)</h3>
+
+<p>두 개의 벡터 $x, y\in \mathbb{R}^n$이 주어졌을 때 내적(inner product 또는 dot product) $x^Ty$는 다음과 같이 정의된다.</p>
+
+<p>\begin{align<em>}
+x^Ty \in \mathbb{R} = [\mbox{ }x_1\mbox{ }x_2\mbox{ }\cdots \mbox{ }x_n\mbox{ }] \begin{bmatrix}
+    y_1<br />
+    y_2<br />
+    \vdots<br />
+    y_n
+\end{bmatrix}
+= \sum_{i=1}^n x_i y_i
+\end{align</em>}</p>
+
+\[x^Ty = y^Tx\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">x</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>32
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>32
+</code></pre></div></div>
+
+<p>두 개의 벡터 $x\in \mathbb{R}^m, y\in \mathbb{R}^n$이 주어졌을 때 외적(outer product) $xy^T\in \mathbb{R}^{m\times n}$는 다음과 같이 정의된다.</p>
+
+<p>\begin{align<em>}
+xy^T \in \mathbb{R}^{m\times n} = \begin{bmatrix}
+    x_1<br />
+    x_2<br />
+    \vdots<br />
+    x_m
+\end{bmatrix}
+[\mbox{ }y_1\mbox{ }y_2\mbox{ }\cdots \mbox{ }y_n\mbox{ }]
+= \begin{bmatrix}
+    x_1y_1 &amp; x_1y_2 &amp; \cdots &amp; x_1y_n<br />
+    x_2y_1 &amp; x_2y_2 &amp; \cdots &amp; x_2y_n<br />
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots<br />
+    x_my_1 &amp; x_my_2 &amp; \cdots &amp; x_my_n
+\end{bmatrix}
+\end{align</em>}</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="p">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>((3, 1), (1, 3))
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[ 4,  5,  6],
+       [ 8, 10, 12],
+       [12, 15, 18]])
+</code></pre></div></div>
+
+<p>외적이 유용한 경우. 아래 행렬 $A$는 모든 열들이 동일한 벡터 $x$를 가지고 있다. 외적을 이용하면 간편하게 $x\mathbf{1}^T$로 나타낼 수 있다 ($\mathbf{1}\in \mathbb{R}^n$는 모든 원소가 1인 $n$차원 벡터).</p>
+
+<p>\begin{align<em>}
+A = \begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert<br />
+    x &amp; x &amp; \cdots &amp; x<br />
+    \vert &amp; \vert &amp; &amp; \vert
+\end{bmatrix}
+= \begin{bmatrix}
+    x_1 &amp; x_1 &amp; \cdots &amp; x_1<br />
+    x_2 &amp; x_2 &amp; \cdots &amp; x_2<br />
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots<br />
+    x_m &amp; x_m &amp; \cdots &amp; x_m
+\end{bmatrix}
+= \begin{bmatrix}
+    x_1<br />
+    x_2<br />
+    \vdots<br />
+    x_m
+\end{bmatrix}
+\begin{bmatrix}
+    1 &amp; 1 &amp; \cdots &amp; 1
+\end{bmatrix}
+= x\mathbf{1}^T
+\end{align</em>}</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># column vector
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ones</span><span class="p">)</span>
+<span class="n">A</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1., 1., 1., 1.],
+       [2., 2., 2., 2.],
+       [3., 3., 3., 3.]])
+</code></pre></div></div>
+
+<h3 id="행렬-times-벡터-matrix-vector-products">행렬 $\times$ 벡터 (Matrix-Vector Products)</h3>
+
+<p>행렬 $A\in \mathbb{R}^{m\times n}$와 벡터 $x\in \mathbb{R}^n$의 곱은 벡터 $y = Ax \in \mathbb{R}^m$이다. 이 곱을 몇 가지 측면에서 바라볼 수 있다.</p>
+
+<h4 id="열벡터를-오른쪽에-곱하고ax-a가-행의-형태로-표현되었을-때">열벡터를 오른쪽에 곱하고($Ax$), $A$가 행의 형태로 표현되었을 때</h4>
+
+<p>\begin{align<em>}
+y = Ax = 
+\begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_m^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix} x
+= \begin{bmatrix}
+a_1^Tx<br />
+a_2^Tx<br />
+\vdots<br />
+a_m^Tx
+\end{bmatrix}
+\end{align</em>}</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">A</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1, 2, 3],
+       [4, 5, 6]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">ones</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[ 6.],
+       [15.]])
+</code></pre></div></div>
+
+<h4 id="열벡터를-오른쪽에-곱하고ax-a가-열의-형태로-표현되었을-때">열벡터를 오른쪽에 곱하고($Ax$), $A$가 열의 형태로 표현되었을 때</h4>
+
+<p>\begin{align<em>}
+y = Ax = 
+\begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert<br />
+    a_1 &amp; a_2 &amp; \cdots &amp; a_n<br />
+    \vert &amp; \vert &amp; &amp; \vert
+\end{bmatrix}
+\begin{bmatrix}
+x_1<br />
+x_2<br />
+\vdots<br />
+x_n
+\end{bmatrix}
+= \begin{bmatrix}
+\vert<br />
+a_1<br />
+\vert
+\end{bmatrix} x_1 +
+\begin{bmatrix}
+\vert<br />
+a_2<br />
+\vert
+\end{bmatrix} x_2 + \cdots +
+\begin{bmatrix}
+\vert<br />
+a_n<br />
+\vert
+\end{bmatrix} x_n
+\end{align</em>}</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[4],
+       [5]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'a_'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s">':'</span><span class="p">,</span> <span class="n">A</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span> <span class="s">'</span><span class="se">\t</span><span class="s">x_'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s">':'</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">'</span><span class="se">\t</span><span class="s">a_'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s">'*x_'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s">':'</span><span class="p">,</span> <span class="n">A</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a_0: [1 0] 	x_0: [1] 	a_0*x_0: [1 0]
+a_1: [0 1] 	x_1: [2] 	a_1*x_1: [0 2]
+a_2: [1 1] 	x_2: [3] 	a_2*x_2: [3 3]
+</code></pre></div></div>
+
+<h4 id="행벡터를-왼쪽에-곱하고xta-a가-열의-형태로-표현되었을-때">행벡터를 왼쪽에 곱하고($x^TA$), $A$가 열의 형태로 표현되었을 때</h4>
+
+<p>$A\in \mathbb{R}^{m\times n}$, $x\in \mathbb{R}^m$, $y\in \mathbb{R}^n$일 때, $y^T = x^TA$</p>
+
+<p>\begin{align<em>}
+y^T = x^TA = x^T
+\begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert<br />
+    a_1 &amp; a_2 &amp; \cdots &amp; a_n<br />
+    \vert &amp; \vert &amp; &amp; \vert
+\end{bmatrix}
+= \begin{bmatrix}
+x^Ta_1 &amp; x^Ta_2 &amp; \cdots &amp; x^Ta_n
+\end{bmatrix}
+\end{align</em>}</p>
+
+<h4 id="행벡터를-왼쪽에-곱하고xta-a가-행의-형태로-표현되었을-때">행벡터를 왼쪽에 곱하고($x^TA$), $A$가 행의 형태로 표현되었을 때</h4>
+
+<p>\begin{align<em>}
+y^T =&amp; x^TA<br />
+    =&amp; \begin{bmatrix}
+    x_1 &amp; x_2 &amp; \cdots &amp; x_m
+    \end{bmatrix}
+    \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_m^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix}<br />
+    =&amp; x_1 \begin{bmatrix}
+        \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix} + x_2 \begin{bmatrix}
+        \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix} + \cdots + x_n \begin{bmatrix}
+        \rule[.5ex]{1.7ex}{0.5pt} &amp; a_n^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix}
+\end{align</em>}</p>
+
+<h3 id="행렬-times-행렬-matrix-matrix-products">행렬 $\times$ 행렬 (Matrix-Matrix Products)</h3>
+
+<p>행렬 $\times$ 행렬 연산도 몇 가지 관점으로 접근할 수 있다.</p>
+
+<h4 id="일련의-벡터-times-벡터-연산으로-표현하는-경우">일련의 벡터 $\times$ 벡터 연산으로 표현하는 경우</h4>
+
+<p>$A$와 $B$가 행 또는 열로 표현되었는가에 따라 두 가지 경우로 나눌 수 있다.</p>
+
+<ul>
+  <li>$A$가 행으로 $B$가 열로 표현되었을 때
+\begin{align<em>}
+C = AB = \begin{bmatrix}
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+   &amp; \vdots &amp;<br />
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_m^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+  \end{bmatrix}
+  \begin{bmatrix}
+  \vert &amp; \vert &amp; &amp; \vert<br />
+  b_1 &amp; b_2 &amp; \cdots &amp; b_p<br />
+  \vert &amp; \vert &amp; &amp; \vert
+  \end{bmatrix}
+= \begin{bmatrix}
+  a_1^Tb_1 &amp; a_1^Tb_2 &amp; \cdots &amp; a_1^Tb_p<br />
+  a_2^Tb_1 &amp; a_2^Tb_2 &amp; \cdots &amp; a_2^Tb_p<br />
+  \vdots &amp; \vdots &amp; \ddots &amp; \vdots<br />
+  a_m^Tb_1 &amp; a_m^Tb_2 &amp; \cdots &amp; a_m^Tb_p<br />
+\end{bmatrix}
+\end{align</em>}</li>
+</ul>
+
+<p>$A\in \mathbb{R}^{m\times n}$, $B\in \mathbb{R}^{n\times p}$, $a_i \in \mathbb{R}^n$, $b_j \in \mathbb{R}^n$이기 때문에 내적값들이 자연스럽게 정의된다.</p>
+
+<ul>
+  <li>$A$가 열로 $B$가 행으로 표현되었을 때</li>
+</ul>
+
+<p>위보다는 까다롭지만 가끔씩 유용하다.</p>
+
+<p>\begin{align<em>}
+C = AB = 
+    \begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert<br />
+    a_1 &amp; a_2 &amp; \cdots &amp; a_n<br />
+    \vert &amp; \vert &amp; &amp; \vert
+    \end{bmatrix}
+    \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; b_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; b_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; b_n^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix}
+= \sum_{i=1}^n a_i b_i^T
+\end{align</em>}</p>
+
+<p>$AB$는 모든 $i$에 대해서 $a_i\in \mathbb{R}^m$와 $b_i\in \mathbb{R}^p$의 외적의 합이다. $a_i b_i^T$의 차원은 $m\times p$이다 ($C$의 차원과 동일).</p>
+
+<h4 id="일련의-행렬-times-벡터-연산으로-표현하는-경우">일련의 행렬 $\times$ 벡터 연산으로 표현하는 경우</h4>
+
+<ul>
+  <li>$B$가 열로 표현되었을 때</li>
+</ul>
+
+<p>$C=AB$일 때 $C$의 열들을 $A$와 $B$의 열들의 곱으로 나타낼 수 있다.</p>
+
+<p>\begin{align<em>}
+C = AB =
+    A \begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert<br />
+    b_1 &amp; b_2 &amp; \cdots &amp; b_p<br />
+    \vert &amp; \vert &amp; &amp; \vert
+    \end{bmatrix}
+= \begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert<br />
+    Ab_1 &amp; Ab_2 &amp; \cdots &amp; Ab_p<br />
+    \vert &amp; \vert &amp; &amp; \vert
+    \end{bmatrix}
+\end{align</em>}</p>
+
+<p>각각의 $c_i = Ab_i$는 앞에서 살펴본 행렬 $\times$ 벡터의 두 가지 관점으로 해석할 수 있다.</p>
+
+<ul>
+  <li>$A$가 행으로 표현되었을 때</li>
+</ul>
+
+<p>\begin{align<em>}
+C = AB =
+    \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_m^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix} B
+= \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^TB &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^TB &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_m^TB &amp; \rule[.5ex]{1.7ex}{0.5pt}
+    \end{bmatrix}
+\end{align</em>}</p>
+
+<h2 id="중요-연산과-성질들-operations-and-properties">중요 연산과 성질들 (Operations and Properties)</h2>
+
+<h3 id="정방square-삼각triangular-대각diagonal-단위identity-행렬들">정방(Square), 삼각(triangular), 대각(diagonal), 단위(identity) 행렬들</h3>
+
+<p>정방행렬(square matrix): 행과 열의 개수가 동일</p>
+
+<p>\begin{bmatrix}
+  4 &amp; 9 &amp; 2 <br />
+  3 &amp; 5 &amp; 7 <br />
+  8 &amp; 1 &amp; 6
+\end{bmatrix}</p>
+
+<p>상삼각행렬(upper triangular matrix): 정방행렬이며 주대각선 아래 원소들이 모두 0</p>
+
+<p>\begin{bmatrix}
+  4 &amp; 9 &amp; 2 <br />
+  0 &amp; 5 &amp; 7 <br />
+  0 &amp; 0 &amp; 6
+\end{bmatrix}</p>
+
+<p>하삼각행렬(lower triangular matrix): 정방행렬이며 주대각선 위 원소들이 모두 0</p>
+
+<p>\begin{bmatrix}
+  4 &amp; 0 &amp; 0 <br />
+  3 &amp; 5 &amp; 0 <br />
+  8 &amp; 1 &amp; 6
+\end{bmatrix}</p>
+
+<p>대각행렬(diagonal matrix): 정방행렬이며 주대각선 제외 모든 원소가 0</p>
+
+<p>\begin{bmatrix}
+  4 &amp; 0 &amp; 0 <br />
+  0 &amp; 5 &amp; 0 <br />
+  0 &amp; 0 &amp; 6
+\end{bmatrix}</p>
+
+<p>NumPy’s <code class="language-plaintext highlighter-rouge">diag</code> 함수를 사용해서 대각행렬을 생성할 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[4, 0, 0],
+       [0, 5, 0],
+       [0, 0, 6]])
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">diag</code> 함수에 행렬을 전달하면 주대각선 값들을 얻을 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+    <span class="p">])</span>
+<span class="n">np</span><span class="p">.</span><span class="n">diag</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([1, 5, 9])
+</code></pre></div></div>
+
+<p>단위행렬(identity matrix): 대각행렬이며 주대각선 원소들이 모두 1. $I$로 표시한다.</p>
+
+<p>\begin{bmatrix}
+  1 &amp; 0 &amp; 0 <br />
+  0 &amp; 1 &amp; 0 <br />
+  0 &amp; 0 &amp; 1
+\end{bmatrix}</p>
+
+<p>Numpy의 <code class="language-plaintext highlighter-rouge">eye</code> 함수를 사용하면 원하는 크기의 단위행렬을 생성할 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1., 0., 0.],
+       [0., 1., 0.],
+       [0., 0., 1.]])
+</code></pre></div></div>
+
+<h3 id="전치-transpose">전치 (Transpose)</h3>
+
+<p>행렬을 전치하는 것은 그 행렬을 뒤집는 것으로 생각할 수 있다. 행렬 $A\in \mathbb{R}^{m\times n}$이 주어졌을 때 그것의 전치행렬은 $A^T \in \mathbb{R}^{n\times m}$으로 표시하고 각 원소는 다음과 같이 주어진다.</p>
+
+\[\left( A^T \right)_{ij} = A_{ji}\]
+
+<p>다음의 성질들이 성립한다.</p>
+
+<ul>
+  <li>$(A^T)^T = A$</li>
+  <li>$\left(AB\right)^T = B^TA^T$</li>
+  <li>$(A + B)^T = A^T + B^T$</li>
+</ul>
+
+<p>$ A^T =
+\begin{bmatrix}
+  1 &amp; 2 &amp; 3 <br />
+  4 &amp; 5 &amp; 6
+\end{bmatrix}^T =
+\begin{bmatrix}
+  1 &amp; 4 <br />
+  2 &amp; 5 <br />
+  3 &amp; 6
+\end{bmatrix}$</p>
+
+<p>Numpy의 <code class="language-plaintext highlighter-rouge">T</code> 속성(attribute)을 사용해서 전치행렬을 구할 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+<span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span><span class="p">.</span><span class="n">T</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1, 4],
+       [2, 5],
+       [3, 6]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span><span class="p">.</span><span class="n">T</span><span class="p">.</span><span class="n">T</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1, 2, 3],
+       [4, 5, 6]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">).</span><span class="n">T</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[27, 60],
+       [33, 75]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">B</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="p">.</span><span class="n">T</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[27, 60],
+       [33, 75]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">A</span> <span class="o">+</span> <span class="n">B</span><span class="p">).</span><span class="n">T</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[ 2,  8],
+       [ 4, 10],
+       [ 6, 12]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span><span class="p">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">B</span><span class="p">.</span><span class="n">T</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[ 2,  8],
+       [ 4, 10],
+       [ 6, 12]])
+</code></pre></div></div>
+
+<h3 id="대칭행렬-symmetic-matrices">대칭행렬 (Symmetic Matrices)</h3>
+
+<p>정방행렬 $A$가 $A^T$와 동일할 때 대칭행렬이라고 부른다. $A = -A^T$일 때는 반대칭(anti-symmetric)행렬이라고 부른다.</p>
+
+<p>$AA^T$는 항상 대칭행렬이다.</p>
+
+<p>$A + A^T$는 대칭, $A - A^T$는 반대칭이다.</p>
+
+\[A = \frac{1}{2}(A+A^T)+\frac{1}{2}(A-A^T)\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A</span><span class="p">.</span><span class="n">T</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[14, 32],
+       [32, 77]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[17, 22, 27],
+       [22, 29, 36],
+       [27, 36, 45]])
+</code></pre></div></div>
+
+<h3 id="대각합-trace">대각합 (Trace)</h3>
+
+<p>정방행렬 $A\in \mathbb{R}^{n\times n}$의 대각합은 $\mathrm{tr}(A)$로 표시(또는 $\mathrm{tr}A$)하고 그 값은 $\sum_{i=1}^n A_{ii}$이다. 대각합은 다음과 같은 성질을 가진다.</p>
+
+<ul>
+  <li>For $A\in \mathbb{R}^{n\times n}$, $\mathrm{tr}A = \mathrm{tr}A^T$</li>
+  <li>For $A,B\in \mathbb{R}^{n\times n}$, $\mathrm{tr}(A+B) = \mathrm{tr}A + \mathrm{tr}B$</li>
+  <li>For $A\in \mathbb{R}^{n\times n}, t\in\mathbb{R}$, $\mathrm{tr}(tA) = t\,\mathrm{tr}A$</li>
+  <li>For $A, B$ such that $AB$ is square, $\mathrm{tr}AB = \mathrm{tr}BA$</li>
+  <li>For $A, B, C$ such that $ABC$ is square, $\mathrm{tr}ABC = \mathrm{tr}BCA = \mathrm{tr}CAB$, and so on for the product of more matrices</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+        <span class="p">[</span> <span class="mi">10</span><span class="p">,</span>  <span class="mi">20</span><span class="p">,</span>  <span class="mi">30</span><span class="p">],</span>
+        <span class="p">[</span>  <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">3</span><span class="p">],</span>
+    <span class="p">])</span>
+<span class="n">np</span><span class="p">.</span><span class="n">trace</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>123
+</code></pre></div></div>
+
+<h3 id="norms">Norms</h3>
+
+<p>벡터의 norm은 벡터의 길이로 이해할 수 있다. $l_2$ norm (Euclidean norm)은 다음과 같이 정의된다.</p>
+
+\[\left \Vert x \right \|_2 = \sqrt{\sum_{i=1}^n{x_i}^2}\]
+
+<p>$\left \Vert x \right |_2^2 = x^Tx$임을 기억하라.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="k">as</span> <span class="n">LA</span>
+<span class="n">LA</span><span class="p">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>5.0
+</code></pre></div></div>
+
+<p>$l_p$ norm</p>
+
+\[\left \Vert x \right \|_p = \left(\sum_{i=1}^n|{x_i}|^p\right)^{1/p}\]
+
+<p>Frobenius norm (행렬에 대해서)</p>
+
+\[\left \Vert A \right \|_F = \sqrt{\sum_{i=1}^m\sum_{j=1}^n A_{ij}^2} = \sqrt{\mathrm{tr}(A^TA)}\]
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+        <span class="p">[</span> <span class="mi">10</span><span class="p">,</span>  <span class="mi">20</span><span class="p">,</span>  <span class="mi">30</span><span class="p">],</span>
+        <span class="p">[</span>  <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">3</span><span class="p">],</span>
+    <span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">LA</span><span class="p">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>376.0505285197722
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">trace</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">T</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>376.0505285197722
+</code></pre></div></div>
+
+<h3 id="선형독립과-rank-linear-independence-and-rank">선형독립과 Rank (Linear Independence and Rank)</h3>
+
+<p>벡터들의 집합 ${x_1,x_2,\ldots,x_n}\subset \mathbb{R}^m$에 속해 있는 어떤 벡터도 나머지 벡터들의 선형조합으로 나타낼 수 없을 때 이 집합을 선형독립(linear independent)이라고 부른다. 역으로 어떠한 벡터가 나머지 벡터들의 선형조합으로 나타내질 수 있을 때 이 집합을 (선형)종속(dependent)이라고 부른다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+    <span class="p">])</span>
+</code></pre></div></div>
+
+<p>위 행렬 $A$의 열들의 집합은 종속이다. 왜냐하면</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">A</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([ True,  True,  True])
+</code></pre></div></div>
+
+<p>Column rank: 행렬 $A\in \mathbb{R}^{m\times n}$의 열들의 부분집합 중에서 가장 큰 선형독립인 집합의 크기</p>
+
+<p>Row rank: 행렬 $A\in \mathbb{R}^{m\times n}$의 행들의 부분집합 중에서 가장 큰 선형독립인 집합의 크기</p>
+
+<p>모든 행렬의 column rank와 row rank는 동일하다. 따라서 단순히 $\mathrm{rank}(A)$로 표시한다. 다음의 성질들이 성립한다.</p>
+
+<ul>
+  <li>For $A\in \mathbb{R}^{m\times n}$, $\mathrm{rank}(A) \leq \min(m, n)$. If $\mathrm{rank}(A) = \min(m, n)$, then $A$ is said to be <strong><em>full rank</em></strong>.</li>
+  <li>For $A\in \mathbb{R}^{m\times n}$, $\mathrm{rank}(A) = \mathrm{rank}(A^T)$.</li>
+  <li>For $A\in \mathbb{R}^{m\times n}, B\in \mathbb{R}^{n\times p}$, $\mathrm{rank}(A+B) \leq \min(\mathrm{rank}(A), \mathrm{rank}(B))$.</li>
+  <li>For $A, B\in \mathbb{R}^{m\times n}$, $\mathrm{rank}(A+B) \leq \mathrm{rank}(A) + \mathrm{rank}(B)$.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">LA</span><span class="p">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2
+</code></pre></div></div>
+
+<h3 id="역행렬-the-inverse">역행렬 (The Inverse)</h3>
+
+<p>정방행렬 $A\in \mathbb{R}^{n\times n}$의 역행렬 $A^{-1}$은 다음을 만족하는 정방행렬($\in \mathbb{R}^{n\times n}$)이다.</p>
+
+\[A^{-1}A = I = AA^{-1}\]
+
+<p>$A$의 역행렬이 존재할 때, $A$를 <strong><em>invertible</em></strong> 또는 <strong><em>non-singular</em></strong>하다고 말한다.</p>
+
+<ul>
+  <li>$A$의 역행렬이 존재하기 위해선 $A$는 full rank여야 한다.</li>
+  <li>$(A^{-1})^{-1} = A$</li>
+  <li>$(AB)^{-1} = B^{-1}A^{-1}$</li>
+  <li>$(A^{-1})^T = (A^T)^{-1}$</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="p">])</span>
+<span class="n">LA</span><span class="p">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[-2. ,  1. ],
+       [ 1.5, -0.5]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">LA</span><span class="p">.</span><span class="n">inv</span><span class="p">(</span><span class="n">LA</span><span class="p">.</span><span class="n">inv</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1., 2.],
+       [3., 4.]])
+</code></pre></div></div>
+
+<h3 id="직교-행렬-orthogonal-matrices">직교 행렬 (Orthogonal Matrices)</h3>
+
+<p>$x^Ty=0$가 성립하는 두 벡터 $x, y \in \mathbb{R}^n$를 직교(orthogonal)라고 부른다. $|x|_2 = 1$인 벡터 $x\in \mathbb{R}^n$를 정규화(normalized)된 벡터라고 부른다.</p>
+
+<p>모든 열들이 서로 직교이고 정규화된 정방행렬 $U\in \mathbb{R}^{n\times n}$를 직교행렬이라고 부른다. 따라서 다음이 성립한다.</p>
+
+<ul>
+  <li>$U^TU = I$</li>
+  <li>$UU^T = I$ 이건 밑에서 증명</li>
+  <li>$U^{-1} = U^T$</li>
+  <li>$|Ux|_2 = |x|_2$ for any $x\in \mathbb{R}^{n}$</li>
+</ul>
+
+<h3 id="치역range-영공간nullspace">치역(Range), 영공간(Nullspace)</h3>
+
+<h4 id="벡터의-집합x_1x_2ldotsx_n에-대한-생성span">벡터의 집합(${x_1,x_2,\ldots,x_n}$)에 대한 생성(span)</h4>
+
+\[\mathrm{span}(\{x_1,x_2,\ldots,x_n\}) = \left\{ v : v = \sum_{i=1}^n\alpha_i x_i, \alpha_i \in \mathbb{R} \right\}\]
+
+<h4 id="행렬의-치역-range">행렬의 치역 (range)</h4>
+<p>행렬 $A\in \mathbb{R}^{m\times n}$의 치역 $\mathcal{R}(A)$는 A의 모든 열들에 대한 생성(span)이다.
+\(\mathcal{R}(A) = \{ v\in \mathbb{R}^m : v = Ax, x\in \mathbb{R}^n\}\)</p>
+
+<h4 id="영공간-nullspace">영공간 (nullspace)</h4>
+<p>행렬 $A\in \mathbb{R}^{m\times n}$의 영공간(nullspace) $\mathcal{N}(A)$는 $A$와 곱해졌을 때 0이 되는 모든 벡터들의 집합이다.
+\(\mathcal{N}(A) = \{x\in \mathbb{R}^n : Ax = 0\}\)</p>
+
+<p>중요한 성질:
+\(\{w : w = u + v, u\in \mathcal{R}(A^T), v \in \mathcal{N}(A)\} = \mathbb{R}^n ~\mathrm{and}~ \mathcal{R}(A^T) \cap \mathcal{N}(A) = \{0\}\)</p>
+
+<p>$\mathcal{R}(A^T)$와 $\mathcal{N}(A)$를 직교여공간(orthogonal complements)라고 부르고 $\mathcal{R}(A^T) = \mathcal{N}(A)^\perp$라고 표시한다.</p>
+
+<h4 id="투영-projection">투영 (projection)</h4>
+
+<p>$\mathcal{R}(A)$위로 벡터 $y\in \mathbb{R}^m$의 투영(projection)은</p>
+
+\[\mathrm{Proj}(y;A) = \mathop{\mathrm{argmin}}_{v\in \mathcal{R}(A)} \| v - y \|_2 = A(A^TA)^{-1}A^Ty\]
+
+<p>$U^TU = I$인 정방행렬 $U$는 $UU^T = I$임을 보이기</p>
+<ul>
+  <li>$U$의 치역은 전체공간이므로 임의의 $y$에 대해 $\mathrm{Proj}(y;U) = y$이어야 한다.</li>
+  <li>모든 $y$에 대해 $U(U^TU)^{-1}Uy = y$이어야 하므로 $U(U^TU)^{-1}U^T= I$이다.</li>
+  <li>따라서 $UU^T = I$이다.</li>
+</ul>
+
+<h3 id="행렬식-determinant">행렬식 (Determinant)</h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>정방행렬 $A\in \mathbb{R}^{n\times n}$의 행렬식(determinant) $</td>
+      <td>A</td>
+      <td>$ (또는 $\det A$)는 다음과 같이 계산할 수 있다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>$</td>
+      <td>A</td>
+      <td>= A_{1,1}\times</td>
+      <td>A^{(1,1)}</td>
+      <td>- A_{1,2}\times</td>
+      <td>A^{(1,2)}</td>
+      <td>+ A_{1,3}\times</td>
+      <td>A^{(1,3)}</td>
+      <td>- A_{1,4}\times</td>
+      <td>A^{(1,4)}</td>
+      <td>+ \cdots ± A_{1,n}\times</td>
+      <td>A^{(1,n)}</td>
+      <td>$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>where $A^{(i,j)}$ is the matrix $A$ without row $i$ and column $j$.</p>
+
+<p>$A = \begin{bmatrix}
+  1 &amp; 2 &amp; 3 <br />
+  4 &amp; 5 &amp; 6 <br />
+  7 &amp; 8 &amp; 0
+\end{bmatrix}$</p>
+
+<p>위의 식을 사용하면 아래와 같이 전개된다.</p>
+
+<p>\begin{align<em>}
+|A| = 1 \times \left | \begin{bmatrix} 5 &amp; 6 \ 8 &amp; 0 \end{bmatrix} \right |
+     - 2 \times \left | \begin{bmatrix} 4 &amp; 6 \ 7 &amp; 0 \end{bmatrix} \right |
+     + 3 \times \left | \begin{bmatrix} 4 &amp; 5 \ 7 &amp; 8 \end{bmatrix} \right |
+\end{align</em>}</p>
+
+<p>이제 위의 $2 \times 2$ 행렬들의 행렬식을 계산하면 된다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>$\left</td>
+      <td>\begin{bmatrix} 5 &amp; 6 \ 8 &amp; 0 \end{bmatrix} \right</td>
+      <td>= 5 \times 0 - 6 \times 8 = -48$</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>$\left</td>
+      <td>\begin{bmatrix} 4 &amp; 6 \ 7 &amp; 0 \end{bmatrix} \right</td>
+      <td>= 4 \times 0 - 6 \times 7 = -42$</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>$\left</td>
+      <td>\begin{bmatrix} 4 &amp; 5 \ 7 &amp; 8 \end{bmatrix} \right</td>
+      <td>= 4 \times 8 - 5 \times 7 = -3$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>최종결과는 다음과 같다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>$</td>
+      <td>A</td>
+      <td>= 1 \times (-48) - 2 \times (-42) + 3 \times (-3) = 27$</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">numpy.linalg</code> 모듈의 <code class="language-plaintext highlighter-rouge">det</code> 함수를 사용하여 행렬식을 쉽게 구할 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="p">])</span>
+<span class="n">LA</span><span class="p">.</span><span class="n">det</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>27.0
+</code></pre></div></div>
+
+<h4 id="행렬식의-기하학적-해석">행렬식의 기하학적 해석</h4>
+
+<p>행렬
+\begin{align<em>}
+\begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; a_n^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}
+\end{align</em>}
+이 주어졌을 때, 행 벡터들의 선형조합(단 조합에 쓰이는 계수들은 0에서 1사이)이 나타내는 $\mathbb{R}^n$ 공간 상의 모든 점들의 집합 $S$를 생각해보자. 엄밀하게 나타내자면
+\(S = \{v\in \mathbb{R}^n : v=\sum_{i=1}^n \alpha_i a_i ~\mathrm{where}~ 0\leq \alpha_i \leq 1, i=1,\ldots,n\}\)</p>
+
+<p><strong>중요한 사실은 행렬식의 절대값이 이 $S$의 부피(volume)과 일치한다는 것이다!</strong></p>
+
+<p>예를 들어, 행렬</p>
+
+<p>\(A = \begin{bmatrix}
+  1 &amp; 3 \\
+  3 &amp; 2
+\end{bmatrix}\)
+의 행벡터들은
+\(a_1 = \begin{bmatrix}
+  1\\
+  3
+\end{bmatrix}
+a_2 = \begin{bmatrix}
+  3\\
+  2
+\end{bmatrix}\)
+이다. $S$에 속한 점들을 2차원평면에 나타내면 다음과 같다.</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>평행사변형 $S$의 넓이는 7인데 이 값은 $A$의 행렬식 $</td>
+      <td>A</td>
+      <td>=-7$의 절대값과 일치함을 알 수 있다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>행렬식의 중요한 성질들</p>
+
+<ul>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$</td>
+          <td>I</td>
+          <td>=1$</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>$A$의 하나의 행에 $t\in \mathbb{R}$를 곱하면 행렬식은 $t|A|$
+\(\begin{align*}
+\left|~\begin{bmatrix}
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; ta_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}\\
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}\\
+   &amp; \vdots &amp;\\
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_n^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}~\right| = t|A|
+\end{align*}\)</li>
+  <li>$A$의 두 행들을 교환하면 행렬식은 $-|A|$
+\(\begin{align*}
+\left|~\begin{bmatrix}
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_2^T &amp; \rule[.5ex]{1.7ex}{0.5pt}\\
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}\\
+   &amp; \vdots &amp;\\
+   \rule[.5ex]{1.7ex}{0.5pt} &amp; a_n^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}~\right| = -|A|
+\end{align*}\)</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>For $A\in \mathbb{R}^{n\times n}$, $</td>
+          <td>A</td>
+          <td>=</td>
+          <td>A^T</td>
+          <td>$.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>For $A, B\in \mathbb{R}^{n\times n}$, $</td>
+          <td>AB</td>
+          <td>=</td>
+          <td>A</td>
+          <td> </td>
+          <td>B</td>
+          <td>$.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>For $A\in \mathbb{R}^{n\times n}$, $</td>
+          <td>A</td>
+          <td>=0$, if and only if A is singular (non-invertible). $A$가 singular이면 행들이 linearly dependent할 것인데, 이 경우 $S$의 형태는 부피가 0인 납작한 판의 형태가 될 것이다.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>For $A\in \mathbb{R}^{n\times n}$ and $A$ non-singular, $</td>
+          <td>A^{-1}</td>
+          <td>= 1/</td>
+          <td>A</td>
+          <td>$.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<h3 id="이차형식-quadratic-forms">이차형식 (Quadratic Forms)</h3>
+
+<p>정방행렬 $A\in \mathbb{R}^{n\times n}$와 벡터 $x\in \mathbb{R}^n$가 주어졌을 때, scalar값 $x^TAx$를 이차형식(quadratic form)이라고 부른다. 다음과 같이 표현할 수 있다.</p>
+
+\[x^TAx = \sum_{i=1}^n x_i(Ax)_i = \sum_{i=1}^n x_i \left(\sum_{j=1}^n A_{ij}x_j\right) = \sum_{i=1}^n\sum_{j=1}^n A_{ij}x_ix_j\]
+
+<p>다음이 성립함을 알 수 있다.</p>
+
+\[x^TAx = (x^TAx)^T = x^TA^Tx = x^T\left(\frac{1}{2}A + \frac{1}{2}A^T\right)x\]
+
+<p>따라서 이차형식에 나타나는 행렬을 대칭행렬로 가정하는 경우가 많다.</p>
+
+<ul>
+  <li>대칭행렬 $A\in \mathbb{S}^n$이 0이 아닌 모든 벡터 $x\in \mathbb{R}^n$에 대해서 $x^TAx \gt 0$을 만족할 때, 양의 정부호(positive definite)라고 부르고 $A\succ 0$(또는 단순히 $A \gt 0$)로 표시한다. 모든 양의 정부호 행렬들의 집합을 $\mathbb{S}_{++}^n$으로 표시한다.</li>
+  <li>대칭행렬 $A\in \mathbb{S}^n$이 0이 아닌 모든 벡터 $x\in \mathbb{R}^n$에 대해서 $x^TAx \ge 0$을 만족할 때, 양의 준정부호(positive sesmi-definite)라고 부르고 $A\succeq 0$(또는 단순히 $A \ge 0$)로 표시한다. 모든 양의 준정부호 행렬들의 집합을 $\mathbb{S}_{+}^n$으로 표시한다.</li>
+  <li>대칭행렬 $A\in \mathbb{S}^n$이 0이 아닌 모든 벡터 $x\in \mathbb{R}^n$에 대해서 $x^TAx \lt 0$을 만족할 때, 음의 정부호(negative definite)라고 부르고 $A\prec 0$(또는 단순히 $A \lt 0$)로 표시한다.</li>
+  <li>대칭행렬 $A\in \mathbb{S}^n$이 0이 아닌 모든 벡터 $x\in \mathbb{R}^n$에 대해서 $x^TAx \leq 0$을 만족할 때, 음의 준정부호(negative sesmi-definite)라고 부르고 $A\preceq 0$(또는 단순히 $A \leq 0$)로 표시한다.</li>
+  <li>대칭행렬 $A\in \mathbb{S}^n$가 양의 준정부호 또는 음의 준정부호도 아닌 경우, 부정부호(indefinite)라고 부른다. 이것은 $x_1^TAx_1 &gt; 0, x_2^TAx_2 &lt; 0$을 만족하는 $x_1, x_2\in \mathbb{R}^n$이 존재한다는 것을 의미한다.</li>
+</ul>
+
+<p>Positive definite 그리고 negative definite 행렬은 full rank이며 따라서 invertible이다.</p>
+
+<h4 id="gram-matrix">Gram matrix</h4>
+<p>임의의 행렬 $A\in \mathbb{R}^{m\times n}$이 주어졌을 때 행렬 $G = A^TA$를 Gram matrix라고 부르고 항상 positive semi-definite이다. 만약 $m\ge n$이고 $A$가 full rank이면, $G$는 positive definite이다.</p>
+
+<h3 id="고유값-eigenvalues-고유벡터-eigenvectors">고유값 (Eigenvalues), 고유벡터 (Eigenvectors)</h3>
+
+<p>정방행렬 $A\in \mathbb{R}^{n\times n}$이 주어졌을 때,
+\(Ax = \lambda x, x\neq 0\)
+을 만족하는 $\lambda \in \mathbb{C}$를 $A$의 고유값(eigenvalue) 그리고 $x\in \mathbb{C}^n$을 연관된 고유벡터(eigenvector)라고 부른다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">numpy.linalg</code> 모듈의 <code class="language-plaintext highlighter-rouge">eig</code> 함수를 사용하여 고유값과 고유벡터를 구할 수 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[1, 2, 3],
+       [4, 5, 6],
+       [7, 8, 0]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">LA</span><span class="p">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(array([12.12289378, -0.38838384, -5.73450994]),
+ array([[-0.29982463, -0.74706733, -0.27625411],
+        [-0.70747178,  0.65820192, -0.38842554],
+        [-0.63999131, -0.09306254,  0.87909571]]))
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eigenvectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([-0.29982463, -0.70747178, -0.63999131])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">eigenvectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([-3.63474211, -8.57660525, -7.75854663])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eigenvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">eigenvectors</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([-3.63474211, -8.57660525, -7.75854663])
+</code></pre></div></div>
+
+<h4 id="고유값-고유벡터의-성질들">고유값, 고유벡터의 성질들</h4>
+
+<ul>
+  <li>$\mathrm{tr}A = \sum_{i=1}^n \lambda_i$</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$</td>
+          <td>A</td>
+          <td>= \prod_{i=1}^n \lambda_i$</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>$\mathrm{rank}(A)$는 0이 아닌 $A$의 고유값의 개수와 같다.</li>
+  <li>$A$가 non-singular일 때, $1/\lambda_i$는 $A^{-1}$의 고유값이다(고유벡터 $x_i$와 연관된). 즉, $A^{-1}x_i = (1/\lambda_i)x_i$이다.</li>
+  <li>대각행렬 $D = \mathrm{diag}(d_1,\ldots,d_n)$의 고유값들은 $d_1,\ldots,d_n$이다.</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span>
+    <span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">LA</span><span class="p">.</span><span class="n">eig</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+<span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(array([ 2.12819293e+01, -2.81929326e-01,  9.68995205e-16]),
+ array([[ 0.17485683,  0.85386809, -0.57735027],
+        [ 0.50887555,  0.18337571, -0.57735027],
+        [ 0.84289427, -0.48711666,  0.57735027]]))
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">LA</span><span class="p">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2
+</code></pre></div></div>
+
+<p>모든 고유값과 고유벡터들을 다음과 같이 하나의 식으로 나타낼 수 있다.</p>
+
+\[AX = X\Lambda\]
+
+\[X\in \mathbb{R}^{n\times n} = 
+\begin{bmatrix}
+    \vert &amp; \vert &amp; &amp; \vert\\
+    x_1 &amp; x_2 &amp; \cdots &amp; x_n\\
+    \vert &amp; \vert &amp; &amp; \vert
+\end{bmatrix},~
+\Lambda = \mathrm{diag}(\lambda_1,\ldots,\lambda_n)\]
+
+<h3 id="고유값-고유벡터와-대칭행렬">고유값, 고유벡터와 대칭행렬</h3>
+
+<p>대칭행렬 $A\in \mathbb{S}^n$가 가지는 놀라운 성질들</p>
+<ul>
+  <li>$A$의 모든 고유값들은 실수값(real)이다.</li>
+  <li>$A$의 고유벡터들은 orthonomal(orthogonal, normalized)이다.</li>
+</ul>
+
+<p>따라서 임의의 대칭행렬 $A$를 $A=U\Lambda U^T$($U$는 위의 $X$처럼 $A$의 고유벡터들로 이뤄진 행렬)로 나타낼 수 있다.</p>
+
+<p>$A\in \mathbb{S}^n = U\Lambda U^T$라고 하자. 그러면
+\(x^TAx = x^T U\Lambda U^T x = y^T\Lambda y = \sum_{i=1}^n \lambda_i y_i^2\)
+where $y=U^Tx$</p>
+
+<p>$y_i^2$가 양수이므로 위 식의 부호는 $\lambda_i$ 값들에 의해서 결정된다. 만약 모든 $\lambda_i &gt; 0$이면, $A$는 positive definite이고 모든 $\lambda_i \ge 0$이면, $A$는 positive seimi-definite이다.</p>
+
+<h2 id="행렬미분-matrix-calculus">행렬미분 (Matrix Calculus)</h2>
+
+<h3 id="the-gradient">The Gradient</h3>
+
+<p>행렬 $A\in \mathbb{R}^{m\times n}$를 입력으로 받아서 실수값을 돌려주는 함수 $f : \mathbb{R}^{m\times n} \to \mathbb{R}$이 있다고 하자. $f$의 gradient는 다음과 같이 정의된다.</p>
+
+\[\nabla_Af(A)\in \mathbb{R}^{m\times n} = \begin{bmatrix}
+    \frac{\partial f(A)}{\partial A_{11}} &amp; \frac{\partial f(A)}{\partial A_{12}} &amp; \cdots &amp; \frac{\partial f(A)}{\partial A_{1n}}\\
+    \frac{\partial f(A)}{\partial A_{21}} &amp; \frac{\partial f(A)}{\partial A_{22}} &amp; \cdots &amp; \frac{\partial f(A)}{\partial A_{2n}}\\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+    \frac{\partial f(A)}{\partial A_{m1}} &amp; \frac{\partial f(A)}{\partial A_{m2}} &amp; \cdots &amp; \frac{\partial f(A)}{\partial A_{mn}}
+\end{bmatrix}\]
+
+\[(\nabla_Af(A))_{ij} = \frac{\partial f(A)}{\partial A_{ij}}\]
+
+<p>특별히 $A$가 벡터 $x\in \mathbb{R}^n$인 경우는,
+\(\nabla_x f(x) = 
+\begin{bmatrix}
+\frac{\partial f(x)}{\partial x_1}\\
+\frac{\partial f(x)}{\partial x_2}\\
+\vdots\\
+\frac{\partial f(x)}{\partial x_n}
+\end{bmatrix}\)</p>
+
+<h3 id="the-hessian">The Hessian</h3>
+
+\[\nabla_x^2 f(x)\in \mathbb{R}^{n\times n} = \begin{bmatrix}
+    \frac{\partial^2 f(x)}{\partial x_1^2} &amp; \frac{\partial^2 f(x)}{\partial x_1x_2} &amp; \cdots &amp; \frac{\partial^2 f(x)}{\partial x_1x_n}\\
+    \frac{\partial^2 f(x)}{\partial x_2x_1} &amp; \frac{\partial^2 f(x)}{\partial x_2^2} &amp; \cdots &amp; \frac{\partial^2 f(x)}{\partial x_2x_n}\\
+    \vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+    \frac{\partial^2 f(x)}{\partial x_nx_1} &amp; \frac{\partial^2 f(x)}{\partial x_nx_2} &amp; \cdots &amp; \frac{\partial^2 f(x)}{\partial x_n^2}
+\end{bmatrix}\]
+
+\[(\nabla_x^2 f(x))_{ij} = \frac{\partial^2 f(x)}{\partial x_i \partial x_j}\]
+
+<p>중요한 공식들</p>
+
+<p>$x, b\in \mathbb{R}^n$, $A\in \mathbb{S}^n$일 때 다음이 성립한다.</p>
+<ul>
+  <li>$\nabla_x b^Tx = b$</li>
+  <li>$\nabla_x x^TAx = 2Ax$</li>
+  <li>$\nabla_x^2 x^TAx = 2A$</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>$\nabla_A \log</td>
+          <td>A</td>
+          <td>= A^{-1}$ ($A\in\mathbb{S}_{++}^n$인 경우)</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ul>
+
+<h2 id="적용예제들">적용예제들</h2>
+
+<h3 id="최소제곱법-least-squares">최소제곱법 (Least Squares)</h3>
+
+<p>행렬 $A\in \mathbb{R}^{m\times n}$($A$는 full rank로 가정)와 벡터 $b\in \mathbb{R}^n$가 주어졌고 $b\notin \mathcal{R}(A)$인 경우, $Ax = b$를 만족하는 벡터 $x\in \mathbb{R}^n$을 찾을 수 없다. 대신 $Ax$가 $b$와 최대한 가까워지는 $x$, 즉</p>
+
+<p>\(\| Ax - b\|_2^2\)
+을 최소화시키는 $x$를 찾는 문제를 고려할 수 있다. $|x|_2^2 = x^Tx$이므로</p>
+
+<p>\begin{align<em>}
+| Ax - b|_2^2 &amp;= (Ax - b)^T(Ax - b)<br />
+&amp;= x^TA^TAx - 2b^TAx + b^Tb
+\end{align</em>}</p>
+
+<p>\begin{align<em>}
+\nabla_x (x^TA^TAx - 2b^TAx + b^Tb) &amp;= \nabla_x x^TA^TAx - \nabla_x 2b^TAx + \nabla_x b^Tb<br />
+&amp;= 2A^TAx - 2A^Tb
+\end{align</em>}</p>
+
+<p>0으로 놓고 $x$에 관해 풀면
+\(x = (A^TA)^{-1}A^Tb\)</p>
+
+<h3 id="고유값과-최적화문제-eigenvalues-as-optimization">고유값과 최적화문제 (Eigenvalues as Optimization)</h3>
+
+<p>다음 형태의 최적화문제를 행렬미분을 사용해 풀면 고유값이 최적해가 되는 것을 보일 수 있다.</p>
+
+\[\max_{x\in \mathbb{R}^n} x^TAx \mathrm{~~~~subject~to~} \|x\|_2^2=1\]
+
+<p>제약조건이 있는 최소화문제는 Lagrangian을 사용해서 해결</p>
+
+\[\mathcal{L}(x, \lambda) = x^TAx - \lambda x^Tx\]
+
+<p>다음을 만족해야 함.</p>
+
+\[\nabla_x \mathcal{L}(x, \lambda) = \nabla_x ( x^TAx - \lambda x^Tx) = 2A^Tx - 2\lambda x = 0\]
+
+<p>따라서 최적해 $x$는 $Ax = \lambda x$를 만족해야 하므로 $A$의 고유벡터만이 최적해가 될 수 있다. 고유벡터 $u_i$는</p>
+
+<p>\(u_i^TAu_i = \sum_{j=1}^n \lambda_j y_j^2 = \lambda_i\)
+을 만족하므로($y=U^Tu_i$), 최적해는 가장 큰 고유값에 해당하는 고유벡터이다.</p>
+
+<h2 id="autoencoder와-principal-components-analysis-pca">Autoencoder와 Principal Components Analysis (PCA)</h2>
+
+<p>Autoencoder의 응용예제</p>
+<ul>
+  <li>Dimensionality Reduction</li>
+  <li>Image Compression</li>
+  <li>Image Denoising</li>
+  <li>Feature Extraction</li>
+  <li>Image generation</li>
+  <li>Sequence to sequence prediction</li>
+  <li>Recommendation system</li>
+</ul>
+
+<p>PCA를 가장 간단한 형태의 autoencoder로 생각할 수 있다. 이 관점으로 PCA를 유도할텐데, 이제까지 우리가 배운 것만으로 가능하다!</p>
+
+<p>$m$개의 점들 ${x_1,\ldots,x_m}$, $x_i\in \mathbb{R}^n$이 주어졌다고 하자. 각각의 점들을 $l$차원의 공간으로 투영시키는 함수 $f(x) = c\in \mathbb{R}^l$와 이것을 다시 $n$차원의 공간으로 회복하는 함수 $g(c)$를 생각해보자. $f$를 인코딩 함수, $g$를 디코딩 함수라고 부르며</p>
+
+<p>\(x \approx g(f(x))\)
+가 되기를 원한다.</p>
+
+<h4 id="디코딩-함수">디코딩 함수</h4>
+
+<p>함수 $g$는 간단한 선형함수로 정의하기로 한다.</p>
+
+\[g(c) = Dc, ~~D\in \mathbb{R}^{n\times l}\]
+
+<p>여기서 $D$는 열들이 정규화되어 있고 서로 직교하는 경우로 한정한다.</p>
+
+<h4 id="인코딩-함수">인코딩 함수</h4>
+
+<p>디코딩 함수가 위와 같이 주어졌을 때, 어떤 함수가 최적의 인코딩 함수일까?</p>
+
+\[f(x)^* = \mathop{\mathrm{argmin}}_{f(x)} \int \| x - g(f(x))\|_2^2 dx\]
+
+<p>변분법(calculus of variations)의 방법(Euler-Lagrange 방정식)으로 풀 수 있다. 방정식</p>
+
+<p>\(\nabla_f \| x - g(f(x))\|_2^2 = 0\)
+을 $f$에 관해 풀면 된다. $f(x)=c$로 두고 두면</p>
+
+<p>\begin{align<em>}
+| x - g(c)|_2^2 &amp;= (x-g(c))^T(x-g(c))<br />
+&amp;= x^Tx - x^Tg(c) - g(c)^Tx + g(c)^Tg(c)<br />
+&amp;= x^Tx - 2x^Tg(c) + g(c)^Tg(c)<br />
+&amp;= x^Tx - 2x^TDc + c^TD^TDc<br />
+&amp;= x^Tx - 2x^TDc + c^TI_lc<br />
+&amp;= x^Tx - 2x^TDc + c^Tc<br />
+\end{align</em>}</p>
+
+\[\nabla_c (x^Tx - 2x^TDc + c^Tc) = 0\]
+
+\[-2D^Tx + 2c = 0\]
+
+\[c = D^Tx\]
+
+<p>따라서 최적의 인코더 함수는
+\(f(x) = D^Tx\)</p>
+
+<h4 id="최적의-d-찾기">최적의 $D$ 찾기</h4>
+
+<p>입력값 $x$와 출력값 $g(f(x))$ 사이의 거리가 최소화되는 $D$를 찾는다.</p>
+
+<p>\begin{align<em>}
+X = \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; x_1^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; x_m^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix},~~
+R = \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; g(f(x_1))^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; g(f(x_m))^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}
+\end{align</em>}</p>
+
+<p>에러행렬 $E$를 다음과 정의할 수 있다.</p>
+
+\[E = X - R\]
+
+<p>우리가 찾는 최적의 $D$는 다음과 같다.</p>
+
+\[D^* = \mathop{\mathrm{argmin}}_{D} \|E\|_F^2~~~\mathrm{subject~to~} D^TD=I_l\]
+
+<p>$R$을 다시 정리해보자.</p>
+
+<p>\begin{align<em>}
+R &amp;= \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; g(f(x_1))^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; g(f(x_m))^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}<br />
+&amp;= \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; \left(DD^Tx_1 \right)^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; \left(DD^Tx_m \right)^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}<br />
+&amp;= \begin{bmatrix}
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; x_1^TDD^T &amp; \rule[.5ex]{1.7ex}{0.5pt}<br />
+     &amp; \vdots &amp;<br />
+     \rule[.5ex]{1.7ex}{0.5pt} &amp; x_m^TDD^T &amp; \rule[.5ex]{1.7ex}{0.5pt}
+\end{bmatrix}<br />
+&amp;= XDD^T
+\end{align</em>}</p>
+
+<p>\begin{align<em>}
+\mathop{\mathrm{argmin}}_{D} |E|_F^2 &amp;= \mathop{\mathrm{argmin}}_{D} | X - XDD^T|_F^2<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} \mathrm{tr}\left( \left(X - XDD^T\right)^T\left(X - XDD^T\right) \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} \mathrm{tr} \left( X^TX - X^TXDD^T - DD^TX^TX + DD^TX^TXDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} \mathrm{tr} \left( X^TX \right) - \mathrm{tr} \left( X^TXDD^T \right) - \mathrm{tr} \left( DD^TX^TX \right) + \mathrm{tr} \left( DD^TX^TXDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} - \mathrm{tr} \left( X^TXDD^T \right) - \mathrm{tr} \left( DD^TX^TX \right) + \mathrm{tr} \left( DD^TX^TXDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} - 2\mathrm{tr} \left( X^TXDD^T \right) + \mathrm{tr} \left( DD^TX^TXDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} - 2\mathrm{tr} \left( X^TXDD^T \right) + \mathrm{tr} \left( X^TXDD^TDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} - 2\mathrm{tr} \left( X^TXDD^T \right) + \mathrm{tr} \left( X^TXDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} - \mathrm{tr} \left( X^TXDD^T \right)<br />
+&amp;= \mathop{\mathrm{argmin}}_{D} - \mathrm{tr} \left( D^TX^TXD \right)<br />
+&amp;= \mathop{\mathrm{argmax}}_{D} \mathrm{tr} \left( D^TX^TXD\right)<br />
+&amp;= \mathop{\mathrm{argmax}}_{d_1,\ldots,d_l} \sum_{i=1}^l d_i^TX^TXd_i
+\end{align</em>}</p>
+
+<p>$d_i^Td_i = 1$이므로 벡터들 $d_1,\ldots,d_l$이 $X^TX$의 가장 큰 $l$개의 고유값에 해당하는 고유벡터들일 때 $\sum_{i=1}^l d_i^TX^TXd_i$이 최대화된다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+</code></pre></div></div>
+:ET

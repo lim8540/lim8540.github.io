@@ -2,15 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_1</loc>
-<lastmod>2021-01-06T20:08:50+09:00</lastmod>
+<lastmod>2021-01-08T22:49:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series/demo_series_post_2</loc>
-<lastmod>2021-01-06T20:08:50+09:00</lastmod>
+<lastmod>2021-01-08T22:49:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo_series_2/demo_series_2_post_1</loc>
-<lastmod>2021-01-06T20:08:50+09:00</lastmod>
+<lastmod>2021-01-08T22:49:00+09:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/demo/Blogging</loc>
@@ -189,6 +189,14 @@
 <lastmod>2021-01-06T00:00:00+09:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/programmers/Linear-algebra</loc>
+<lastmod>2021-01-07T00:00:00+09:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/programmers/Probability</loc>
+<lastmod>2021-01-08T00:00:00+09:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/series/</loc>
 </url>
 <url>
@@ -223,5 +231,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/page7/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/image/ML_E2E_files/ML_Probability_1.pdf</loc>
+<lastmod>2021-01-08T22:25:01+09:00</lastmod>
 </url>
 </urlset>
