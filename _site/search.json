@@ -1,6 +1,15 @@
 [
   
     {
+      "title"    : "Pytorch and tensorflow tutorial",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week7_day3, ml_basics, Deep Learning, pytorch, tensorflow",
+      "url"      : "/programmers/Pytorch-and-Tensorflow-Tutorial",
+      "date"     : "2021-01-20 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "Ml Linear_models_practice(mnist)",
       "category" : "programmers",
       "tags"     : "K-digital training, week6_day5, ml_basics, MNIST",

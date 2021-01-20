@@ -1,0 +1,542 @@
+I"��<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="n">torch</span><span class="p">.</span><span class="n">__version__</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'1.7.0+cu101'
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># (5,3)행렬 생성
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[8.7746e-36, 0.0000e+00, 3.3631e-44],
+        [0.0000e+00,        nan, 0.0000e+00],
+        [1.1578e+27, 1.1362e+30, 7.1547e+22],
+        [4.5828e+30, 1.2121e+04, 7.1846e+22],
+        [9.2198e-39, 7.0374e+22, 0.0000e+00]])
+</code></pre></div></div>
+
+<p>무작위로 초기화된 행렬을 생성합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># randn은 표준 정규분포에서 값을 가져옴
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1"># 0~1까지의 값을 랜덤으로 생성해서 가져옴
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[ 4.5447e-01,  1.3331e+00,  1.2781e+00,  5.4159e-01],
+        [-4.5623e-01, -3.2100e-01, -2.8804e-01, -7.6402e-01],
+        [-4.0236e-01, -7.2240e-01,  1.0715e+00, -7.4293e-01],
+        [-1.0594e-03,  8.5973e-03, -5.1800e-01, -8.8304e-02],
+        [ 2.1843e+00, -1.1041e+00, -1.8512e-01, -1.3299e-01]])
+tensor([[0.9992, 0.5313, 0.0124],
+        [0.8940, 0.8677, 0.4543],
+        [0.2914, 0.9133, 0.0473],
+        [0.2199, 0.3526, 0.0556],
+        [0.0642, 0.6516, 0.2317]])
+</code></pre></div></div>
+
+<p>dtype이 long이고 0으로 채워진 행렬을 생성합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]])
+</code></pre></div></div>
+
+<p>dtype이 long이고 1으로 채워진 행렬을 생성합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">long</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1]])
+</code></pre></div></div>
+
+<p>데이터로부터 tensor를 직접 생성합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">5.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([5.5000, 3.0000])
+</code></pre></div></div>
+
+<p>또는 존재하는 tensor를 바탕으로 tensor를 만듭니다. 이 메소드(method)들은 사용자로부터 제공된 새로운 값이 없는 한, 입력 tensor의 속성들(ex. dtype)을 재사용합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">new_ones</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">double</span><span class="p">)</span>  <span class="c1"># new_* methods take in sizes
+</span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn_like</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># override dtype!
+</span><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># result has the same size
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]], dtype=torch.float64)
+tensor([[-0.8074,  0.7985, -1.1509],
+        [ 0.3417, -0.2309, -0.5055],
+        [-0.3476,  0.4446, -0.5655],
+        [ 1.2507, -2.4757,  0.5277],
+        [ 0.1569, -1.8602,  1.3673]])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>torch.Size([5, 3])
+torch.Size([5, 3])
+</code></pre></div></div>
+
+<p>덧셈 : 문법1</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[-0.8074,  0.7985, -1.1509],
+        [ 0.3417, -0.2309, -0.5055],
+        [-0.3476,  0.4446, -0.5655],
+        [ 1.2507, -2.4757,  0.5277],
+        [ 0.1569, -1.8602,  1.3673]])
+tensor([[0.5883, 0.6303, 0.2083],
+        [0.2199, 0.6586, 0.1263],
+        [0.4853, 0.2840, 0.8761],
+        [0.9962, 0.2061, 0.2271],
+        [0.2546, 0.6492, 0.2455]])
+tensor([[-0.2192,  1.4288, -0.9426],
+        [ 0.5616,  0.4277, -0.3792],
+        [ 0.1377,  0.7286,  0.3106],
+        [ 2.2469, -2.2696,  0.7548],
+        [ 0.4115, -1.2110,  1.6128]])
+</code></pre></div></div>
+
+<p>덧셈 : 문법2</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[-0.2192,  1.4288, -0.9426],
+        [ 0.5616,  0.4277, -0.3792],
+        [ 0.1377,  0.7286,  0.3106],
+        [ 2.2469, -2.2696,  0.7548],
+        [ 0.4115, -1.2110,  1.6128]])
+</code></pre></div></div>
+
+<p>덧셈: 결과 tensor를 인자로 제공</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">result</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="n">torch</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="n">result</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[ 1.5020e-35,  0.0000e+00,  4.4842e-44],
+        [ 0.0000e+00,         nan,  6.4460e-44],
+        [ 1.0948e+21,  9.2868e-04,  1.3556e-19],
+        [ 9.8864e-33,  1.0008e+01,  2.5591e-41],
+        [ 4.1154e-01, -1.2110e+00,  1.6128e+00]])
+tensor([[-0.2192,  1.4288, -0.9426],
+        [ 0.5616,  0.4277, -0.3792],
+        [ 0.1377,  0.7286,  0.3106],
+        [ 2.2469, -2.2696,  0.7548],
+        [ 0.4115, -1.2110,  1.6128]])
+</code></pre></div></div>
+
+<p>덧셈: 바뀌지기(in-place)방식</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># adds x to y
+</span><span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span><span class="p">.</span><span class="n">add_</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[0.5883, 0.6303, 0.2083],
+        [0.2199, 0.6586, 0.1263],
+        [0.4853, 0.2840, 0.8761],
+        [0.9962, 0.2061, 0.2271],
+        [0.2546, 0.6492, 0.2455]])
+tensor([[-0.2192,  1.4288, -0.9426],
+        [ 0.5616,  0.4277, -0.3792],
+        [ 0.1377,  0.7286,  0.3106],
+        [ 2.2469, -2.2696,  0.7548],
+        [ 0.4115, -1.2110,  1.6128]])
+</code></pre></div></div>
+
+<p>Note
+바꿔치기(in-place)방식으로 tensor의 값을 변경하는 연산은 <em>를 접미사로 갖습니다. 
+예: x.copy</em>(y), x.t_()는 x를 변경합니다.
+Numpy스러운 인덱싱 표기 방법을 사용할 수도 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[-0.8074,  0.7985, -1.1509],
+        [ 0.3417, -0.2309, -0.5055],
+        [-0.3476,  0.4446, -0.5655],
+        [ 1.2507, -2.4757,  0.5277],
+        [ 0.1569, -1.8602,  1.3673]])
+tensor([ 0.7985, -0.2309,  0.4446, -2.4757, -1.8602])
+</code></pre></div></div>
+
+<p>크기 변경: tensor의 크기(size)나 모양(shape)을 변경하고 싶다면 torch.view를 사용합니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># 기존의 x를 크기 16의 벡터로 바꾼다.
+</span><span class="n">z</span> <span class="o">=</span> <span class="n">y</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># -1을 지정해주면 남는 수로 알아서 지정해준다
+</span><span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">z</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[-1.3493, -0.0660,  1.6294, -0.0537],
+        [ 0.0798, -1.3702, -1.6111, -0.0604],
+        [-0.0539,  1.5659,  0.4382,  0.1584],
+        [-0.5603, -0.7932, -0.1485, -0.3525]])
+tensor([-1.3493, -0.0660,  1.6294, -0.0537,  0.0798, -1.3702, -1.6111, -0.0604,
+        -0.0539,  1.5659,  0.4382,  0.1584, -0.5603, -0.7932, -0.1485, -0.3525])
+tensor([[-1.3493, -0.0660],
+        [ 1.6294, -0.0537],
+        [ 0.0798, -1.3702],
+        [-1.6111, -0.0604],
+        [-0.0539,  1.5659],
+        [ 0.4382,  0.1584],
+        [-0.5603, -0.7932],
+        [-0.1485, -0.3525]])
+torch.Size([16]) torch.Size([8, 2])
+</code></pre></div></div>
+
+<p>만약 tensor에 하나의 값만 존재한다면, .item()을 사용하면 숫자 값을 얻을 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">item</span><span class="p">()))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">item</span><span class="p">())</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([1.2073])
+&lt;class 'torch.Tensor'&gt; &lt;class 'float'&gt;
+1.2072875499725342
+</code></pre></div></div>
+
+<h3 id="numpy-변환bridge">Numpy 변환(Bridge)</h3>
+<p>Torch Tensor를 Numpy 배열(array)로 변환하거나, 그 반대로 하는 것은 매우 쉽습니다.
+(CPU 상의) Torch Tensor와 Numpy배열은 저장 공간을 공유하기 때문에, 하나를 변경하면 다른 하나도 변경됩니다.</p>
+<ul>
+  <li>Torch Tensor를 Numpy배열로 변환하기</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([1., 1., 1., 1., 1.])
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1. 1. 1. 1. 1.]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span><span class="p">.</span><span class="n">add_</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([2., 2., 2., 2., 2.])
+[2. 2. 2. 2. 2.]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="n">temp_numpy</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="n">a</span><span class="p">.</span><span class="n">add_</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">temp_numpy</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([3., 3., 3., 3., 3.])
+[2. 2. 2. 2. 2.]
+</code></pre></div></div>
+
+<ul>
+  <li>Numpy 배열을 Torch Tensor로 변환하기</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="n">np</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1. 1. 1. 1. 1.]
+[2. 2. 2. 2. 2.]
+tensor([2., 2., 2., 2., 2.], dtype=torch.float64)
+</code></pre></div></div>
+
+<h3 id="cuda-tensor">CUDA Tensor</h3>
+<p>.to 메소드를 사용하여 Tensor를 어떠한 장치로도 옮길 수 있습니다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">torch</span><span class="p">.</span><span class="n">cuda</span><span class="p">.</span><span class="n">is_available</span><span class="p">():</span>
+  <span class="n">device</span> <span class="o">=</span> <span class="s">"cuda:0"</span> <span class="c1"># torch.device("cuda:0")  # CUDA 장치 객채(device object)로
+</span>  <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">device</span> <span class="o">=</span> <span class="n">device</span><span class="p">)</span>     <span class="c1"># GPU상에 직접적으로 tensor를 생성하거나
+</span>  <span class="k">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>                            <span class="c1"># ``.to("cuda")``를 사용하면 됩니다.
+</span>  <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">z</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="s">"cpu"</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">double</span><span class="p">))</span>            <span class="c1">#``.to``는 dtype도 함께 변경합니다!
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tensor([[1., 1., 1., 1.],
+        [1., 1., 1., 1.],
+        [1., 1., 1., 1.],
+        [1., 1., 1., 1.]], device='cuda:0')
+tensor([[1.0848, 1.4457, 1.7807, 1.8750],
+        [1.7479, 1.5151, 1.8975, 1.7800],
+        [1.4996, 1.4367, 1.9204, 1.5543],
+        [1.7803, 1.2702, 1.1891, 1.8557]], device='cuda:0')
+tensor([[1.0848, 1.4457, 1.7807, 1.8750],
+        [1.7479, 1.5151, 1.8975, 1.7800],
+        [1.4996, 1.4367, 1.9204, 1.5543],
+        [1.7803, 1.2702, 1.1891, 1.8557]], dtype=torch.float64)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 간단하게 다음의 방법으로도 가능
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">cuda</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="k">print</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">__version__</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2.4.0
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 모양이 [1, 2, 3]이고 값은 0으로 채워진 3차원 텐서가 변수로 생성
+</span><span class="n">my_variable</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="n">my_variable</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Variable 'Variable:0' shape=(1, 2, 3) dtype=float32, numpy=
+array([[[0., 0., 0.],
+        [0., 0., 0.]]], dtype=float32)&gt;
+</code></pre></div></div>
+
+<h3 id="변수의-사용">변수의 사용</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 텐서플로 그래프에서 tf.Variable의 값을 사용하려면 이를 단순히 tf.Tensor로 취급하면 됨
+</span><span class="n">v</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># w는 v값 기준으로 계산되는 tf.Tensor입니다. 변수가 수식에 사용될 때, 변수는 자동적으로 tf.Tensor로 변환되어 값을 표현합니다.
+</span><span class="k">print</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Variable 'Variable:0' shape=() dtype=float32, numpy=0.0&gt;
+tf.Tensor(1.0, shape=(), dtype=float32)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 값을 변수에 할당하려면 assign, assign_add 메소드와 tf.Variable 클래스에 있는 친구들(friends)fmf tkdyd
+</span><span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">a</span><span class="p">.</span><span class="n">assign_add</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">a</span><span class="p">.</span><span class="n">read_value</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Tensor: shape=(), dtype=float32, numpy=1.0&gt;
+</code></pre></div></div>
+
+<h3 id="tftensor-객체의-랭ㅇ크는-그-차원의-수">tf.Tensor 객체의 랭ㅇ크는 그 차원의 수</h3>
+
+<h4 id="랭크-0">랭크 0</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mammal</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="s">"코끼리"</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">string</span><span class="p">)</span>
+<span class="n">ignition</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">451</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">int16</span><span class="p">)</span>
+<span class="n">floating</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="mf">3.141592</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">float64</span><span class="p">)</span>
+<span class="n">its_complicated</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">(</span><span class="mf">12.3</span> <span class="o">-</span> <span class="mf">4.85j</span><span class="p">,</span> <span class="n">tf</span><span class="p">.</span><span class="n">complex64</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">mammal</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ignition</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">floating</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">its_complicated</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Variable 'Variable:0' shape=() dtype=string, numpy=b'\xec\xbd\x94\xeb\x81\xbc\xeb\xa6\xac'&gt;
+&lt;tf.Variable 'Variable:0' shape=() dtype=int32, numpy=451&gt;
+&lt;tf.Variable 'Variable:0' shape=() dtype=float32, numpy=3.141592&gt;
+&lt;tf.Variable 'Variable:0' shape=() dtype=complex128, numpy=(12.3-4.85j)&gt;
+</code></pre></div></div>
+
+<h4 id="랭크-1벡터">랭크 1(벡터)</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mystr</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([</span><span class="s">"안녕하세요"</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">string</span><span class="p">)</span>
+<span class="n">cool_numbers</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([</span><span class="mf">3.14159</span><span class="p">,</span> <span class="mf">2.71828</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">first_primes</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="n">its_very_complicated</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([</span><span class="mf">12.3</span> <span class="o">-</span> <span class="mf">4.85j</span><span class="p">,</span> <span class="mf">7.5</span> <span class="o">-</span> <span class="mf">6.23j</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">complex64</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">mystr</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cool_numbers</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">first_primes</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">its_very_complicated</span><span class="p">)</span>
+<span class="n">tf</span><span class="p">.</span><span class="n">rank</span><span class="p">(</span><span class="n">mystr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Variable 'Variable:0' shape=(1,) dtype=string, numpy=
+array([b'\xec\x95\x88\xeb\x85\x95\xed\x95\x98\xec\x84\xb8\xec\x9a\x94'],
+      dtype=object)&gt;
+&lt;tf.Variable 'Variable:0' shape=(2,) dtype=float32, numpy=array([3.14159, 2.71828], dtype=float32)&gt;
+&lt;tf.Variable 'Variable:0' shape=(5,) dtype=int32, numpy=array([ 2,  3,  5,  7, 11], dtype=int32)&gt;
+&lt;tf.Variable 'Variable:0' shape=(2,) dtype=complex128, numpy=array([12.3-4.85j,  7.5-6.23j])&gt;
+
+
+
+
+
+&lt;tf.Tensor: shape=(), dtype=int32, numpy=1&gt;
+</code></pre></div></div>
+
+<h4 id="고차원-랭크랭크2-랭크2-tftensor-객체는-최소-한-개-이상의-열과-행으로-구성됩니다">고차원 랭크(랭크2, 랭크2 tf.Tensor 객체는 최소 한 개 이상의 열과 행으로 구성됩니다)</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mymat</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([[</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">11</span><span class="p">]],</span> <span class="n">tf</span><span class="p">.</span><span class="n">int16</span><span class="p">)</span>
+<span class="n">myxor</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([[</span><span class="bp">False</span><span class="p">,</span> <span class="bp">True</span><span class="p">],</span> <span class="p">[</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">]],</span> <span class="n">tf</span><span class="p">.</span><span class="nb">bool</span><span class="p">)</span>
+
+<span class="c1"># tf.rank : 객제의 랭ㅇ크 구하기
+</span><span class="n">rank_of_myxor</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">rank</span><span class="p">(</span><span class="n">myxor</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mymat</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rank_of_myxor</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Variable 'Variable:0' shape=(2, 1) dtype=int32, numpy=
+array([[ 7],
+       [11]], dtype=int32)&gt;
+tf.Tensor(2, shape=(), dtype=int32)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_image</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">299</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>  <span class="c1"># 배치 x 높이 x 너비 x 색상
+</span></code></pre></div></div>
+
+<h3 id="tftensor-객체-랭크-구하기">tf.Tensor 객체 랭크 구하기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">r</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">rank</span><span class="p">(</span><span class="n">my_image</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tf.Tensor(4, shape=(), dtype=int32)
+</code></pre></div></div>
+
+<h3 id="tftensor-원소-참조하기">tf.Tensor 원소 참조하기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_vector</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">tf</span><span class="p">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">rank</span><span class="p">(</span><span class="n">my_vector</span><span class="p">))</span>
+
+<span class="n">my_scalar</span> <span class="o">=</span> <span class="n">my_vector</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_scalar</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tf.Tensor(1, shape=(), dtype=int32)
+tf.Tensor(3, shape=(), dtype=int32)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">squarish_squares</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Variable</span><span class="p">([[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">25</span><span class="p">]],</span> <span class="n">tf</span><span class="p">.</span><span class="n">int32</span><span class="p">)</span>
+<span class="n">my_row_vector</span> <span class="o">=</span> <span class="n">squarish_squares</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">my_column_vector</span> <span class="o">=</span> <span class="n">squarish_squares</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">squarish_squares</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_row_vector</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_column_vector</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Variable 'Variable:0' shape=(2, 2) dtype=int32, numpy=
+array([[ 4,  9],
+       [16, 25]], dtype=int32)&gt;
+tf.Tensor([16 25], shape=(2,), dtype=int32)
+tf.Tensor([ 9 25], shape=(2,), dtype=int32)
+</code></pre></div></div>
+
+<h3 id="tftensor-객체-형태-얻기">tf.Tensor 객체 형태 얻기</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">zeros</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">squarish_squares</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1">#squarish_squares.shape으로 새로운 텐서 생성
+</span><span class="n">zeros</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Tensor: shape=(2, 2), dtype=float32, numpy=
+array([[0., 0.],
+       [0., 0.]], dtype=float32)&gt;
+</code></pre></div></div>
+
+<h3 id="tftensor-형태-변경">tf.Tensor 형태 변경</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 60
+</span><span class="n">rank_three_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">rank_three_tensor</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rank_three_tensor</span><span class="p">,</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span> <span class="c1"># 기존 내용을 6x10행렬로 형태 변경
+</span>
+<span class="k">print</span><span class="p">(</span><span class="n">matrix</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">matrixB</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># 기존 내용을 3x2행렬로 형태 변경 -1은 차원 크기를 계산하여 자동으로 결정하라는 의미
+</span>
+<span class="k">print</span><span class="p">(</span><span class="n">matrixB</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">matrixAlt</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">matrixB</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># 기존 내용을 4x3x5텐서로 형태 변경
+</span>
+<span class="k">print</span><span class="p">(</span><span class="n">matrixAlt</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># 형태가 변경된 텐서의 원소 개수는
+# 원래 텐서의 원소 개수와 같습니다.
+# 그러므로 다음은 원소 개수를 유지하면서
+# 마지막 차원에 사용 가능한 수가 없기 때문에 에러를 발생합니다.
+#yet_another = tf.reshape(matrixAlt, [13, 2, -1])  # 에러!
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(3, 4, 5)
+(6, 10)
+(3, 20)
+(4, 3, 5)
+</code></pre></div></div>
+
+<h3 id="자료형">자료형</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 정수형 텐서를 실수형으로 변환
+</span><span class="n">a</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tf.Tensor([1 2 3], shape=(3,), dtype=int32)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">float_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">float_tensor</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Tensor: shape=(3,), dtype=float32, numpy=array([1., 2., 3.], dtype=float32)&gt;
+</code></pre></div></div>
+
+:ET
