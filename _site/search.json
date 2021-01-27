@@ -1,6 +1,51 @@
 [
   
     {
+      "title"    : "Vggnet(tensorflow)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week8_day1, ml_basics, Deep Learning, Tensorflow, VGGNet",
+      "url"      : "/programmers/VGGNet(Tensorflow)",
+      "date"     : "2021-01-25 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Vggnet(pytorch)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week8_day1, ml_basics, Deep Learning, pytorch, VGGNet",
+      "url"      : "/programmers/VGGNet(Pytorch)",
+      "date"     : "2021-01-25 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Alexnet(pytorch &amp; tensorflow)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week7_day4, ml_basics, Deep Learning, pytorch, tensorflow",
+      "url"      : "/programmers/AlexNet(pytorch-&-Tensorflow)",
+      "date"     : "2021-01-22 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Tensorflow(gradient, mlp)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week7_day4, ml_basics, Deep Learning, tensorflow",
+      "url"      : "/programmers/tensorflow(gradient,-MLP)",
+      "date"     : "2021-01-21 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
+      "title"    : "Pytorch(autograted mlp)",
+      "category" : "programmers",
+      "tags"     : "K-digital training, week7_day4, ml_basics, Deep Learning, pytorch",
+      "url"      : "/programmers/pytorch(autograted-MLP)",
+      "date"     : "2021-01-21 00:00:00 +0900",
+      "content": "[\n  {% for post in site.posts %}\n    {\n      \"title\"    : \"{{ post.title | escape }}\",\n      \"category\" : \"{{ post.category }}\",\n      \"tags\"     : \"{{ post.tags | join: ', ' }}\",\n      \"url\"      : \"{{ site.baseurl }}{{ post.url }}\",\n      \"date\"     : \"{{ post.date }}\",\n      \"content\": {{ page.content | jsonify }}\n    } {% unless forloop.last %},{% endunless %}\n  {% endfor %}\n]"
+    } ,
+  
+    {
       "title"    : "Pytorch and tensorflow tutorial",
       "category" : "programmers",
       "tags"     : "K-digital training, week7_day3, ml_basics, Deep Learning, pytorch, tensorflow",

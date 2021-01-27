@@ -1,5 +1,14 @@
-I"��<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+I"��<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </code></pre></div></div>
+<h2 id="what-us-pytorch">What us Pytorch?</h2>
+<p>python 기반의 과학 연산 패키지로 다음과 같은 두 집단을 대상으로 합니다.</p>
+<ul>
+  <li>Numpy를 대체하면서 GPU를 이용한 연산이 필요한 경우</li>
+  <li>최대한의 유연성과 속도를 제공하는 딥러닝 연구 플랫폼이 필요한 경우</li>
+</ul>
+
+<h3 id="getting-started">Getting Started</h3>
+<p>Tensor는 Numpy의 ndarray와 유사하며, 추가로 GPU를 사용한 연산 가속도 가능합니다.</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -377,7 +386,7 @@ tf.Tensor(1.0, shape=(), dtype=float32)
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;tf.Tensor: shape=(), dtype=float32, numpy=1.0&gt;
 </code></pre></div></div>
 
-<h3 id="tftensor-객체의-랭ㅇ크는-그-차원의-수">tf.Tensor 객체의 랭ㅇ크는 그 차원의 수</h3>
+<h3 id="tftensor-객체의-랭크는-그-차원의-수">tf.Tensor 객체의 랭크는 그 차원의 수</h3>
 
 <h4 id="랭크-0">랭크 0</h4>
 

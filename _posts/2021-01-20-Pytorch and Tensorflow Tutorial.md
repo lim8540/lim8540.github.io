@@ -7,7 +7,13 @@ use_math: true
 ```python
 %matplotlib inline
 ```
+## What us Pytorch?
+python 기반의 과학 연산 패키지로 다음과 같은 두 집단을 대상으로 합니다.
+- Numpy를 대체하면서 GPU를 이용한 연산이 필요한 경우
+- 최대한의 유연성과 속도를 제공하는 딥러닝 연구 플랫폼이 필요한 경우
 
+### Getting Started
+Tensor는 Numpy의 ndarray와 유사하며, 추가로 GPU를 사용한 연산 가속도 가능합니다.
 
 ```python
 from __future__ import print_function
@@ -446,7 +452,7 @@ a.read_value()
 
 
 
-### tf.Tensor 객체의 랭ㅇ크는 그 차원의 수
+### tf.Tensor 객체의 랭크는 그 차원의 수
 
 #### 랭크 0
 
